@@ -1,0 +1,2 @@
+2016-10-19 10:31:28,701 [Worker-5] INFO  o.e.m.c.i.i.nexus.NexusIndexManager - Updating index for repository: central|http://repo.maven.apache.org/maven2
+2016-10-19 10:31:30,342 [Worker-5] INFO  c.n.h.c.p.n.NettyAsyncHttpProvider - Number of application's worked threads is 8
