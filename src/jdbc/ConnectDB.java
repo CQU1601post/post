@@ -14,6 +14,7 @@ public class ConnectDB {
 			Class.forName(dbDriver).newInstance();
 			con = DriverManager.getConnection(url, userName,password); 
 			con.setAutoCommit(true);
+			System.out.println("connect to the database successfully!");
 		} catch (Exception ex) {
 			System.out.println("false in :src/configurations/ConnectDB/ConnectDB()");
 		}
