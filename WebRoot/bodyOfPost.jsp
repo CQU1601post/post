@@ -105,18 +105,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			}, animSpeed);
 		});
 	});
-	
-	
 
-	
 </script>
 
 </head>
 
 <body bgcolor="#F3F3F3">
 <div class='info'>
-	&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;<font>${unitName}->${post.postName}</font>
-	&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;<font>今日访问量：${post.visitorsOfToday}  总访问量:${post.allVisitors}</font>
+<span>${unitName} -> ${post.postName}</span>
+<span>今日访问量：<em>${post.visitorsOfToday}</em></span>  
+<span>总访问量:<em>${post.allVisitors}</em></span>
 </div>
 	<!--单位名、粘贴栏名 -->
 	<input type="hidden" id="recordScrollTop" value="0">
@@ -135,9 +133,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<input type="hidden" id="isAnyMorePics"
 		value="${fn:length(ads)<picNumOfEveryLoading? false:true }">
 	<!-- 记录该类别是否还有图片可供加载 -->
-	<br />
-	<br />
-	<br />
+
 	<!--将当前Post、adTypeId存放在session，在上传时可调取-->
 	<c:set var='post' value='${post}' scope='session'></c:set>
 	<!-- 如果传入的ID是0则将其改为1 -->
@@ -208,40 +204,36 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</div>
 		</tr>
 		</table>
-		<table id="ads">
-		<tr>
+		<div id="ads" class="ads">
 		 
 			<c:if test="${fn:length(ads)>0}">
 			
-				<c:set var="picsInOneRow" value="${picsInOneRow}">
-				</c:set>
+				<!-- <c:set var="picsInOneRow" value="${picsInOneRow}">
+				</c:set> -->
 				<!-- 每行显示的图片个数 -->	
 					
 				<c:forEach var="ad" items="${ads}" varStatus="status">
 				     
-					 <td > 
+					 <div class="ad_cell">
 					  <a href="PostLogical?functionName=picsOfAd&adId=${ad['adId']}&postId=${post.postId}" target="_blank">
-						<img  class="img" alt="点击查看" src="${ad['firstPicAddr']}" style="width:250;height:250" id="${ad['adId']}"   /> </a>
-					 
-					</td>
+						<img  class="img" alt="点击查看" src="${ad['firstPicAddr']}"
+						id="${ad['adId']}"/></a>					 
+					</div>
 					  
 					 
-					<c:if test="${status.count%picsInOneRow==0}">
-						<!-- 如果每行达到指定个数则转行-->
+					<!-- <c:if test="${status.count%picsInOneRow==0}">
+						 如果每行达到指定个数则转行
 						<c:out value="</tr ><tr>" escapeXml="false"></c:out>
-					</c:if>
+					</c:if> -->
 				</c:forEach>
-				
-								 
+				<div style="clear:both"></div>						 
 			</c:if>
 			
 			<c:if test="${fn:length(ads)<=0 }">
-				<td>本粘贴栏内暂无广告</td>			 
+				<div class="adpost_none"><img src="images/adpost_none.jpg"></div>			 
 			</c:if>
-			 
-		</tr>
-		 
-	</table>
+
+	</div>
 	<div id="returnTop" class="returnTop" onclick="returnTop() ">返回顶部</div>
 	<!-- 返回顶部的小链接 -->
 	<div style="height:1000"></div>
