@@ -232,11 +232,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<c:if test="${fn:length(ads)<=0 }">
 				<div class="adpost_none"><img src="images/adpost_none.jpg"></div>			 
 			</c:if>
+		</div>
 
-	</div>
 	<div id="returnTop" class="returnTop" onclick="returnTop() ">返回顶部</div>
 	<!-- 返回顶部的小链接 -->
-	<div style="height:1000"></div>
 	
 
 </body>
