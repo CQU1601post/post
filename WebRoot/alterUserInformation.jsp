@@ -27,7 +27,7 @@
 		</script>
 	</c:if>
 	<c:if test='${true}'><!-- null!=sessionScope.user-->
-		<div align="left" style="margin-left:60px; margin-top:30px;">
+		<div align="left" style="margin-left:60px; margin-top:30px">
 			<img src="logo/logo02.png" width="80" height="80">
 			&nbsp;&nbsp;&nbsp;&nbsp; <font color="#FAA07D" size="+4">修改信息</font>	
 			 ${sessionScope.user.userName} 

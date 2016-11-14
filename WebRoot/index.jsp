@@ -151,7 +151,7 @@ $(document).ready(function () {
 		  <font size="3"> 
 		    <c:forEach var="item" items="<%=unitTypes%>">
 		    	<a href="PostLogical?functionName=unitsOfType&unitTypeId=${item.unitTypeId}&unitTypeName=${item.unitTypeName}"
-				>${item.unitTypeName}</a> &nbsp;	&nbsp;&nbsp;	     
+				target="_blank">${item.unitTypeName}</a> &nbsp;	&nbsp;&nbsp;	     
 		    </c:forEach>
 		   
    	       </font>
