@@ -99,6 +99,15 @@ public class SearchAboutPost {
 		connect.close();
 		return adTypes;
 	}
+	//返回普通粘贴栏UnitType的所有广告类别
+	public List<AdType> adTypesOfUnitTypes(int UnitTypeId) {
+        ConnectDB connect = new ConnectDB();
+        String sql = "select * from adType where unitTypeId='"+UnitTypeId+"'";
+        ResultSet result = connect.executeQuery(sql);
+        List<AdType> adTypes = changeResultSetToArray.adTypesArray(result);
+        connect.close();
+        return adTypes;
+    }
 	
 	// 返回某个专栏下的所有广告类别
 	public List<PrivateAdType> privateAdTypes(int postId) {
@@ -175,7 +184,7 @@ public class SearchAboutPost {
 		// System.out.println("执行src/jdbc/SearchFromDB/adsOfPost(),传入的postId为："+postId);
 		ConnectDB connect = new ConnectDB();
 		//返回通过审核的广告并且按时间排序
-		String sql = "select * from privateAd where exist=1and postId='" + postId+"' order by sortValue DESC limit "+m+","+n;		 
+		String sql = "select * from privateAd where  exist=1 and postId='" + postId+"' order by sortValue DESC limit "+m+","+n;		 
 		ResultSet result = connect.executeQuery(sql);
 		List<PrivateAd> ads = changeResultSetToArray.privateAdsArray(result);
 		connect.close();
@@ -189,7 +198,7 @@ public class SearchAboutPost {
 		if(adTypeId>0){
 			ConnectDB connect = new ConnectDB();
 			//返回通过审核的广告并且按时间排序
-		 	String sql = "select * from privateAd where  exist=1and postId='" + postId+"' and adTypeId='"+adTypeId+"' order by sortValue  DESC limit "+m+","+n;
+		 	String sql = "select * from privateAd where  exist=1 and postId='" + postId+"' and adTypeId='"+adTypeId+"' order by sortValue  DESC limit "+m+","+n;
 			ResultSet result = connect.executeQuery(sql);
 			System.out.println("result:"+result);
 			List<PrivateAd> ads = changeResultSetToArray.privateAdsArray(result);
@@ -209,7 +218,7 @@ public class SearchAboutPost {
 
 		ConnectDB connect = new ConnectDB();
 		// 返回通过审核的广告并且按时间排序
-		String sql = "select * from privatePic where  privatePic.adId in(select privatead.adId from ad where exist=1) and privatePic.adId='" + adId
+		String sql = "select * from privatePic where  adId in(select adId from ad where exist=1) and privatePic.adId='" + adId
 				+ "'";
 		ResultSet result = connect.executeQuery(sql);
 		// System.out.println("result:" + result);
@@ -449,6 +458,23 @@ public class SearchAboutPost {
     	}   
     	System.out.println("adTypeName:"+adType.getAdTypeName());
     	return adType;
+    }
+    public AdType adTypeOfIdOfUnitType(int adTypeId,int unitTypeId){
+        ConnectDB connect = new ConnectDB(); 
+        System.out.println("adTypeId:"+adTypeId);
+        String sql="select * from adType where adTypeId='"+adTypeId+"'and unitTypeId='"+unitTypeId+"'";
+        ResultSet result=connect.executeQuery(sql);
+        List<AdType> adTypes=changeResultSetToArray.adTypesArray(result);
+        AdType adType=new AdType();
+        if(adTypes.size()>1){//如果根据postId查出的单位栏超过一个，则出现错误
+            System.out.println("false in:SearchAboutPost/adTypeId,一个adTypeId对应的粘贴栏不可能为多个");
+        }
+        else{
+            adType=adTypes.get(0);//只有一个则获取第一个
+            connect.close();
+        }   
+        System.out.println("adTypeName:"+adType.getAdTypeName());
+        return adType;
     }
     //返回指定id的专栏单位类别
     public PrivateAdType privateAdTypeOfId(int adTypeId){

@@ -37,7 +37,8 @@ public class TimeProcessThread extends Thread {
         timer.schedule(new TimerTask() {
 
             @Override
-            public void run() {// 获取当前系统时间
+            public void run() {
+                int k=0;//用于记录当前要保留的数目
                 AdminLogic adminLogic=new AdminLogic();
                 String nowTime = new GetCurrentTime().currentTime();
                 double currentDouble = TransformDouble(nowTime);
@@ -52,9 +53,15 @@ public class TimeProcessThread extends Thread {
                         adIdList.add(key);
                         System.out.println("add key"+key);
                     }
+                    if(currentDouble - value <168){
+                        k++;
+                    }
                     System.out.println("run" + key + "   " + value);
-                }            
-             adminLogic.delBatch_pic_ad(adIdList);
+                }        
+                if(k>300){
+                    adminLogic.newDelBatch_pic_ad(adIdList);
+                }
+             
             }
 
         }, 2000, 100000);

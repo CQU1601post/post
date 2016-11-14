@@ -6,6 +6,8 @@ String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/"; 
 String unitTypeName=request.getParameter("unitTypeName");
 unitTypeName=new String(unitTypeName.getBytes("iso-8859-1"),"utf-8");
+String unitTypeId=request.getParameter("unitTypeId");
+
 %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>  
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%> 
@@ -59,7 +61,7 @@ unitTypeName=new String(unitTypeName.getBytes("iso-8859-1"),"utf-8");
 					 <!--    <a href="PostLogical?functionName=enterUnit&adTypeId=0&unitInfo=${entry.key}">所有</a>
 						 --> 
 						<c:forEach var='post' items='${entry.value}'>
-							<a href="PostLogical?functionName=enterPost&adTypeId=0&postId=${post.postId}" target="_blank">${post.postName}</a>
+							<a href="PostLogical?functionName=enterPost&adTypeId=0&postId=${post.postId}&unitTypeId=${unitTypeId}" target="_blank">${post.postName}</a>
 						</c:forEach>
 						</div>
 					

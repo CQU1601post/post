@@ -88,7 +88,7 @@ public class ChangeResultSetToArray {
 		try {
 			while(result.next()){
 				//将搜到的adType相关信息都存到units列表中
-				AdType adType=new AdType(result.getInt(1),result.getString(2));
+				AdType adType=new AdType(result.getInt(1),result.getString(2),result.getInt(3));
 				//System.out.println(adType.getAdTypeName());
 				adTypes.add(adType);
 			}

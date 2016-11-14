@@ -81,6 +81,7 @@ public class FunctionsForPostLogical {
 			}	
 			request.setAttribute("unitTypeName",unitTypeName);
 			request.setAttribute("unitsAndPosts",unitsAndPosts);
+			request.setAttribute("unitTypeId", unitTypeId);
 			request.getRequestDispatcher("unitsAndPostsOfType.jsp").forward(request,response);
 		}
 		
@@ -107,6 +108,7 @@ public class FunctionsForPostLogical {
 			System.out.println("visitorip===="+visitorip);
 			int adTypeId=Integer.parseInt(request.getParameter("adTypeId")); 
 			int postId=Integer.parseInt(request.getParameter("postId"));
+			int unitTypeId=Integer.parseInt(request.getParameter("unitTypeId"));
 			searchFromDB.updateVisitors(postId);//进入之前先更新访问人数，加1
 			Post post=searchFromDB.postOfId(postId);//获取粘贴栏信息
 		    Unit unit=searchFromDB.unitOfId(post.getUnitId());//获取粘贴栏对应单位信息
@@ -122,7 +124,7 @@ public class FunctionsForPostLogical {
 			System.out.println(postId+" ");
 			//查找粘贴栏下的所有类别
 			if(post.getUserId()<=0){//如果不是专栏
-				List<AdType> adTypes=searchFromDB.adTypes();//返回所有普通粘贴栏类别		
+				List<AdType> adTypes=searchFromDB.adTypesOfUnitTypes(unitTypeId);//返回所有普通粘贴栏类别		
 				System.out.println("adTypes.size()"+adTypes.size());
 				request.setAttribute("adTypes",adTypes);
 				List<Ad> ads=new ArrayList<Ad>();
