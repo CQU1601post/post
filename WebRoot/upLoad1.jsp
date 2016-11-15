@@ -175,7 +175,7 @@
 </div>
 
 
-	<form action='upLoad2.jsp' onsubmit='return check()' method='post'>
+	<form action='upload_seq.jsp' onsubmit='return check()' method='post'>
 		<!-- 点击广告后向upLoad2发送adTypeId和postId,发送前先确定是否选中-->
 		<div class='info'>
 		<ul>

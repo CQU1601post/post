@@ -89,13 +89,38 @@ color:#333333;
 
 .current {width:33%; background-color:#FFF2E6; display:inline-block; color:#FF6600;}
 .not_current {width:33%; display:inline-block; background-color:#EEEEEE; color:#FFFFFF;}
+.current_step{
+	width: 400px;
+	height: 40px;
+	font-size: 30px;
+	line-height: 40px;
+	padding: 10px;
+	border-radius: 10px;
+	text-shadow: 3px 3px 3px #FF6600;
+	text-align: center;
+	vertical-align: middle;
+	color: white;
+	background-color: #facaa8;
+	margin: 50px auto;
+}
 
 
-.but1{ width:90%; margin-top:100px;text-align:center;}
-.but{position: absolute;right: 250px;top: 184px;}
+.but1{ width:400px; margin:20px auto; text-align:center;}
 .button{width:100px; height:31px;border-radius:3px 3px 3px 3px; border:1px solid #666666; background-color:#666666; cursor:pointer;font-size:12px;color:#f3f3f3; } 
 .button:hover{background:#999999; border:#999999;}
 
+.main_{
+	width: 800px;
+	margin: 20px auto;
+}
+.upload_info{
+	text-indent: 15em;
+}
+.upload_info span{
+	color: #FF6600;
+	font-weight: bold;
+	padding: 10px;
+}
 
 <!--�ϴ�ͼƬ
 
@@ -112,6 +137,9 @@ color: #999999;
 cursor: pointer; 
 text-align: center; 
 } 
+ul li{
+	list-style: none;
+}
 .btn_addPic span{display: block;line-height: 39px;} 
 .btn_addPic em { 
 background:url(add.png) 0 0; 
@@ -134,6 +162,84 @@ height: 39px;
 font-size: 100px; /* ����ͬ������Ŀɵ������ */ 
 opacity: 0; /* ʵ�ֵĹؼ�� */ 
 filter:alpha(opacity=0);/* ����IE */ 
-} 
+}
 
-.file{margin-top:20px;}
+/*关键信息*/
+.note{
+	width: 300px;
+	height: 25px;
+	line-height: 25px;
+	margin: 20px 20px;
+	text-align: center;
+	float: left;
+}
+.note input{
+	padding: 5px;
+}
+.but{
+	width: 100px;
+	float: right;
+	margin: 20px 20px;
+}
+
+
+/*外框*/
+.img_upload{
+	width: 250px;
+	height: 250px;
+	float: left;
+	margin: 5px;
+	background: url("../images/img_default.jpg");
+	background-clip: content-box;
+	position: relative;
+	padding: 5px;	
+}
+.shine:hover{
+	background: #6495ED; 
+	box-shadow: 1px 1px 2px white inset,-1px -1px 2px white inset;
+}
+/*最下层*/
+.image{
+	display: block;
+	width: 250px;
+	height: 250px;
+	z-index: 2;
+	position: relative;
+}
+/*中层*/
+.file_upload{
+	width: 250px;
+	height: 250px;
+	position: absolute;
+	z-index: 20;
+	top: 5px;
+	left: 5px;	
+}
+.file_upload input{
+	opacity: 0;
+	filter: alpha(opacity=0);
+	display: inline-block;
+	width: 250px;
+	height: 250px;
+	cursor:move;
+}
+/*最上层*/
+.dele{
+	width: 25px;
+	height: 25px;
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	border-radius: 12.5px;
+	overflow: hidden;
+	z-index: 30;
+	opacity: 0.5;
+	cursor: pointer;
+}
+.dele:hover{
+	opacity: 1;
+}
+.dele img{
+	width: 25px;
+	height: 25px;
+}

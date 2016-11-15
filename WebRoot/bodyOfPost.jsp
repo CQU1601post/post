@@ -36,6 +36,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <link rel="stylesheet" type="text/css" href="styles.css">
     -->
 <link rel="stylesheet" href="css/post.css" type="text/css" />
+<link rel="stylesheet" type="text/css" href="css/bodyOfPost.css">
+
 <script src="js/post/post_jquery.min.js"></script>
 <script src="js/post/post_jquery-ui.min.js"></script>
 <script src="js/post/imgbubbles.js"></script>
@@ -43,9 +45,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script src="js/post/DD_roundies_0.0.2a-min.js"></script>
 <script type="text/javascript" src="js/jquery-1.4.4.js"></script>
 <script type="text/javascript" src="js/showAds.js"></script>
-<link rel="stylesheet" type="text/css" href="css/bodyOfPost.css">
- 
- 
 
 <script type="text/javascript">
     
