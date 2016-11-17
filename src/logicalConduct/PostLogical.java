@@ -34,6 +34,9 @@ public class PostLogical extends HttpServlet {
 		else if("unitsWithPublicPost".equals(functionName)){
 			functions.unitsWithPublicPost(request,response);			
 		}
+		else if("unitsWithPublicAD".equals(functionName)){
+            functions.unitsWithPublicAD(request,response);            
+        }
 		//在上传图片时点击某个单位后显示所有非专栏
 		else if("publicPostsOfUnit".equals(functionName)){ 
 			functions.publicPostsOfUnit(request,response);		

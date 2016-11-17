@@ -15,6 +15,7 @@ public class AdType {
 	
 	public int getAdTypeId() {
 		return adTypeId;
+		
 	}
 	public void setAdTypeId(int adTypeId) {
 		this.adTypeId = adTypeId;

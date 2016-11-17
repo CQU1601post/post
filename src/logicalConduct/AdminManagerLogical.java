@@ -129,9 +129,10 @@ public class AdminManagerLogical extends HttpServlet {
         if (a.getName().equals(name)) {
             if (a.getPassword().equals(password)) {
                 System.out.println("right...");
+                request.getSession().setAttribute("adminInfo", a);
                 request.getRequestDispatcher("adminManager.jsp").forward(
                         request, response);
-                request.getSession().setAttribute("adminInfo", a);
+              
                 return;
             } else {
                 infomation = "登录失败";

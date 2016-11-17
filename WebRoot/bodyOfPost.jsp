@@ -13,6 +13,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 %>
 <%
     List<Ad> ads=(List<Ad>)request.getAttribute("ads");
+  Object unitTypeId=request.getAttribute("unitTypeId");
+  System.out.print("unitTypeID"+unitTypeId);
  Configuration configuration=new Configuration();
  int picWidth=200;//  获取限定的每张图片高度与宽度
  int picHeight=200;
@@ -147,7 +149,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         <!-- 标示不是专栏 -->
                         <c:set var='privatePost' value='false' scope='session'></c:set>
                         <li>                            
-                          <a href="PostLogical?functionName=enterPost&postId=${post.postId}&adTypeId=0" id=0>所有广告</a>
+                          <a href="PostLogical?functionName=enterPost&postId=${post.postId}&adTypeId=0&unitTypeId=${unitTypeId}" id=0>所有广告</a>
                         </li>
                     </c:if>
                     <c:if test="${param.functionName eq 'privatePost'}">
@@ -160,7 +162,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                             <c:set var="adTypeId" value="${item.adTypeId}"></c:set>
                             <li>
                                 <c:if test="${param.functionName eq 'enterPost'}">
-                                    <a href="PostLogical?functionName=enterPost&postId=${post.postId}&adTypeId=${adTypeId}" id='${item.adTypeId}'>${item.adTypeName}</a>
+                                    <a href="PostLogical?functionName=enterPost&postId=${post.postId}&adTypeId=${adTypeId}&unitTypeId=${unitTypeId}" id='${item.adTypeId}'>${item.adTypeName}</a>
                                 </c:if> 
                                 <c:if test="${param.functionName eq 'privatePost'}">
                                     <a href="UserLogical?functionName=privatePost&adTypeId=${adTypeId}" id='${item.adTypeId}'>${item.adTypeName}</a>
@@ -215,7 +217,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                      <div class="ad_cell">
                       <a href="PostLogical?functionName=picsOfAd&adId=${ad['adId']}&postId=${post.postId}" target="_blank">
                         <img  class="img" alt="点击查看" src="${ad['firstPicAddr']}"
-                        id="${ad['adId']}"/></a>                     
+                        id="${ad['adId']}"/>
+                        <span class='keyInfo'>
+                            <c:if test="${empty ad['remark']}">
+                                                                                   无文字介绍
+                            </c:if>
+                            <c:if test="${!empty ad['remark']}">
+                                ${fn:substring(ad['remark'],0,8)}
+                            </c:if>
+                        </span>
+                        </a>                     
                     </div>
                       
                      

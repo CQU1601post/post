@@ -14,6 +14,7 @@ import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import jdbc.OperationData;
 import jdbc.SearchAboutPost;
@@ -91,6 +92,7 @@ public class FunctionsForPostLogical {
 	public void enterPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{	 		
 		request.setCharacterEncoding("utf-8");
 		response.setCharacterEncoding("utf-8");
+		HttpSession session=request.getSession();
 		if(null==request.getParameter("postId")||null==request.getParameter("adTypeId")){
 			//System.out.println("您尚未选择任何粘贴栏"); 
 			response.sendRedirect("index.jsp");
@@ -127,6 +129,7 @@ public class FunctionsForPostLogical {
 				List<AdType> adTypes=searchFromDB.adTypesOfUnitTypes(unitTypeId);//返回所有普通粘贴栏类别		
 				System.out.println("adTypes.size()"+adTypes.size());
 				request.setAttribute("adTypes",adTypes);
+				session.setAttribute("unitTypeId", unitTypeId);
 				List<Ad> ads=new ArrayList<Ad>();
 				if(adTypeId==0){//adTypeId==0则返回所有广告
 					//根据粘贴栏id返回 广告信息,每次取Configuration中指定的picNumOfEveryLoading
@@ -266,6 +269,33 @@ public class FunctionsForPostLogical {
 		}
 
 	}
+	
+	public void unitsWithPublicAD(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException{
+        request.setCharacterEncoding("utf-8");
+        response.setCharacterEncoding("utf-8");  
+        response.setContentType("application/json;utf-8");
+        response.setHeader("pragma", "no-cache");
+        response.setHeader("cache-control", "no-cache");
+        PrintWriter out = response.getWriter();
+        System.out.println("执行:src/logicalConduct/FunctionsForPostLogical/unitsWithPublicAD");
+        if (null==request.getParameter("unitTypeId")) {// 如果传来的参数信息不全，跳回主页
+            System.out.println("您尚未选中任何单位类别，请在主页选择您要查看的单位类别");
+            response.sendRedirect("index.jsp");
+        } else {
+            int unitTypeId = Integer.parseInt(request.getParameter("unitTypeId"));          
+            List<AdType> adTypes = new ArrayList<AdType>();
+            adTypes = searchFromDB.unitsWithPublicAD(unitTypeId);// 获取用户列表          
+            // 将List转化成json对象传给显示粘贴栏的页面
+            Gson gson = new Gson();
+            String result = gson.toJson(adTypes);
+            System.out.println("result:" + result);
+            out.println(result);
+            out.flush();
+        }
+
+    }
+	
 	
 	//选择某个单位下的所有非专栏，需传入参数unitId
 	public void publicPostsOfUnit(HttpServletRequest request,
@@ -489,7 +519,7 @@ public class FunctionsForPostLogical {
 			//压缩首图,并且存储在对应路径
 			new DisposePic().compress(path+"\\"+firstPicPath,compressPath+"\\"+firstPicCompressPath,250,250,0.8F);
 			//给压缩图加上标题
-			new DisposePic().createMark(compressPath+"\\"+firstPicCompressPath,compressPath+"\\"+firstPicCompressPath,remark);
+			//new DisposePic().createMark(compressPath+"\\"+firstPicCompressPath,compressPath+"\\"+firstPicCompressPath,remark);
 			String upLoadTime = new GetCurrentTime().currentTime();// 获取当前时间，作为广告的上传时间
 			//将压缩后首图存储在ad表中		
 			int money=0;
@@ -526,7 +556,7 @@ public class FunctionsForPostLogical {
 					int id=adId+i;//当前广告的id
 					Ad ad = new Ad(id, adTypeId, upLoadTime, userId, Integer.parseInt(postIds[i]),
 							firstPicAddr, money, sortValue, checked, remark, 250,
-							250,1,0);
+							250,0,1);
 					searchAboutPost.saveAd(ad);					 
 				}				
 			}

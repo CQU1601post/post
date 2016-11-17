@@ -101,13 +101,13 @@ List auditlist=(List)request.getAttribute("auditlist");
     <form action="AdminManagerLogical?info=auditInfo" method="post"
         id="form1" name="formName"
     >
-        <table width="1200">
+        <table   style="margin:0 auto;width:1250px;">
 
             <tr>
                 <td align="center" class="adminManager_table_td"><input
                     type="radio" value="未审核" name="audit" 
                     class="adminManager_table_td_noaudit"
-                />未审核 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input
+                />未审核 <input
                     type="radio" value="已审核" name="audit"
                     class="adminManager_table_td_audit"
                 />已审核</td>
@@ -147,21 +147,22 @@ List auditlist=(List)request.getAttribute("auditlist");
                 </select></td>
                 <td><input type="button" value="展示" class="adminManager_table_radio_button"
                   
-                /> &nbsp;</td>
+                /></td>
                 <td>全选<input type="radio" name="adminManager_radio"
                     class="adminManager_table_radio_allChoice"
                 />反选<input type="radio" name="adminManager_radio"
                     class="adminManager_table_radio_inverseChoice"
                 /></td>
                 <td><a href="javascript:void(0)"
-                    class="adminManager_table_a_delete"                  
+                    class="adminManager_table_a_delete"                 
                 >批量删除</a></td>
                 <td><a href="javascript:void(0)"
                     class="adminManager_table_a_insert"             
                 >批量审核</a></td>
-                <td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td>
-
+                
+                <td><a href="AdminManagerLogical?info=allBy">全部通过审核</a></td>
                 <td><lable>定时删除开关</lable></td>
+                
                 <td><label><input
                         class="adminManager_table_mui-switch mui-switch-animbg"
                         type="checkbox"
@@ -170,7 +171,7 @@ List auditlist=(List)request.getAttribute("auditlist");
             <tr>
             </tr>
             <tr>
-                <a href="AdminManagerLogical?info=allBy">全部通过审核</a>
+                
             </tr>
 
 
@@ -181,56 +182,91 @@ List auditlist=(List)request.getAttribute("auditlist");
         </table>
     </form>
 
-    <table width="1200" class="pic-wrapper">
+    <table style="margin:0 auto;width:1250px;" class="pic-wrapper">
         <tr>
             <td id="more">
                 <div id="d">
                     <ul id="squares" class="bubblewrap">
                         <c:if test="${noauditlist!=null }">
                             <%
+                            
                                 for(int i=0;i<noauditlist.size();i++)
-                                                                                                                                          {
-                                                                                                                                          	Pic p=(Pic)noauditlist.get(i);
+                                 {
+                                    Pic p=(Pic)noauditlist.get(i);
+                                    int currentAdId;
+                                    int nextAdId;
+                                    
+                                    currentAdId = p.getAdId();
+                                    if(i == noauditlist.size()-1)
+                                    {
+                                         nextAdId = -1;
+                                    }
+                                    else{
+                                        System.out.println("=============="+i);
+                                        Pic nextPic=(Pic)noauditlist.get(i+1);
+                                        nextAdId = nextPic.getAdId();
+                                    }
                             %>
-                            <li><img src="<%=p.getPicAddr()%>"
-                                width="200" height="200"
-                            /></li>
-                            <span> <input type="hidden"
-                                class="adminManager_table_noaudit_hidden_Adid"
-                                value=<%=p.getAdId()%>
-                            /> <a
-                                href="AdminManagerLogical?info=auditBy&adId=<%=p.getAdId()%>"
-                            >通过</a> <a
-                                href="AdminManagerLogical?info=auditnoBy&adId=<%=p.getAdId()%>"
-                            >删除</a> <input type="checkbox"
-                                class="adminManager_table_noaudit_input_checkbox"
-                            />
-                            </span>
+                            <li>
+                            <div class="picShow">
+                                <img src="<%=p.getPicAddr()%>" width="200" height="200" />
+                            <div class="deletePic"> 
+                                <span style="float:left;left:-20px;color:gray">广告ID：<%=p.getAdId()%></span>
+                             <%
+                                if(currentAdId!=nextAdId)
+                                {
+                              %>
+                              <input type="hidden" class="adminManager_table_noaudit_hidden_Adid" value=<%=p.getAdId()%>/> 
+                              <a href="AdminManagerLogical?info=auditBy&adId=<%=p.getAdId()%>" >通过</a>
+                              <a href="AdminManagerLogical?info=auditnoBy&adId=<%=p.getAdId()%>" >删除</a> 
+                              <input type="checkbox" class="adminManager_table_noaudit_input_checkbox" />
+                             <%} %>
+                            </div> 
+                            </div>
                             <%
                                 }
                             %>
+                             </li>
                         </c:if>
 
                         <c:if test="${auditlist!=null }">
                             <%
                                 for(int i=0;i<auditlist.size();i++)
-                                                                                                                                          {
-                                                                                                                                          	Pic p=(Pic)auditlist.get(i);
+                                {
+                                    Pic p=(Pic)auditlist.get(i);
+                                    int currentAdId;
+                                    int nextAdId;
+                                    
+                                    currentAdId = p.getAdId();
+                                    if(i == auditlist.size()-1)
+                                    {
+                                         nextAdId = -1;
+                                    }
+                                    else{
+                                        Pic nextPic=(Pic)auditlist.get(i+1);
+                                        nextAdId = nextPic.getAdId();
+                                    }
                             %>
-                            <li><img src="<%=p.getPicAddr()%>"
-                                width="200" height="200"
-                            /></li>
-                            <span> <input type="hidden"
-                                class="adminManager_table_audit_hidden_Adid"
-                                value=<%=p.getAdId()%>
-                            /> <a
-                                href="AdminManagerLogical?info=delInfo&adId=<%=p.getAdId()%>"
-                            >删除</a> <input type="checkbox"
-                                class="adminManager_table_audit_input_checkbox"
-                            />
-                            </span>
-
-
+                            <li>
+                            <div class="picShow">
+                                <img src="<%=p.getPicAddr()%>" width="200" height="200" />
+                             
+                             <div class="deletePic"> 
+                                <span style="float:left;left:-20px;color:gray">广告ID：<%=p.getAdId()%></span>
+                             <%
+                                if(currentAdId!=nextAdId)
+                                {
+                              %>
+                                <input type="hidden" class="adminManager_table_audit_hidden_Adid" value=<%=p.getAdId()%> /> 
+                                 <a class="delete" href="AdminManagerLogical?info=delInfo&adId=<%=p.getAdId()%>" >删除</a>
+                                 <input type="checkbox" class="adminManager_table_audit_input_checkbox"/>
+                              <%} %>
+                            </div>
+                            
+                            </div>
+                           
+                            </li>
+                           
                             <%
                                 }
                             %>
@@ -239,6 +275,7 @@ List auditlist=(List)request.getAttribute("auditlist");
                 </div>
             </td>
         </tr>
+        
     </table>
 
     <script type="text/javascript">

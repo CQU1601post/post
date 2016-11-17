@@ -64,6 +64,28 @@ public class SearchAboutPost {
 		connect.close();
 		return units;
 	}
+	   public List<AdType > unitsWithPublicAD(int unitTypeId) {	     
+	        ConnectDB connect = new ConnectDB();
+	        String sql = "select * from adtype where unitTypeId=" + unitTypeId;
+	        ResultSet result = connect.executeQuery(sql);
+	        List<AdType> adTypes = new ArrayList<AdType>();
+	        try {
+	            while(result.next()){                
+	                int adtypeId=result.getInt(1);//获取unitId
+	               
+	                System.out.println("adtypeId:"+adtypeId);
+	              
+	                AdType adType=new AdType(result.getInt(1),result.getString(2),result.getInt(3));  
+	                adTypes.add(adType);
+	                }
+	            
+	        } catch (SQLException e) {
+	             System.out.println("false in:src/jdbc/ChangeResultSetToArray/postsArray");
+	             System.out.println(e);
+	        } 
+	        connect.close();
+	        return adTypes ;
+	    }
 	
 	// 查找传入单位下所有粘贴栏
 	public List<Post> postsOfUnit(int unitId) {
@@ -332,7 +354,7 @@ public class SearchAboutPost {
     //返回当前的最大广告id
     public int maxAdId(){
     	ConnectDB connect = new ConnectDB(); 
-    	String sql="select max(adId) from ad where exist=1 ";
+    	String sql="select max(adId) from ad ";
     	ResultSet result=connect.executeQuery(sql);
     	int maxAdId=0;
     	try {
@@ -349,7 +371,7 @@ public class SearchAboutPost {
     //返回当前的最大专帖栏广告id
     public int maxPrivateAdId(){
     	ConnectDB connect = new ConnectDB(); 
-    	String sql="select max(adId) from privateAd where exist=1 ";
+    	String sql="select max(adId) from privateAd  ";
     	ResultSet result=connect.executeQuery(sql);
     	int maxAdId=0;
     	try {
@@ -368,9 +390,9 @@ public class SearchAboutPost {
     public boolean saveAd(Ad ad){
     	ConnectDB connect = new ConnectDB(); 
     	System.out.println("ad.getFirstPicAddr():"+ad.getFirstPicAddr());
-    	String sql="insert into ad(adId,adTypeId,upLoadTime,userId,postId,firstPicAddr,money,sortValue,checked,remark,height,width) " +
+    	String sql="insert into ad(adId,adTypeId,upLoadTime,userId,postId,firstPicAddr,money,sortValue,checked,remark,height,width,exist,click) " +
     			"values('"+ad.getAdId()+"','"+ad.getAdTypeId()+"','"+ad.getUpLoadTime()+"','"+ad.getUserId()
-    			+"','"+ad.getPostId()+"','"+ad.getFirstPicAddr()+"','"+ad.getMoney()+"','"+ad.getSortValue()+"','"+ad.getChecked()+"','"+ad.getRemark()+"','"+ad.getHeight()+"','"+ad.getWidth()+"')";
+    			+"','"+ad.getPostId()+"','"+ad.getFirstPicAddr()+"','"+ad.getMoney()+"','"+ad.getSortValue()+"','"+ad.getChecked()+"','"+ad.getRemark()+"','"+ad.getHeight()+"','"+ad.getWidth()+"','"+ad.getExist()+"','"+ad.getClick()+"')";
     	
     	boolean isSave=connect.executeUpdate(sql);
     	System.out.println("isSave:"+isSave);
@@ -402,9 +424,9 @@ public class SearchAboutPost {
     public boolean savePrivateAd(PrivateAd ad){
     	ConnectDB connect = new ConnectDB(); 
     	System.out.println("ad.getRemark():"+ad.getRemark());
-    	String sql="insert into privatead(adId,adTypeId,upLoadTime,userId,postId,firstPicAddr,money,sortValue,remark,height,width) " +
+    	String sql="insert into privatead(adId,adTypeId,upLoadTime,userId,postId,firstPicAddr,money,sortValue,remark,height,width,exist,click) " +
     			"values('"+ad.getAdId()+"','"+ad.getAdTypeId()+"','"+ad.getUpLoadTime()+"','"+ad.getUserId()
-    			+"','"+ad.getPostId()+"','"+ad.getFirstPicAddr()+"','"+ad.getMoney()+"','"+ad.getSortValue()+"','"+ad.getRemark()+"','"+ad.getHeight()+"','"+ad.getWidth()+"')";
+    			+"','"+ad.getPostId()+"','"+ad.getFirstPicAddr()+"','"+ad.getMoney()+"','"+ad.getSortValue()+"','"+ad.getRemark()+"','"+ad.getHeight()+"','"+ad.getWidth()+"','"+ad.getExist()+"','"+ad.getClick()+"')";
     	
     	boolean isSave=connect.executeUpdate(sql);
     	System.out.println("isSave:"+isSave);

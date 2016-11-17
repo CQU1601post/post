@@ -45,7 +45,7 @@ $(function() {
         }
     });
   
-    
+   
     
     $(".adminManager_table_a_delete").click(function() {
         if (confirm("Are you sure?")) {
@@ -55,50 +55,61 @@ $(function() {
             var noAuditAdidArray = $(".adminManager_table_noaudit_hidden_Adid");
             var auditAdidArray = $(".adminManager_table_audit_hidden_Adid");
           
-           
-            var ADCheckedID = new Array();
-            if(noAuditChoice.length!=0){         
-                for ( var i = 0; i < noAuditChoice.length; i++) {
-                    if (noAuditChoice[i].checked == true) {
-                        ADCheckedID.push($.trim(noAuditAdidArray[i].value));
-                        alert(noAuditAdidArray[i].value);
-                    }
-                }
-            }
-            else{
-                for ( var i = 0; i < auditChoice.length; i++) {
-                    if (auditChoice[i].checked == true) {
-                        ADCheckedID.push($.trim(auditAdidArray[i].value));
-                        alert(auditAdidArray[i].value);
-                    }
-                }
-            }
-           
-            var jsonADCheckedID = JSON.stringify(ADCheckedID);
             var   Audit= $(".indirect_audit").val();
+            var ADCheckedID = new Array();
+     
+        
+                
+            
+           
+           
+           
             if(Audit=="已审核"){
-              
-                $.ajax({
-                    type:"get",
-                    url : "AdminManagerLogical?info=delAuditBatchInfo&jsonADCheckedID="
-                        +jsonADCheckedID,
-                     success:function(data){
-                         alert("成功");
-                     },
-                });
+                if(auditChoice.length!=0){         
+                    for ( var i = 0; i < auditChoice.length; i++) {
+                        if (auditChoice[i].checked == true) {
+                            ADCheckedID.push($.trim(auditAdidArray[i].value));
+                         
+                        }
+                    }
+                    var jsonADCheckedID = JSON.stringify(ADCheckedID);
+                    $.ajax({
+                        type:"get",
+                        url : "AdminManagerLogical?info=delAuditBatchInfo&jsonADCheckedID="
+                            +jsonADCheckedID,
+                         success:function(data){
+                             alert("成功");
+                         },
+                    });
+                }
+                else{
+                    alert("没有数据");
+                }
+                        
             }
             if(Audit=="未审核"){
-                
-                $.ajax({
-                    type:"get",
-                    url : "AdminManagerLogical?info=delBatchInfo&jsonADCheckedID="
-                        +jsonADCheckedID,
-                     success:function(data){
-                         alert("成功");
-                     },
-                });
+                if(noAuditChoice.length!=0){         
+                    for ( var i = 0; i < noAuditChoice.length; i++) {
+                        if (noAuditChoice[i].checked == true) {
+                            ADCheckedID.push($.trim(noAuditAdidArray[i].value));
+                           
+                        }
+                    }
+                    var jsonADCheckedID = JSON.stringify(ADCheckedID);
+                    $.ajax({
+                        type:"get",
+                        url : "AdminManagerLogical?info=delBatchInfo&jsonADCheckedID="
+                            +jsonADCheckedID,
+                         success:function(data){
+                             alert("成功");
+                         },
+                    });
+                }
+                else{
+                    alert("没有数据");
+                }
             }
-           
+            
 
         } else {
             return false;
@@ -119,20 +130,21 @@ $(function() {
                         ADCheckedID.push($.trim(noAuditAdidArray[i].value));                      
                     }
                 }
+                var jsonADCheckedID = JSON.stringify(ADCheckedID);
+                $.ajax({
+                    type:"get",
+                    url : "AdminManagerLogical?info=batchAuditBy&jsonADCheckedID="
+                        +jsonADCheckedID,
+                     success:function(data){
+                         alert("成功");
+                     },
+                });
             }
             else{
-                alert("已经审核过了");
+                alert("没有数据");
             }
            
-            var jsonADCheckedID = JSON.stringify(ADCheckedID);
-            $.ajax({
-                type:"get",
-                url : "AdminManagerLogical?info=batchAuditBy&jsonADCheckedID="
-                    +jsonADCheckedID,
-                 success:function(data){
-                     alert("成功");
-                 },
-            });
+            
 
         } else {
             return false;
@@ -164,4 +176,11 @@ $(function() {
         }
         
     });
+});
+$(function(){
+    var   Audit= $(".indirect_audit").val();
+   
+    if(Audit=="已审核"){
+        $(".adminManager_table_a_insert").css("display", "none");
+    }
 });
