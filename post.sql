@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50529
 File Encoding         : 65001
 
-Date: 2016-11-14 10:09:14
+Date: 2016-11-28 20:21:11
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -47,7 +47,7 @@ INSERT INTO `ad` VALUES ('7', '1', '20140320173118', '-1', '14', 'firstPics/1395
 INSERT INTO `ad` VALUES ('8', '1', '20140320173215', '-1', '14', 'firstPics/1395307934637.jpg', '0', '20140320173215', '1', '', '250', '250', '1', '0');
 INSERT INTO `ad` VALUES ('9', '1', '20140320173224', '-1', '14', 'firstPics/1395307943940.jpg', '0', '20140320173224', '1', '', '250', '250', '1', '0');
 INSERT INTO `ad` VALUES ('10', '1', '20140320173240', '-1', '14', 'firstPics/1395307959774.jpg', '0', '20140320173240', '1', '', '250', '250', '1', '0');
-INSERT INTO `ad` VALUES ('11', '3', '20140320181112', '54', '16', 'firstPics/1395310271556.jpg', '0', '20140320181112', '1', '', '250', '250', '1', '0');
+INSERT INTO `ad` VALUES ('11', '3', '20140320181112', '54', '16', 'firstPics/1395310271556.jpg', '0', '20140320181112', '1', '', '250', '250', '1', '6');
 INSERT INTO `ad` VALUES ('26', '1', '20140320205348', '56', '20', 'firstPics/1395320028202.jpg', '0', '20140320205348', '1', 'asdfghjkl', '250', '250', '1', '0');
 INSERT INTO `ad` VALUES ('27', '1', '20140320222906', '55', '11', 'firstPics/1395325744516.jpg', '0', '20140320222906', '1', '', '250', '250', '1', '0');
 INSERT INTO `ad` VALUES ('80', '1', '20140321192307', '-1', '11', 'firstPics/1395400985601.jpg', '0', '20140321192307', '1', '', '250', '250', '1', '0');
@@ -60,7 +60,7 @@ INSERT INTO `ad` VALUES ('34', '2', '20140321104924', '-1', '4', 'firstPics/1395
 INSERT INTO `ad` VALUES ('35', '2', '20140321104948', '-1', '11', 'firstPics/1395370188536.JPG', '0', '20140321104948', '1', '', '250', '250', '1', '0');
 INSERT INTO `ad` VALUES ('36', '1', '20140321105122', '-1', '11', 'firstPics/1395370282095.JPG', '0', '20140321105122', '1', '', '250', '250', '1', '0');
 INSERT INTO `ad` VALUES ('79', '1', '20140321152647', '11', '11', 'firstPics/1395386806537.jpg', '0', '20140321152647', '1', '', '250', '250', '1', '0');
-INSERT INTO `ad` VALUES ('78', '1', '20140321152632', '11', '11', 'firstPics/1395386791791.jpg', '0', '20140321152632', '1', '', '250', '250', '1', '0');
+INSERT INTO `ad` VALUES ('78', '1', '20140321152632', '11', '11', 'firstPics/1395386791791.jpg', '0', '20140321152632', '1', '', '250', '250', '1', '1');
 INSERT INTO `ad` VALUES ('77', '1', '20140321152620', '11', '6', 'firstPics/1395386779740.jpg', '0', '20140321152620', '1', '', '250', '250', '1', '0');
 INSERT INTO `ad` VALUES ('76', '1', '20140321152620', '11', '5', 'firstPics/1395386779740.jpg', '0', '20140321152620', '1', '', '250', '250', '1', '0');
 INSERT INTO `ad` VALUES ('75', '1', '20140321152620', '11', '4', 'firstPics/1395386779740.jpg', '0', '20140321152620', '1', '', '250', '250', '1', '0');
@@ -79,16 +79,30 @@ INSERT INTO `ad` VALUES ('58', '4', '20140321113800', '-1', '11', 'firstPics/139
 INSERT INTO `ad` VALUES ('64', '1', '20140321144116', '11', '4', 'firstPics/1395384075617.jpg', '0', '20140321144116', '1', '..........', '250', '250', '1', '0');
 INSERT INTO `ad` VALUES ('63', '1', '20140321144116', '11', '11', 'firstPics/1395384075617.jpg', '0', '20140321144116', '1', '..........', '250', '250', '1', '0');
 INSERT INTO `ad` VALUES ('62', '1', '20140321144017', '11', '5', 'firstPics/1395384016518.jpg', '0', '20140321144017', '1', '', '250', '250', '1', '0');
-INSERT INTO `ad` VALUES ('95', '1', '20161101192503', '59', '11', 'firstPics/1477999502606.jpg', '0', '20161101192503', '1', 'aaaa', '250', '250', '1', '0');
+INSERT INTO `ad` VALUES ('95', '1', '20161101192503', '59', '11', 'firstPics/1477999502606.jpg', '0', '20161101192503', '1', 'aaaa', '250', '250', '1', '2');
 INSERT INTO `ad` VALUES ('59', '1', '20140321134621', '-1', '4', 'firstPics/1395380780145.jpg', '0', '20140321134621', '1', '', '250', '250', '1', '0');
+INSERT INTO `ad` VALUES ('215', '1', '20161115155741', '-1', '11', 'firstPics/1479196660030.jpg', '0', '20161115155741', '1', '', '250', '250', '1', '3');
 INSERT INTO `ad` VALUES ('115', '1', '20161101213218', '57', '11', 'firstPics/1478007138883.jpg', '0', '20161101213218', '1', 'aaa', '250', '250', '0', '0');
 INSERT INTO `ad` VALUES ('125', '1', '20161102193132', '57', '11', 'firstPics/1478086292046.jpg', '0', '20161102193132', '0', 'aaaa', '250', '250', '1', '0');
 INSERT INTO `ad` VALUES ('135', '1', '20161102193355', '60', '11', 'firstPics/1478086435460.jpg', '0', '20161102193355', '0', '', '250', '250', '1', '0');
 INSERT INTO `ad` VALUES ('145', '1', '20161102214604', '-1', '4', 'firstPics/1478094364189.jpg', '0', '20161102214604', '1', 'dsda', '250', '250', '1', '0');
 INSERT INTO `ad` VALUES ('155', '1', '20161102214838', '-1', '11', 'firstPics/1478094518182.jpg', '0', '20161102214838', '1', '', '250', '250', '1', '1');
 INSERT INTO `ad` VALUES ('165', '1', '20161102215219', '-1', '11', 'firstPics/1478094739598.JPG', '0', '20161102215219', '1', '', '250', '250', '1', '0');
-INSERT INTO `ad` VALUES ('185', '1', '20161106152037', '-1', '11', 'firstPics/1478416836317.jpg', '0', '20161106152037', '1', '', '50', '50', '1', '0');
+INSERT INTO `ad` VALUES ('185', '1', '20161106152037', '-1', '11', 'firstPics/1478416836317.jpg', '0', '20161106152037', '1', '', '50', '50', '1', '1');
 INSERT INTO `ad` VALUES ('195', '1', '20161106160200', '-1', '4', 'firstPics/1478419318955.jpg', '0', '20161106160200', '1', '', '250', '250', '1', '0');
+INSERT INTO `ad` VALUES ('225', '1', '20161115155854', '-1', '11', 'firstPics/1479196734133.jpg', '0', '20161115155854', '0', '中国', '250', '250', '1', '0');
+INSERT INTO `ad` VALUES ('205', '1', '20161115151106', '-1', '11', 'firstPics/1479193865734.jpg', '0', '20161115151106', '1', '', '250', '250', '0', '0');
+INSERT INTO `ad` VALUES ('235', '1', '20161115155919', '-1', '11', 'firstPics/1479196759191.jpg', '0', '20161115155919', '1', '', '250', '250', '0', '0');
+INSERT INTO `ad` VALUES ('245', '1', '20161115160633', '-1', '11', 'firstPics/1479197193181.jpg', '0', '20161115160633', '1', '中国', '250', '250', '1', '2');
+INSERT INTO `ad` VALUES ('255', '1', '20161115161417', '2', '11', 'firstPics/1479197657127.jpg', '0', '20161115161417', '1', '八仙花', '250', '250', '1', '2');
+INSERT INTO `ad` VALUES ('275', '2', '20161116185534', '-1', '4', 'firstPics/1479293734557.jpg', '0', '20161116185534', '0', 'bbbb', '250', '250', '1', '0');
+INSERT INTO `ad` VALUES ('305', '1', '20161119215735', '-1', '11', 'firstPics/1479563854282.png', '0', '20161119215735', '0', 'bbbb', '250', '250', '1', '0');
+INSERT INTO `ad` VALUES ('295', '1', '20161116211142', '2', '4', 'firstPics/1479301901798.jpg', '0', '20161116211142', '0', 'aaaa', '250', '250', '1', '0');
+INSERT INTO `ad` VALUES ('315', '2', '20161121162654', '2', '2', 'firstPics/1479716813761.jpg', '0', '20161121162654', '0', '', '250', '250', '1', '0');
+INSERT INTO `ad` VALUES ('325', '2', '20161121163855', '-1', '11', 'firstPics/1479717535641.jpg', '0', '20161121163855', '0', '', '250', '250', '1', '0');
+INSERT INTO `ad` VALUES ('335', '2', '20161121165151', '-1', '12', 'firstPics/1479718311039.jpg', '0', '20161121165151', '0', '', '250', '250', '1', '0');
+INSERT INTO `ad` VALUES ('345', '2', '20161121165709', '-1', '15', 'firstPics/1479718628797.jpg', '0', '20161121165709', '0', '', '250', '250', '1', '0');
+INSERT INTO `ad` VALUES ('355', '3', '20161121170509', '-1', '2', 'firstPics/1479719109143.jpg', '0', '20161121170509', '0', '', '250', '250', '1', '0');
 
 -- ----------------------------
 -- Table structure for administrator
@@ -113,10 +127,10 @@ DROP TABLE IF EXISTS `adtype`;
 CREATE TABLE `adtype` (
   `adTypeId` int(4) NOT NULL AUTO_INCREMENT,
   `adTypeName` varchar(20) DEFAULT NULL,
-  `unitTypeId` int(10) DEFAULT NULL,
+  `groupId` int(10) DEFAULT NULL,
   PRIMARY KEY (`adTypeId`),
-  KEY `unitTypeId` (`unitTypeId`) USING BTREE
-) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+  KEY `unitTypeId` (`groupId`) USING BTREE
+) ENGINE=MyISAM AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of adtype
@@ -127,6 +141,11 @@ INSERT INTO `adtype` VALUES ('3', '求职招聘', '1');
 INSERT INTO `adtype` VALUES ('4', '餐饮', '1');
 INSERT INTO `adtype` VALUES ('5', '考研', '1');
 INSERT INTO `adtype` VALUES ('6', '公共类', '1');
+INSERT INTO `adtype` VALUES ('8', '中考', '2');
+INSERT INTO `adtype` VALUES ('9', '家教', '3');
+INSERT INTO `adtype` VALUES ('10', '招聘', '4');
+INSERT INTO `adtype` VALUES ('11', '活动', '6');
+INSERT INTO `adtype` VALUES ('12', ' 打折', '7');
 
 -- ----------------------------
 -- Table structure for attention
@@ -170,7 +189,7 @@ CREATE TABLE `pic` (
   `adId` int(4) DEFAULT NULL,
   PRIMARY KEY (`picId`),
   KEY `tb_pic_ibfk_1` (`adId`)
-) ENGINE=MyISAM AUTO_INCREMENT=675 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=723 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of pic
@@ -301,7 +320,9 @@ INSERT INTO `pic` VALUES ('601', 'photoes/1395380781389.jpg', '1024', '768', '1'
 INSERT INTO `pic` VALUES ('659', 'photoes/1478007138883.jpg', '1024', '647', '1', '115');
 INSERT INTO `pic` VALUES ('654', 'photoes/1477999502606.jpg', '1024', '647', '1', '95');
 INSERT INTO `pic` VALUES ('604', 'photoes/1395384016518.jpg', '773', '580', '1', '62');
+INSERT INTO `pic` VALUES ('679', 'photoes/1479194570659.jpg', '260', '383', '1', '205');
 INSERT INTO `pic` VALUES ('607', 'photoes/1395384017615.jpg', '1024', '659', '1', '62');
+INSERT INTO `pic` VALUES ('678', 'photoes/1479194326429.jpg', '3888', '5152', '1', '205');
 INSERT INTO `pic` VALUES ('610', 'photoes/1395384017946.jpg', '1024', '747', '1', '62');
 INSERT INTO `pic` VALUES ('611', 'photoes/1395384075617.jpg', '1024', '690', '1', '63');
 INSERT INTO `pic` VALUES ('612', 'photoes/1395384075617.jpg', '1024', '690', '1', '64');
@@ -347,10 +368,38 @@ INSERT INTO `pic` VALUES ('664', 'photoes/1478086435580.jpg', '709', '1030', '0'
 INSERT INTO `pic` VALUES ('665', 'photoes/1478094364189.jpg', '1024', '768', '1', '145');
 INSERT INTO `pic` VALUES ('666', 'photoes/1478094518182.jpg', '1024', '768', '1', '155');
 INSERT INTO `pic` VALUES ('667', 'photoes/1478094739598.JPG', '347', '475', '1', '165');
+INSERT INTO `pic` VALUES ('677', 'photoes/1479194326358.jpg', '260', '383', '1', '205');
+INSERT INTO `pic` VALUES ('676', 'photoes/1479193866529.jpg', '358', '272', '1', '205');
+INSERT INTO `pic` VALUES ('675', 'photoes/1479193865734.jpg', '1024', '647', '1', '205');
 INSERT INTO `pic` VALUES ('671', 'photoes/1478416836317.jpg', '1280', '960', '1', '185');
 INSERT INTO `pic` VALUES ('672', 'photoes/1478416837179.jpg', '709', '1030', '1', '185');
 INSERT INTO `pic` VALUES ('673', 'photoes/1478419318955.jpg', '3888', '5152', '1', '195');
 INSERT INTO `pic` VALUES ('674', 'photoes/1478419321198.jpg', '3888', '5152', '1', '195');
+INSERT INTO `pic` VALUES ('680', 'photoes/1479194570956.jpg', '3888', '5152', '1', '205');
+INSERT INTO `pic` VALUES ('691', 'photoes/1479196660030.jpg', '3888', '5152', '1', '215');
+INSERT INTO `pic` VALUES ('692', 'photoes/1479196662366.jpg', '3888', '5152', '1', '215');
+INSERT INTO `pic` VALUES ('693', 'photoes/1479196734133.jpg', '356', '220', '0', '225');
+INSERT INTO `pic` VALUES ('694', 'photoes/1479196734199.jpg', '240', '240', '0', '225');
+INSERT INTO `pic` VALUES ('695', 'photoes/1479196759191.jpg', '895', '436', '1', '235');
+INSERT INTO `pic` VALUES ('696', 'photoes/1479197193181.jpg', '1024', '768', '1', '245');
+INSERT INTO `pic` VALUES ('697', 'photoes/1479197657127.jpg', '1024', '768', '1', '255');
+INSERT INTO `pic` VALUES ('700', 'photoes/1479293734557.jpg', '1024', '768', '0', '275');
+INSERT INTO `pic` VALUES ('701', 'photoes/1479293734927.jpg', '1024', '768', '0', '275');
+INSERT INTO `pic` VALUES ('708', 'photoes/1479563856605.jpg', '3888', '5152', '0', '305');
+INSERT INTO `pic` VALUES ('707', 'photoes/1479563854282.png', '1492', '1398', '0', '305');
+INSERT INTO `pic` VALUES ('704', 'photoes/1479301901798.jpg', '1024', '768', '0', '295');
+INSERT INTO `pic` VALUES ('705', 'photoes/1479301902091.jpg', '1024', '768', '0', '295');
+INSERT INTO `pic` VALUES ('706', 'photoes/1479301902133.jpg', '1024', '768', '0', '295');
+INSERT INTO `pic` VALUES ('709', 'photoes/1479716813761.jpg', '1024', '768', '0', '315');
+INSERT INTO `pic` VALUES ('710', 'photoes/1479716814324.jpg', '0', '0', '0', '315');
+INSERT INTO `pic` VALUES ('711', 'photoes/1479717535641.jpg', '1024', '768', '0', '325');
+INSERT INTO `pic` VALUES ('712', 'photoes/1479717535976.jpg', '3888', '5152', '0', '325');
+INSERT INTO `pic` VALUES ('713', 'photoes/1479718311039.jpg', '1024', '768', '0', '335');
+INSERT INTO `pic` VALUES ('714', 'photoes/1479718311366.jpg', '3888', '5152', '0', '335');
+INSERT INTO `pic` VALUES ('715', 'photoes/1479718628797.jpg', '1024', '768', '0', '345');
+INSERT INTO `pic` VALUES ('716', 'photoes/1479718629132.jpg', '3888', '5152', '0', '345');
+INSERT INTO `pic` VALUES ('717', 'photoes/1479719109143.jpg', '1024', '768', '0', '355');
+INSERT INTO `pic` VALUES ('718', 'photoes/1479719109469.jpg', '3888', '5152', '0', '355');
 
 -- ----------------------------
 -- Table structure for post
@@ -364,41 +413,43 @@ CREATE TABLE `post` (
   `createTime` varchar(20) DEFAULT NULL,
   `visitorsOfToday` int(10) NOT NULL,
   `allVisitors` int(10) NOT NULL,
+  `groupId` int(10) DEFAULT NULL,
   PRIMARY KEY (`postId`),
   KEY `unitId` (`unitId`),
   KEY `userId` (`userId`),
-  KEY `pasteName` (`postName`)
+  KEY `pasteName` (`postName`),
+  KEY `adType_groupId` (`groupId`)
 ) ENGINE=MyISAM AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of post
 -- ----------------------------
-INSERT INTO `post` VALUES ('11', '12舍', '1', '-1', null, '670', '670');
-INSERT INTO `post` VALUES ('12', '图书馆', '2', '-1', null, '7', '7');
-INSERT INTO `post` VALUES ('13', '三峡广场', '3', '-1', null, '1', '0');
-INSERT INTO `post` VALUES ('4', '明主湖', '1', '-1', null, '63', '63');
-INSERT INTO `post` VALUES ('5', '9舍', '1', '-1', null, '11', '11');
-INSERT INTO `post` VALUES ('6', '12教学楼', '1', '-1', null, '7', '7');
-INSERT INTO `post` VALUES ('8', '13舍', '1', '-1', null, '2', '2');
-INSERT INTO `post` VALUES ('1', '重庆大学总栏', '1', '-1', null, '9', '9');
-INSERT INTO `post` VALUES ('3', '三峡广场总栏', '3', '-1', null, '1', '1');
-INSERT INTO `post` VALUES ('2', '西南大学总栏', '2', '-1', null, '8', '8');
-INSERT INTO `post` VALUES ('14', '重庆八中总栏', '8', '-1', null, '28', '28');
-INSERT INTO `post` VALUES ('15', '重庆一中总栏', '9', '-1', null, '21', '21');
-INSERT INTO `post` VALUES ('16', '红花小学', '10', '-1', null, '25', '25');
-INSERT INTO `post` VALUES ('17', '12图书馆', '7', '-1', null, '1', '1');
-INSERT INTO `post` VALUES ('18', '12食堂', '7', '-1', null, '2', '2');
-INSERT INTO `post` VALUES ('19', '重庆12', '7', '-1', null, '1', '1');
-INSERT INTO `post` VALUES ('20', '12超市', '1', '-1', null, '4', '4');
-INSERT INTO `post` VALUES ('21', '重百专栏', '11', '11', null, '332', '332');
-INSERT INTO `post` VALUES ('22', '幸福小区', '12', '-1', '20131006135656', '12', '12');
-INSERT INTO `post` VALUES ('24', 'zhulingyun', '1', '12', '20131006160658', '15', '15');
-INSERT INTO `post` VALUES ('25', '1111', '1', '13', '20131020185231', '3', '3');
-INSERT INTO `post` VALUES ('9', '一中', '1', '-1', null, '1', '1');
-INSERT INTO `post` VALUES ('28', '2中', '1', '-1', null, '2', '2');
-INSERT INTO `post` VALUES ('29', '3', '1', '7', null, '0', '0');
-INSERT INTO `post` VALUES ('30', '4', '1', '1', null, '0', '0');
-INSERT INTO `post` VALUES ('31', '4354', '1', '65', null, '3', '3');
+INSERT INTO `post` VALUES ('11', '12啊', '1', '-1', null, '764', '764', '1');
+INSERT INTO `post` VALUES ('12', '图书馆', '2', '-1', null, '14', '14', '1');
+INSERT INTO `post` VALUES ('13', '三峡广场', '3', '-1', null, '1', '0', '1');
+INSERT INTO `post` VALUES ('4', '明主湖', '1', '-1', null, '77', '77', '1');
+INSERT INTO `post` VALUES ('5', '9舍', '1', '-1', null, '13', '13', '1');
+INSERT INTO `post` VALUES ('6', '12教学楼', '1', '-1', null, '7', '7', '1');
+INSERT INTO `post` VALUES ('8', '13舍', '1', '-1', null, '2', '2', '1');
+INSERT INTO `post` VALUES ('1', '重庆大学总栏', '1', '-1', null, '9', '9', '1');
+INSERT INTO `post` VALUES ('3', '三峡广场总栏', '3', '-1', null, '1', '1', '1');
+INSERT INTO `post` VALUES ('2', '西南大学总栏', '2', '-1', null, '8', '8', '1');
+INSERT INTO `post` VALUES ('14', '重庆八中总栏', '8', '-1', null, '34', '34', '1');
+INSERT INTO `post` VALUES ('15', '重庆一中总栏', '9', '-1', null, '21', '21', '1');
+INSERT INTO `post` VALUES ('16', '红花小学', '10', '-1', null, '33', '33', '3');
+INSERT INTO `post` VALUES ('17', '12图书馆', '7', '-1', null, '1', '1', '1');
+INSERT INTO `post` VALUES ('18', '12食堂', '7', '-1', null, '2', '2', '1');
+INSERT INTO `post` VALUES ('19', '重庆12', '7', '-1', null, '1', '1', '1');
+INSERT INTO `post` VALUES ('20', '12超市', '1', '-1', null, '4', '4', '1');
+INSERT INTO `post` VALUES ('21', '重百专栏', '11', '11', null, '347', '347', '0');
+INSERT INTO `post` VALUES ('22', '幸福小区', '12', '-1', '20131006135656', '12', '12', '6');
+INSERT INTO `post` VALUES ('24', 'zhulingyun', '1', '12', '20131006160658', '15', '15', '1');
+INSERT INTO `post` VALUES ('25', '1111', '1', '13', '20131020185231', '3', '3', '1');
+INSERT INTO `post` VALUES ('9', '一中', '1', '-1', null, '1', '1', '1');
+INSERT INTO `post` VALUES ('28', '2中', '1', '-1', null, '2', '2', '1');
+INSERT INTO `post` VALUES ('29', '3', '1', '7', null, '0', '0', '1');
+INSERT INTO `post` VALUES ('30', '4', '1', '1', null, '0', '0', '1');
+INSERT INTO `post` VALUES ('31', '4354', '1', '65', null, '4', '4', '1');
 
 -- ----------------------------
 -- Table structure for privatead
@@ -487,6 +538,27 @@ INSERT INTO `privatepic` VALUES ('143', 'photoes/1395373484086.jpg', '1024', '68
 INSERT INTO `privatepic` VALUES ('144', 'photoes/1395388397000.jpg', '1024', '728', '7');
 INSERT INTO `privatepic` VALUES ('145', 'photoes/1395388448520.jpg', '1024', '719', '7');
 INSERT INTO `privatepic` VALUES ('146', 'photoes/1395388537442.jpeg', '800', '800', '8');
+
+-- ----------------------------
+-- Table structure for typegroup
+-- ----------------------------
+DROP TABLE IF EXISTS `typegroup`;
+CREATE TABLE `typegroup` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `GroupName` varchar(40) CHARACTER SET utf8 DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+
+-- ----------------------------
+-- Records of typegroup
+-- ----------------------------
+INSERT INTO `typegroup` VALUES ('1', '类别一');
+INSERT INTO `typegroup` VALUES ('2', '类别二');
+INSERT INTO `typegroup` VALUES ('3', '类别三');
+INSERT INTO `typegroup` VALUES ('4', '类别四');
+INSERT INTO `typegroup` VALUES ('5', '类别五');
+INSERT INTO `typegroup` VALUES ('6', '类别六');
+INSERT INTO `typegroup` VALUES ('7', '类别七');
 
 -- ----------------------------
 -- Table structure for unit
@@ -612,7 +684,7 @@ CREATE TABLE `visitorlog` (
   `visitorID` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`visitorID`),
   KEY `visitorId` (`visitorID`)
-) ENGINE=InnoDB AUTO_INCREMENT=321 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=468 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of visitorlog
@@ -937,3 +1009,150 @@ INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '重庆八中总栏', '317')
 INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '重庆一中总栏', '318');
 INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '319');
 INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '红花小学', '320');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '321');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '重百专栏', '322');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '323');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '324');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '重百专栏', '325');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '重百专栏', '326');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '重百专栏', '327');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '重庆八中总栏', '328');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '重百专栏', '329');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '4354', '330');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '重百专栏', '331');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '332');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '333');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '334');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '335');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '336');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '9舍', '337');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '9舍', '338');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '339');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '340');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '341');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '重庆八中总栏', '342');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '343');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '344');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '345');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '346');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '347');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '348');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '349');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '350');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '351');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '352');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '353');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '354');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '355');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '356');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '357');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '358');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '359');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '360');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '361');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '362');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '363');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '364');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '365');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '366');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '367');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '368');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '369');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '370');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '371');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '372');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '373');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '374');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '375');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '376');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '377');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '378');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '379');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '明主湖', '380');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '明主湖', '381');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '明主湖', '382');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '明主湖', '383');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '明主湖', '384');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '明主湖', '385');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '明主湖', '386');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '明主湖', '387');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '明主湖', '388');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '重庆八中总栏', '389');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '390');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '391');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '明主湖', '392');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '明主湖', '393');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '明主湖', '394');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '明主湖', '395');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '明主湖', '396');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '图书馆', '397');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '图书馆', '398');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '图书馆', '399');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '图书馆', '400');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '图书馆', '401');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '图书馆', '402');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '图书馆', '403');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '重百专栏', '404');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '重百专栏', '405');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '重百专栏', '406');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '重百专栏', '407');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '重百专栏', '408');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '重百专栏', '409');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '重百专栏', '410');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '重百专栏', '411');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '重百专栏', '412');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '413');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '414');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '415');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '416');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '417');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '418');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '419');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '420');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '421');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '422');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '423');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '424');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '425');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '426');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '427');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '428');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '429');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '430');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '431');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '432');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '433');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '434');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '435');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '436');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '437');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '438');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '439');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '440');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '441');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '442');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '443');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '444');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '445');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '重庆八中总栏', '446');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '红花小学', '447');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '红花小学', '448');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '红花小学', '449');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '红花小学', '450');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '重庆八中总栏', '451');
+INSERT INTO `visitorlog` VALUES ('172.22.138.57', '12舍', '452');
+INSERT INTO `visitorlog` VALUES ('172.22.138.57', '重庆八中总栏', '453');
+INSERT INTO `visitorlog` VALUES ('172.22.138.57', '红花小学', '454');
+INSERT INTO `visitorlog` VALUES ('172.22.138.57', '12舍', '455');
+INSERT INTO `visitorlog` VALUES ('172.22.138.57', '红花小学', '456');
+INSERT INTO `visitorlog` VALUES ('172.22.138.57', '红花小学', '457');
+INSERT INTO `visitorlog` VALUES ('172.22.138.57', '红花小学', '458');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '459');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '460');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12舍', '461');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12啊', '462');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12啊', '463');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12啊', '464');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12啊', '465');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12啊', '466');
+INSERT INTO `visitorlog` VALUES ('0:0:0:0:0:0:0:1', '12啊', '467');
