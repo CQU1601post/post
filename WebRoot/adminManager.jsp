@@ -156,17 +156,16 @@ List auditlist=(List)request.getAttribute("auditlist");
                 <td><a href="javascript:void(0)"
                     class="adminManager_table_a_delete"                 
                 >批量删除</a></td>
-                <td><a href="javascript:void(0)"
-                    class="adminManager_table_a_insert"             
-                >批量审核</a></td>
-                
+               
                 <td><a href="AdminManagerLogical?info=allBy">全部通过审核</a></td>
-                <td><lable>定时删除开关</lable></td>
-                
+                <td><lable>定时删除开关</lable></td>                     
                 <td><label><input
                         class="adminManager_table_mui-switch mui-switch-animbg"
                         type="checkbox"
                     ></label></td>
+                     <td><a href="javascript:void(0)"
+                    class="adminManager_table_a_insert"             
+                >批量审核</a></td>
             </tr>
             <tr>
             </tr>

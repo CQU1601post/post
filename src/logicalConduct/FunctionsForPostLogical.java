@@ -126,7 +126,7 @@ public class FunctionsForPostLogical {
 			System.out.println(postId+" ");
 			//查找粘贴栏下的所有类别
 			if(post.getUserId()<=0){//如果不是专栏
-				List<AdType> adTypes=searchFromDB.adTypesOfUnitTypes(unitTypeId);//返回所有普通粘贴栏类别		
+				List<AdType> adTypes=searchFromDB.adTypesOfPost(postId);//返回所有普通粘贴栏类别		
 				System.out.println("adTypes.size()"+adTypes.size());
 				request.setAttribute("adTypes",adTypes);
 				session.setAttribute("unitTypeId", unitTypeId);
@@ -279,13 +279,13 @@ public class FunctionsForPostLogical {
         response.setHeader("cache-control", "no-cache");
         PrintWriter out = response.getWriter();
         System.out.println("执行:src/logicalConduct/FunctionsForPostLogical/unitsWithPublicAD");
-        if (null==request.getParameter("unitTypeId")) {// 如果传来的参数信息不全，跳回主页
+        if (null==request.getParameter("postId")) {// 如果传来的参数信息不全，跳回主页
             System.out.println("您尚未选中任何单位类别，请在主页选择您要查看的单位类别");
             response.sendRedirect("index.jsp");
         } else {
-            int unitTypeId = Integer.parseInt(request.getParameter("unitTypeId"));          
+            int postId = Integer.parseInt(request.getParameter("postId"));          
             List<AdType> adTypes = new ArrayList<AdType>();
-            adTypes = searchFromDB.unitsWithPublicAD(unitTypeId);// 获取用户列表          
+            adTypes = searchFromDB.adTypesOfPost(postId);// 获取用户列表          
             // 将List转化成json对象传给显示粘贴栏的页面
             Gson gson = new Gson();
             String result = gson.toJson(adTypes);
@@ -376,7 +376,7 @@ public class FunctionsForPostLogical {
 		// 创建解析类的实例
 		ServletFileUpload sfu = new ServletFileUpload(factory);
 		long fileMax = 1024 * 1024 * 8; // 设置单个上传文件的最大限度，byte为单位,2M
-		long filesMax = 1024 * 1024 * 40;// 设置总上传文件的最大限度，10M
+		long filesMax = 1024 * 1024 * 80;// 设置总上传文件的最大限度，10M
 		//sfu.setFileSizeMax(fileMax);
 		//sfu.setSizeMax(filesMax);
 		List<FileItem> fileItems = new ArrayList<FileItem>();// 接收文件域
@@ -451,7 +451,7 @@ public class FunctionsForPostLogical {
 				}
 				//存储广告到对应的粘贴栏、类别
 				else{
-					saveAds(postIds,adTypeId,remark,isPrivateAd,fileItems,request,response);
+					saveAds1(postIds,adTypeId,remark,isPrivateAd,fileItems,request,response);
 				}				
 			}	
 			
@@ -461,6 +461,204 @@ public class FunctionsForPostLogical {
 		
 	} 
 
+	//广告存储
+    public void saveAds1(String[] postIds,int adTypeId,String remark,boolean isPrivateAd,List<FileItem> fileItems,HttpServletRequest request,
+            HttpServletResponse response)throws ServletException, IOException{ 
+        request.setCharacterEncoding("utf-8");
+        response.setCharacterEncoding("utf-8");
+        File file=null;
+        PrintWriter out=response.getWriter(); 
+        SearchAboutPost searchAboutPost=new SearchAboutPost();
+        User user=null;
+        if(null!=request.getSession().getAttribute("user")){//获取用户信息
+            user=(User)request.getSession().getAttribute("user");
+        }   
+        System.out.println("isPrivateAd:"+request.getParameter("privatePost"));
+        if((user==null||user.getUserType()<=0)&&postIds.length>1){//如果不是专栏用户但是选择了多个粘贴栏
+            System.out.println("您没有一次选择多个粘贴栏的权利");
+            out.println("<script type='text/javascript'>alert('您没有一次选择多个粘贴栏的权利')</script>");
+            out.println("<script type='text/javascript'>history.go(-1)</script>");
+        }
+        else{
+            /*
+             * 
+             * 先处理首图，压缩，分为专栏用户与非专栏用户
+             *如果是专栏用户，可以上传到多个粘贴栏，广告加水印表示为专栏用户，checked=1；不是专栏用户，上传到一个粘贴栏，checked=0
+             *然后再将所有图片存到数据库
+             *用privatePost标示用户是不是上传到自己专栏，如果是的话，则将广告存储到专栏广告表
+             * 
+             */
+            String compressPath= request.getSession().getServletContext().getRealPath("/firstPics").replace("/", "\\");//首图压缩后存放路径
+            String path = request.getSession().getServletContext().getRealPath("/photoes").replace("/", "\\");//图片存储路径
+            String TSPath = request.getSession().getServletContext().getRealPath("/TSphotoes").replace("/", "\\");//图片存储路径
+            System.out.println("/photoes所在真实路径path:" + path);   
+            System.out.println("/firstPics所在真实路径compressPath:"+compressPath);
+            File photoesDir = new File(path);
+            File compressDir = new File(compressPath);
+            File realPhotoesDir = new File(TSPath);
+            if (!photoesDir.exists()) {//如果不存在此路径则创建
+                photoesDir.mkdir();
+            }
+            if (!realPhotoesDir.exists()) {//如果不存在此路径则创建
+                realPhotoesDir.mkdir();
+            }
+            if (!compressDir.exists()) {//如果不存在此路径则创建
+                compressDir.mkdir();
+            }
+            FileItem firstPic=fileItems.get(0);//获取首图
+            String firstPicName=firstPic.getName();
+            String fileType = firstPicName.substring(firstPicName.lastIndexOf(".")+1);// 获取文件类型
+            String firstPicPath=System.currentTimeMillis() + "."+ fileType;//首图存储路径
+            //System.out.println("由当前时间毫秒数与后缀确定的firstPicPath:"+firstPicPath);   
+            String firstPicCompressPath= System.currentTimeMillis() + "."+ fileType;//首图压缩后的存储路径 
+            //System.out.println("由当前时间毫秒数与后缀确定的firstPicCompressPath:"+firstPicCompressPath);
+            //存储文件  
+            if(firstPic.getSize()>1024*1024*2){
+               file=new File(TSPath+"\\"+firstPicPath); 
+                
+            }
+            else{
+                file=new File(path+"\\"+firstPicPath); 
+            }
+         
+            //System.out.println("首图存储路径："+path+"\\"+firstPicPath);
+            try {
+                firstPic.write(file);//将图片输出到对应文件夹下
+            } catch (Exception e1) {
+                // TODO Auto-generated catch block
+                System.out.println("输出首图失败");
+                e1.printStackTrace();
+            }
+            //压缩首图,并且存储在对应路径
+            boolean fileflag=false;
+            if(firstPic.getSize()>1024 * 1024 *2){
+                new DisposePic().compress(TSPath+"\\"+firstPicPath,compressPath+"\\"+firstPicCompressPath,250,250,0.8F);
+                new DisposePic().compress(TSPath+"\\"+firstPicPath,path+"\\"+firstPicCompressPath,1024,1024,1F);
+               fileflag= file.delete();
+               System.out.println("fileflag:"+fileflag);
+                if(fileflag==true){
+                    System.out.println("文件删除成功");
+                }
+            }else{
+                new DisposePic().compress(path+"\\"+firstPicPath,compressPath+"\\"+firstPicCompressPath,250,250,0.8F);
+            }
+            
+         
+            //给压缩图加上标题
+            //new DisposePic().createMark(compressPath+"\\"+firstPicCompressPath,compressPath+"\\"+firstPicCompressPath,remark);
+            String upLoadTime = new GetCurrentTime().currentTime();// 获取当前时间，作为广告的上传时间
+            //将压缩后首图存储在ad表中     
+            int money=0;
+            long sortValue=new GetSortValue().sortValue(money,upLoadTime);//排序值
+            int userId=0;
+            int checked=1;//是否审核，专栏用户默认已审核  
+            if(user==null){
+                userId=-1;
+                checked=0;
+            }
+            else{
+                userId=user.getUserId();
+                if(user.getUserType()<=0){//普通注册用户
+                    checked=0;
+                }
+            }
+
+            int adId;
+            String firstPicAddr = "firstPics/" + firstPicPath;
+            // firstPicAddr=firstPicAddr.replace("/", "\\");
+            // System.out.println("数据库所存首图地址："+firstPicAddr);
+            // 广告压缩后的宽高为250
+            if (isPrivateAd == true) {// 如果是专栏广告，广告存放在专栏广告表中,广告只会上传到一个粘贴栏-自己专栏 
+                adId=searchAboutPost.maxPrivateAdId()+ 1;// 广告id为当前最大id+1
+                PrivateAd ad = new PrivateAd(adId, adTypeId, upLoadTime,
+                        userId,Integer.parseInt(postIds[0]), firstPicAddr, money, sortValue, remark,
+                        250, 250,1,0);
+                searchAboutPost.savePrivateAd(ad);
+                System.out.println("存储专栏广告");
+            } 
+            else {//可能要上传到多个粘贴栏
+                adId=searchAboutPost.maxAdId()+ 10;// 广告id为当前最大id+10，加10以防并发时会冲突
+                for(int i=0;i<postIds.length;i++){      
+                    int id=adId+i;//当前广告的id
+                    Ad ad = new Ad(id, adTypeId, upLoadTime, userId, Integer.parseInt(postIds[i]),
+                            firstPicAddr, money, sortValue, checked, remark, 250,
+                            250,0,1);
+                    searchAboutPost.saveAd(ad);                  
+                }               
+            }
+            System.out.println("存储广告成功");
+            for (int j = 0; j < fileItems.size(); j++) {// 存储该广告下所有图片
+                String filedir;// 图片路径
+                FileItem fileItem = fileItems.get(j);
+                if (j == 0) {// 如果是首图，则为已经取出的地址
+                    filedir = firstPicPath;
+                } else {
+                    String fileName = fileItem.getName();
+                    fileType = fileName
+                            .substring(fileName.lastIndexOf(".") + 1);// 获取文件类型
+                    filedir = System.currentTimeMillis() + "." + fileType;// 文件存储路径
+                    System.out.println("根据当前毫秒数与类型确定图片后缀：" + filedir);
+                }
+                if(fileItem.getSize()>1024*1024*2){
+                    file = new File(TSPath + "\\" + filedir);
+                }
+                else{
+                    file = new File(path + "\\" + filedir);// 存储文件
+                }
+                
+                // System.out.println("存储图片路径："+path+"\\"+filedir);
+                int width = 0;
+                int height = 0;
+                try {
+                    if (!file.exists()) {// 如果文件不存在，则存储文件到对应路径
+                        fileItem.write(file);
+                    }
+                    // 读取图片的宽度与高度
+                    java.io.File img=null;
+                    if(fileItem.getSize()>1024*1024*2){                   
+                        img = new java.io.File(TSPath+ "\\" + filedir);
+                    }
+                    else{                     
+                      img = new java.io.File(path + "\\" + filedir);
+                    }
+                   
+                    BufferedImage image = null;
+                    image = ImageIO.read(img);
+                    width = image.getWidth();
+                    height = image.getHeight();
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                if(fileItem.getSize()>1024*1024*2){
+                    new DisposePic().compress(TSPath+"\\"+ filedir,path+"\\"+ filedir,1024,1024,1F);
+                    fileflag= file.delete();
+                    System.out.println("fileflag2:"+fileflag);
+                    if(fileflag==true){
+                        System.out.println("文件删除成功");
+                    }
+                }
+              
+            
+                String picAddr = "photoes/" + filedir;
+                if (isPrivateAd == true) {// 如果是专栏广告，广告下所有图片存放在专栏图片表中
+                    PrivatePic pic = new PrivatePic(0, picAddr, width, height,
+                            adId);
+                    searchAboutPost.savePrivatePic(pic);// 存储图片
+                    System.out.println("存储专栏广告");
+                } else {
+                    for(int i=0;i<postIds.length;i++){//如果有多个粘贴栏，则在每个粘贴栏下申明一个对应的adId，而图片需要对应每一个广告
+                        int id=adId+i;//当前广告id
+                        Pic pic = new Pic(0, picAddr, width, height, checked, id);
+                        searchAboutPost.savePic(pic);// 存储图片
+                    }                   
+                }
+            }
+                    
+        }   
+        response.sendRedirect("upLoad3.jsp");//成功则跳转到成功页面               
+    }
+	
 	//广告存储
 	public void saveAds(String[] postIds,int adTypeId,String remark,boolean isPrivateAd,List<FileItem> fileItems,HttpServletRequest request,
 			HttpServletResponse response)throws ServletException, IOException{ 
@@ -608,7 +806,6 @@ public class FunctionsForPostLogical {
 			}
 			 		
 		}	
-		response.sendRedirect("upLoad3.jsp");//成功则跳转到成功页面		
-		 		
+		response.sendRedirect("upLoad3.jsp");//成功则跳转到成功页面				
 	}
 }

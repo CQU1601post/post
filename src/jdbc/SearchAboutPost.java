@@ -17,7 +17,7 @@ public class SearchAboutPost {
 	public List<UnitType> unitTypes() {
 		ConnectDB connect = new ConnectDB();
 		// System.out.println("执行src/jdbc/SearchFromDB/unitTypeNames()");
-		String sql = "select * from unitType";
+		String sql = "select * from unittype";
 		ResultSet result = connect.executeQuery(sql);
 		List<UnitType> unitTypes = changeResultSetToArray.unitTypeArrays(result);
 		connect.close();
@@ -64,28 +64,28 @@ public class SearchAboutPost {
 		connect.close();
 		return units;
 	}
-	   public List<AdType > unitsWithPublicAD(int unitTypeId) {	     
-	        ConnectDB connect = new ConnectDB();
-	        String sql = "select * from adtype where unitTypeId=" + unitTypeId;
-	        ResultSet result = connect.executeQuery(sql);
-	        List<AdType> adTypes = new ArrayList<AdType>();
-	        try {
-	            while(result.next()){                
-	                int adtypeId=result.getInt(1);//获取unitId
-	               
-	                System.out.println("adtypeId:"+adtypeId);
-	              
-	                AdType adType=new AdType(result.getInt(1),result.getString(2),result.getInt(3));  
-	                adTypes.add(adType);
-	                }
-	            
-	        } catch (SQLException e) {
-	             System.out.println("false in:src/jdbc/ChangeResultSetToArray/postsArray");
-	             System.out.println(e);
-	        } 
-	        connect.close();
-	        return adTypes ;
-	    }
+//	   public List<AdType > unitsWithPublicAD(int postId) {	     
+//	        ConnectDB connect = new ConnectDB();
+//	        String sql ="select * from adType where adType.groupId in (select post.groupId from post where postId='"+postId+"')";
+//	        ResultSet result = connect.executeQuery(sql);
+//	        List<AdType> adTypes = new ArrayList<AdType>();
+//	        try {
+//	            while(result.next()){                
+//	                int adtypeId=result.getInt(1);//获取unitId
+//	               
+//	                System.out.println("adtypeId:"+adtypeId);
+//	              
+//	                AdType adType=new AdType(result.getInt(1),result.getString(2),result.getInt(3));  
+//	                adTypes.add(adType);
+//	                }
+//	            
+//	        } catch (SQLException e) {
+//	             System.out.println("false in:src/jdbc/ChangeResultSetToArray/postsArray");
+//	             System.out.println(e);
+//	        } 
+//	        connect.close();
+//	        return adTypes ;
+//	    }
 	
 	// 查找传入单位下所有粘贴栏
 	public List<Post> postsOfUnit(int unitId) {
@@ -122,9 +122,9 @@ public class SearchAboutPost {
 		return adTypes;
 	}
 	//返回普通粘贴栏UnitType的所有广告类别
-	public List<AdType> adTypesOfUnitTypes(int UnitTypeId) {
+	public List<AdType> adTypesOfPost(int postId) {
         ConnectDB connect = new ConnectDB();
-        String sql = "select * from adType where unitTypeId='"+UnitTypeId+"'";
+        String sql = "select * from adType where adType.groupId in (select post.groupId from post where postId='"+postId+"')";
         ResultSet result = connect.executeQuery(sql);
         List<AdType> adTypes = changeResultSetToArray.adTypesArray(result);
         connect.close();

@@ -3,11 +3,12 @@ package allClasses;
 public class AdType {
 	private int adTypeId;
 	private String adTypeName;
-	private int unitTypeId;
-	public AdType(int adTypeId, String adTypeName, int unitTypeId) {     
+	private int groupId;
+	
+	public AdType(int adTypeId, String adTypeName, int groupId) {     
         this.adTypeId = adTypeId;
         this.adTypeName = adTypeName;
-        this.unitTypeId = unitTypeId;
+        this.groupId = groupId;
     }
     public AdType() {
 		super(); 
@@ -26,11 +27,12 @@ public class AdType {
 	public void setAdTypeName(String adTypeName) {
 		this.adTypeName = adTypeName;
 	}
-    public int getUnitTypeId() {
-        return unitTypeId;
+    public int getGroupId() {
+        return groupId;
     }
-    public void setUnitTypeId(int unitTypeId) {
-        this.unitTypeId = unitTypeId;
+    public void setGroupId(int groupId) {
+        this.groupId = groupId;
     }
+    
 	
 }

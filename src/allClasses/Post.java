@@ -8,6 +8,7 @@ public class Post {
 	private String createTime;
 	private int visitorsOfToday;
 	private int allVisitors;
+	private int groupId;
 	public Post(){
 		
 	}
@@ -23,7 +24,20 @@ public class Post {
 		this.allVisitors = allVisitors;
 	}
 
-	public int getVisitorsOfToday() {
+	public Post(int postId, int unitId, int userId, String postName,
+            String createTime, int visitorsOfToday, int allVisitors, int groupId) {
+        super();
+        this.postId = postId;
+        this.unitId = unitId;
+        this.userId = userId;
+        this.postName = postName;
+        this.createTime = createTime;
+        this.visitorsOfToday = visitorsOfToday;
+        this.allVisitors = allVisitors;
+        this.groupId = groupId;
+    }
+
+    public int getVisitorsOfToday() {
 		return visitorsOfToday;
 	}
 	public void setVisitorsOfToday(int visitorsOfToday) {
@@ -67,4 +81,12 @@ public class Post {
 	public void setCreateTime(String createTime) {
 		this.createTime = createTime;
 	}
+
+    public int getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(int groupId) {
+        this.groupId = groupId;
+    }
 }

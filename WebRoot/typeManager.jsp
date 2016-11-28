@@ -7,6 +7,8 @@ String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 
 List list=(List)request.getAttribute("list");
+Object Groupid=request.getSession().getAttribute("GroupId");
+String delete="delete";
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -38,6 +40,21 @@ List list=(List)request.getAttribute("list");
 </STYLE>
 
 <script type="text/javascript">
+function delete1(id){
+         
+             var r=confirm("删除此类别吗？删除后此类别下所有的广告都要被删除");
+             if (r==true)
+               {
+                 var cn=document.getElementById("delete"+id);
+                 cn.href="AdminManagerLogical?info=delType&typeId="+id; 
+               }
+             else{
+                 var cn=document.getElementById("delete"+id);
+                 cn.href="AdminManagerLogical?info=typeShow"; 
+             }
+          
+     
+     }
 	function change(id,name){
 		var newType=null;		
 		newType=prompt("请输入你要修改的类别",name);
@@ -57,7 +74,9 @@ List list=(List)request.getAttribute("list");
      		newType=prompt("请输入类别名"," ");     		
 		}
 		var cn=document.getElementById("add");
-		cn.href="AdminManagerLogical?info=insertType&typeName="+newType;  
+		var GroupId=document.getElementById("HiddenGroupId").value;
+		
+		cn.href="AdminManagerLogical?info=insertType&typeName="+newType+"&GroupId="+GroupId;  
 	}
 
 </script>
@@ -74,7 +93,7 @@ List list=(List)request.getAttribute("list");
     <tr align="center">    
    		<td width="150" align="center">类别Id</td>       
     	<td width="150" align="center">类别名</td>     	
-  		<td width="200" align="center">操作  </td>
+  		<td width="300" align="center">操作  </td>
   		<td></td>
     </tr>
     <c:if test="${list!=null }">   
@@ -86,12 +105,13 @@ List list=(List)request.getAttribute("list");
   	 		<td width="150" align="center"><%=t.getAdTypeId()%></td>  	 		
    	 		<td width="150" align="center"><%=t.getAdTypeName()%></td>   
   			<td>
-  				<table width="200" >  
+  				<table width="300" >  
   				<tr align="center">	 		
     				<td width="100" align="center"><a href=" " onclick="change('<%=t.getAdTypeId()%>','<%=t.getAdTypeName() %>')"  id="<%=t.getAdTypeId()%>" >修改</a></td>
     				  		
-     				<td width="100" align="center"><a href="AdminManagerLogical?info=delType&typeId=<%=t.getAdTypeId() %>">删除 </a></td>
-    			</tr>
+     				<td width="100" align="center"><a href=" "  onclick="delete1('<%=t.getAdTypeId() %>')"   id="<%=delete+t.getAdTypeId()%>">删除 </a></td>
+    		          
+            	</tr>
     			</table>
     		</td>
    	</tr>    
@@ -102,7 +122,7 @@ List list=(List)request.getAttribute("list");
   </table>     
      
      
-    
+   <input type="hidden"  id="HiddenGroupId" value="<%=Groupid%>">
      
   </body>
 </html>

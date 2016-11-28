@@ -21,6 +21,7 @@ public class ConnectDB {
             con = DriverManager.getConnection(url, userName, password);
             con.setAutoCommit(true);
         } catch (Exception ex) {
+            System.out.println(ex.getMessage());
             System.out
                     .println("false in :src/configurations/ConnectDB/ConnectDB()");
         }

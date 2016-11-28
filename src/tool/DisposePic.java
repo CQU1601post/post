@@ -28,7 +28,8 @@ public class DisposePic {
 			byte[] b = new byte[5];
 			in.read(b);
 			srcImage = javax.imageio.ImageIO.read(file);
-		} catch (IOException e) {
+			in.close();
+		} catch (IOException e) {		   
 			System.out.println("读取图片文件出错！" + e.getMessage());
 			e.printStackTrace();
 		}
@@ -93,6 +94,7 @@ public class DisposePic {
 				0, null);
 		// 调用方法输出图片文件
 		OutImage(outImgPath, newImg, per);
+		
 	}
 
 	private static void OutImage(String outImgPath, BufferedImage newImg,

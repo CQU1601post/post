@@ -2,6 +2,7 @@ package logicalConduct;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +11,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -24,6 +26,7 @@ import allClasses.AdType;
 import allClasses.Administrator;
 import allClasses.Pic;
 import allClasses.Post;
+import allClasses.TypeGroup;
 import allClasses.Unit;
 import allClasses.UnitType;
 import allClasses.User;
@@ -61,8 +64,11 @@ public class AdminManagerLogical extends HttpServlet {
         } else if (info.equals("delInfo")) {
             this.delInfo(request, response);// 删除信息，就是删除图片
         } else if (info.equals("pasteShow")) {
-            this.pasteShow(request, response);// 展示所有张贴栏
-        } else if (info.equals("insertPaste")) {
+            this.pasteShow(request, response);// 展示所有张贴栏      
+        } else if (info.equals("updatePasteGroupId")) {
+            this.updatePasteGroupId(request, response);// 展示所有张贴栏            
+        } 
+        else if (info.equals("insertPaste")) {
             this.insertPaste(request, response);// 添加张贴栏
         } else if (info.equals("updatePaste")) {
             this.updatePaste(request, response);// 更改张贴栏
@@ -84,6 +90,14 @@ public class AdminManagerLogical extends HttpServlet {
             this.updateType(request, response);
         } else if (info.equals("delType")) {
             this.delType(request, response);
+        }  else if (info.equals("typeGroupShow")) {
+            this.typeGroupShow(request, response);
+        } else if (info.equals("insertTypeGroup")) {
+            this.insertTypeGroup(request, response);
+        } else if (info.equals("updateTypeGroup")) {
+            this.updateTypeGroup(request, response);
+        } else if (info.equals("delTypeGroup")) {
+            this.delTypeGroup(request, response);
         } else if (info.equals("pasteTypeShow")) {
             this.pasteTypeShow(request, response);
         } else if (info.equals("insertPasteType")) {
@@ -629,6 +643,7 @@ public class AdminManagerLogical extends HttpServlet {
             HttpServletResponse response) throws ServletException, IOException {
         data = new AdminLogic();
         List list = data.get_paste();
+      
         request.setAttribute("list", list);
         System.out.println("t4");
         request.getRequestDispatcher("pasteManage.jsp").forward(request,
@@ -695,19 +710,40 @@ public class AdminManagerLogical extends HttpServlet {
     // 修改粘贴栏信息
     public void updatePaste(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
-        data = new AdminLogic();
-        response.setContentType("text/html;charset=UTF-8");
-        request.setCharacterEncoding("UTF-8");
+        request.setCharacterEncoding("utf-8");
+        response.setContentType("text/html;charset=utf-8");
+        data = new AdminLogic();   
         String Id = request.getParameter("id");
         int id = Integer.parseInt(Id);// 获取传入粘贴栏id
         String paste_name = request.getParameter("newName");// 获取传入的粘贴栏名
-        // paste_name=new String(paste_name.getBytes("iso-8859-1"),"UTF-8");
+         paste_name=new String(paste_name.getBytes("iso-8859-1"),"UTF-8");
+        System.out.println("paste_name1=" + paste_name);
         paste_name = URLDecoder.decode(paste_name, "utf-8");
         System.out.println("paste_name=" + paste_name);
         data.updatePaste(id, paste_name);
         pasteShow(request, response);
     }
-
+    public void updatePasteGroupId(HttpServletRequest request,HttpServletResponse response)throws ServletException, IOException{
+        request.setCharacterEncoding("utf-8");
+        response.setContentType("text/html;charset=utf-8");
+        int groupId=Integer.parseInt(request.getParameter("newgroupid"));
+        int oldgroupId=Integer.parseInt(request.getParameter("oldGroupId"));
+        int id=Integer.parseInt(request.getParameter("id"));
+        if(groupId!=oldgroupId){
+            data = new AdminLogic();  
+            List list= data.getAdtypeById(oldgroupId);
+            if(!list.isEmpty()){
+                String sql="select * from ad where adTypeId=? and postId='"
+                    + id + "'";
+                List list2=data.selectAdID(sql, list);
+                data.delBatch_pic_ad(list2);//删除类别下面的所有广告
+                System.out.println("执行了"+id);
+            }
+            data.updatePasteGroupId(id,groupId);
+        }
+        pasteShow(request, response);
+       
+    }
     // 删除粘贴栏
     public void delPaste(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
@@ -802,15 +838,94 @@ public class AdminManagerLogical extends HttpServlet {
 
     }
 
+    //显示类别组信息
+    public void typeGroupShow(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException {
+        data=new AdminLogic();
+        List list = data.getTypeGroup();
+        request.setAttribute("list", list);
+        request.getRequestDispatcher("typeGroupManager.jsp").forward(request,
+                response);
+    
+    }
+    // 插入一个组类别
+    public void insertTypeGroup(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException {
+        data = new AdminLogic();
+        response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
+
+        String paste_type = request.getParameter("typeGroupName");
+        paste_type=new String(paste_type.getBytes("iso-8859-1"),"UTF-8");
+        paste_type = URLDecoder.decode(paste_type, "utf-8");
+        System.out.println("paste_type:" + paste_type);
+
+        int typeId = data.maxTypeGroupId() + 1;
+        TypeGroup t = new TypeGroup();
+        t.setId(typeId);
+        t.setName(paste_type);
+        data.saveTypeGroup(t);
+        typeGroupShow(request, response);
+    }
+    public void updateTypeGroup(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException {
+        data = new AdminLogic();
+        response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
+
+        String typeGroupid = request.getParameter("typeGroupId");
+        int typeGroupId = Integer.parseInt(typeGroupid);
+        String typeGroupName = request.getParameter("typeGroupName");
+        typeGroupName=new String(typeGroupName.getBytes("iso-8859-1"),"UTF-8");
+        data.updateTypeGroup(typeGroupId, typeGroupName);
+        typeGroupShow(request, response);
+    }
+    public void delTypeGroup(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        data = new AdminLogic();
+        String typeGroupId = request.getParameter("typeGroupId");
+        System.out.println("typeGroupId=" + typeGroupId);
+        int id = Integer.parseInt(typeGroupId);
+        List list=data.getAdtypeById(id);
+        if(!list.isEmpty()){
+            String sql="select * from ad where adTypeId=?";
+            List list2=data.selectAdID(sql, list);
+            data.delBatch_pic_ad(list2);//删除类别下面的所有广告
+        }
+       
+        data.delTypeGroup(id);
+        typeGroupShow(request, response);
+
+    }
+    
+    
     // 显示类别信息
     public void typeShow(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
-        data = new AdminLogic();
-        List list = data.get_type();
-        request.setAttribute("list", list);
-        request.getRequestDispatcher("typeManager.jsp").forward(request,
-                response);
+        response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
+        int id=-1;
+        String GroupId;
+        GroupId = request.getParameter("GroupId");
+         if(!(GroupId==null)){
+              id = Integer.parseInt(GroupId);
+        }
+       if(GroupId==null){
+           GroupId= request.getSession().getAttribute("GroupId").toString();
+           id = Integer.parseInt(GroupId);
+       }
+       if(id!=-1){
+           data = new AdminLogic();
+           List list = data.get_typeById(id);
+           request.setAttribute("list", list);
+           HttpSession session= request.getSession();
+           session.setAttribute("GroupId", id);       
+           request.getRequestDispatcher("typeManager.jsp").forward(request,
+                   response);
+       }
+     
     }
+
 
     // 插入一个广告类别
     public void insertType(HttpServletRequest request,
@@ -820,15 +935,19 @@ public class AdminManagerLogical extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
 
         String paste_type = request.getParameter("typeName");
-        // paste_type=new String(paste_type.getBytes("iso-8859-1"),"UTF-8");
+         paste_type=new String(paste_type.getBytes("iso-8859-1"),"UTF-8");
         paste_type = URLDecoder.decode(paste_type, "utf-8");
         System.out.println("paste_type:" + paste_type);
-
+        String Groupid=request.getParameter("GroupId");
+        System.out.println(Groupid);
+        int GroupId=Integer.parseInt(Groupid);
         int typeId = data.maxTypeId() + 1;
         AdType t = new AdType();
         t.setAdTypeId(typeId);
         t.setAdTypeName(paste_type);
+        t.setGroupId(GroupId);
         data.saveType(t);
+        request.setAttribute("GroupId", GroupId);
         typeShow(request, response);
     }
 
@@ -838,23 +957,30 @@ public class AdminManagerLogical extends HttpServlet {
         data = new AdminLogic();
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
-
+      
         String typeid = request.getParameter("typeId");
         int typeId = Integer.parseInt(typeid);
         String typeName = request.getParameter("typeName");
-        // typeName=new String(typeName.getBytes("iso-8859-1"),"UTF-8");
+        typeName=new String(typeName.getBytes("iso-8859-1"),"UTF-8");
         data.updateType(typeId, typeName);
+      
         typeShow(request, response);
     }
 
     // 删除某个类别
     public void delType(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
+      
         data = new AdminLogic();
         String typeId = request.getParameter("typeId");
         System.out.println("typeId=" + typeId);
         int id = Integer.parseInt(typeId);
-        data.delType(id);
+       List<Integer> list= data.getAdByAdTypeId(id);
+       data.delBatch_pic_ad(list);//删除类别是要删除此类别下面的广告
+       data.delType(id);
+      
         typeShow(request, response);
 
     }
@@ -913,6 +1039,7 @@ public class AdminManagerLogical extends HttpServlet {
         String typeId = request.getParameter("typeId");
         System.out.println("typeId=" + typeId);
         int id = Integer.parseInt(typeId);
+       
         data.delPasteType(id);
         pasteTypeShow(request, response);
 

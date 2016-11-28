@@ -57,13 +57,7 @@ $(function() {
           
             var   Audit= $(".indirect_audit").val();
             var ADCheckedID = new Array();
-     
-        
-                
-            
-           
-           
-           
+   
             if(Audit=="已审核"){
                 if(auditChoice.length!=0){         
                     for ( var i = 0; i < auditChoice.length; i++) {

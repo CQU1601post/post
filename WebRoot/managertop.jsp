@@ -52,7 +52,7 @@ body{
      <td  width="120"  rowspan="2"><div align="center"><a href="AdminManagerLogical?info=showUser" class="top-a">注册用户管理</a></div></td>
      <td width="120" rowspan="2"><div align="center"><a href="AdminManagerLogical?info=pasteShow" class="top-a">粘贴栏管理</a></div></td>
      <td width="120" rowspan="2"><div align="center"><a href="AdminManagerLogical?info=unitShow" class="top-a">单位管理</a></div></td>       
-     <td width="120"  rowspan="2"><div align="center"><a href="AdminManagerLogical?info=typeShow" class="top-a">类别管理</a></div></td> 
+     <td width="120"  rowspan="2"><div align="center"><a href="AdminManagerLogical?info=typeGroupShow" class="top-a">类别管理</a></div></td> 
      <td width="150" rowspan="2"><div align="center"><a href="AdminManagerLogical?info=pasteTypeShow" class="top-a">单位所属类别管理</a></div></td>       
      <c:if  test="${!empty sessionScope.adminInfo}">
      <td width="180" rowspan="2"></td>

@@ -8,10 +8,13 @@ import java.util.List;
 
 import javax.enterprise.inject.New;
 
+import sun.print.resources.serviceui;
+
 import allClasses.AdType;
 import allClasses.Administrator;
 import allClasses.Pic;
 import allClasses.Post;
+import allClasses.TypeGroup;
 import allClasses.Unit;
 import allClasses.UnitType;
 import allClasses.User;
@@ -56,7 +59,8 @@ public class AdminLogic {
     public List getAuditInfo(int checked) {
         List list = new ArrayList();
         Pic p;
-        sql = "select *from pic where pic.adId in(select ad.adId from ad where exist=1) and checked='" + checked + "'";
+        sql = "select *from pic where pic.adId in(select ad.adId from ad where exist=1) and checked='"
+                + checked + "'";
         connection = new ConnectDB();
         ResultSet rs = connection.executeQuery(sql);
 
@@ -152,14 +156,15 @@ public class AdminLogic {
         connection.close();
 
     }
-    //通过改变ad的状态，来代表删除
-    public void newDel_pic_ad(int adId){
-        connection=new ConnectDB();
-        sql="update ad set exist=0 where adId="+adId;
+
+    // 通过改变ad的状态，来代表删除
+    public void newDel_pic_ad(int adId) {
+        connection = new ConnectDB();
+        sql = "update ad set exist=0 where adId=" + adId;
         connection.executeUpdate(sql);
         connection.close();
     }
-    
+
     public void delBatch_pic_ad(List<Integer> AdList) {
         connection = new ConnectDB();
         sql = "delete from pic where adId=?";
@@ -169,13 +174,15 @@ public class AdminLogic {
         flag = connection.executeBatch(sql, listTransformationInt(AdList));
         connection.close();
     }
-    
-    public void newDelBatch_pic_ad(List<Integer> AdList){
-        connection=new ConnectDB();
-        sql="update ad set exist=0 where adId=?";
-        boolean flag=connection.executeBatch(sql, listTransformationInt(AdList));
+
+    public void newDelBatch_pic_ad(List<Integer> AdList) {
+        connection = new ConnectDB();
+        sql = "update ad set exist=0 where adId=?";
+        boolean flag = connection.executeBatch(sql,
+                listTransformationInt(AdList));
         connection.close();
     }
+
     // 看用户名是否在在数据库中存在，存在返回false,不存在返回true
     public boolean isRepeat(String userName) {
 
@@ -316,7 +323,7 @@ public class AdminLogic {
         connection = new ConnectDB();
         resultSets = connection.executeQueryBatch(sql,
                 listTransformationInt(IDList));
-        if(resultSets.size()!=0){
+        if (resultSets.size() != 0) {
             for (Iterator iterator = resultSets.iterator(); iterator.hasNext();) {
                 ResultSet resultSet = (ResultSet) iterator.next();
                 try {
@@ -324,15 +331,14 @@ public class AdminLogic {
                         IDLists.add(resultSet.getInt("adId"));
                     }
                 } catch (SQLException e1) {
-                   
+
                     e1.printStackTrace();
-                }
-                finally {
+                } finally {
                     connection.close();
                 }
             }
         }
-        
+
         return IDLists;
     }
 
@@ -359,7 +365,7 @@ public class AdminLogic {
 
     // 批量删除用户
     public boolean delBatch_user(List<Integer> userIDList) {
-        ConnectDB  connection1 = new ConnectDB();
+        ConnectDB connection1 = new ConnectDB();
         int[] param = new int[userIDList.size()];
         List<String> strings = new ArrayList<String>();
         int i = 0;
@@ -371,37 +377,37 @@ public class AdminLogic {
         }
         sql = "delete from user where userId=?";// 删除用户之前需要删除ad、pic、privatead、privatepic。
         String sqlDeleteFather = "delete from ad where userId=?";
-        String sqlSelectFather="select adId from ad where userId=?";
+        String sqlSelectFather = "select adId from ad where userId=?";
         String sqlDeleteSon = "delete from pic where adId=?";
         connection1.executeBatch(sqlDeleteSon,
                 listTransformationInt(selectAdID(sqlSelectFather, userIDList)));// 删除pic中与这个用户相关联的pic，可以使用批量删除广告
         connection1.executeBatch(sqlDeleteFather,
                 listTransformationInt(userIDList));// 删除ad中与这个用户相关联的ad
         sqlDeleteFather = "delete from privatead where userId=?";
-        sqlSelectFather="select adId from privatead where userId=?";
+        sqlSelectFather = "select adId from privatead where userId=?";
         sqlDeleteSon = "delete from privatepic where adId=?";
         connection1.executeBatch(sqlDeleteSon,
-                listTransformationInt(selectAdID( sqlSelectFather, userIDList)));// 删除pic中与这个用户相关联的privatepic
+                listTransformationInt(selectAdID(sqlSelectFather, userIDList)));// 删除pic中与这个用户相关联的privatepic
         connection1.executeBatch(sqlDeleteFather,
                 listTransformationInt(userIDList));// 删除ad中与这个用户相关联的privatead
         sqlDeleteSon = "delete from attention where userId=?";
-        connection1
-                .executeBatch(sqlDeleteSon, listTransformationInt(userIDList));
+        connection1.executeBatch(sqlDeleteSon,
+                listTransformationInt(userIDList));
         boolean flag = connection1.executeBatch(sql, param);// 此地用的param可以用listTransformationInt(userIDList)获得，是一样的
         System.out.println(flag);
         connection1.close();
         return flag;
     }
-    public void delBatch_ad(String sql,List<Integer> adList){
+
+    public void delBatch_ad(String sql, List<Integer> adList) {
         connection = new ConnectDB();
-       
+
         String sqlDeleteSon = "delete from pic where adId=?";
-        connection.executeBatch(sqlDeleteSon,
-                listTransformationInt(adList));// 删除pic中与这个用户相关联的pic
-        connection.executeBatch(sql,
-                listTransformationInt(adList));// 删除ad中与这个用户相关联的ad
+        connection.executeBatch(sqlDeleteSon, listTransformationInt(adList));// 删除pic中与这个用户相关联的pic
+        connection.executeBatch(sql, listTransformationInt(adList));// 删除ad中与这个用户相关联的ad
     }
-    //把list 转化为数组。
+
+    // 把list 转化为数组。
     public int[] listTransformationInt(List<Integer> List) {
         int[] param = new int[List.size()];
         int i = 0;
@@ -452,6 +458,7 @@ public class AdminLogic {
                 p.setUnitId(rs.getInt("unitId"));
                 p.setUserId(rs.getInt("userId"));
                 p.setCreateTime(rs.getString("createtime"));
+                p.setGroupId(rs.getInt("groupId"));
                 list.add(p);
 
             }
@@ -462,6 +469,24 @@ public class AdminLogic {
             connection.close();
         }
 
+        return list;
+    }
+
+    public List<Integer> getPasteGroup() {
+        List<Integer> list = new ArrayList<Integer>();
+        ConnectDB connectDB = new ConnectDB();
+        sql = "select DISTINCT groupId from adtype ";
+        ResultSet resultSet = connectDB.executeQuery(sql);
+        try {
+            while (resultSet.next()) {
+                list.add(resultSet.getInt("groupId"));
+            }
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+        } finally {
+            connectDB.close();
+        }
         return list;
     }
 
@@ -490,6 +515,16 @@ public class AdminLogic {
         System.out.println("执行updatePaste，flag=" + flag);
         return flag;
     }
+    public boolean updatePasteGroupId(int id, int groupid) {
+        connection = new ConnectDB();
+        sql = "update post set  groupId='" + groupid + "' where postId='"
+                + id + "'";
+        boolean flag = connection.executeUpdate(sql);
+        connection.close();
+        System.out.println("执行updatePasteGroupId，flag=" + flag);
+        return flag;
+    }
+    
 
     // 返回当前最大的粘贴栏id
     public int maxPasteId() {
@@ -604,6 +639,108 @@ public class AdminLogic {
         return flag;
     }
 
+    public int maxTypeGroupId() {
+        int max = 0;
+        sql = "select max(id) as id from typeGroup";
+
+        connection = new ConnectDB();
+        ResultSet rs = connection.executeQuery(sql);
+        try {
+            while (rs.next()) {
+                max = rs.getInt(1);
+
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            connection.close();
+        }
+        System.out.println("执行maxTypeGroupId，当前最大的typeGroupId为：" + max);
+        return max;
+    }
+    
+    // 获取所有组类别信息
+    public List<TypeGroup> getTypeGroup(){
+        sql = "select *  from typeGroup ";
+        List<TypeGroup> list = new ArrayList<TypeGroup>();
+        TypeGroup p;
+        connection = new ConnectDB();
+        ResultSet rs = connection.executeQuery(sql);
+        System.out.println("rs=" + rs);
+        try {
+            while (rs.next()) {
+                p = new TypeGroup();
+                p.setId(rs.getInt(1));
+                // p.setAdType(rs.getInt(1));
+                p.setName(rs.getString(2));
+                list.add(p);
+
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            connection.close();
+        }
+        return list;
+    }
+
+    public boolean saveTypeGroup(TypeGroup p) {
+        connection = new ConnectDB();
+        sql = "insert into typeGroup values('" + p.getId() + "','"
+                + p.getName() + "')";
+        boolean flag = connection.executeUpdate(sql);
+        connection.close();
+        return flag;
+    }
+    
+    public boolean updateTypeGroup(int id, String typeGroupName) {
+        connection = new ConnectDB();
+        sql = "update typeGroup set GroupName='" + typeGroupName
+                + "' where id='" + id + "'";
+        boolean flag = connection.executeUpdate(sql);
+        connection.close();
+        System.out.println("执行updateTypeGroup，flag=" + flag);
+        return flag;
+    }
+    
+    //删除组类别，并且删除组里面所有的成员，并且删除此类别下面的所有广告。
+    public boolean delTypeGroup(int id) {
+        
+        connection = new ConnectDB();
+        sql="delete from adtype where groupId='"+id+"'";
+        boolean  flag=connection.executeUpdate(sql);
+        if(flag){
+            sql = "delete from typeGroup where id='" + id + "'";
+            flag = connection.executeUpdate(sql);
+        } 
+        connection.close();
+        return flag;
+    }
+    
+    public List<Integer> getAdtypeById(int id) {
+        List<Integer> list = new ArrayList<Integer>();
+       
+        sql = "select * from adtype where GroupId='" + id + "'";;
+       ConnectDB connection1 = new ConnectDB();
+      
+        ResultSet rs = connection1.executeQuery(sql);
+        System.out.println("rs=" + rs);
+        try {
+            while (rs.next()) {     
+                list.add(rs.getInt(1));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            connection1.close();
+        }
+
+        return list;
+    }
+    
     // 获取所有广告类别信息
     public List get_type() {
         List list = new ArrayList();
@@ -618,6 +755,7 @@ public class AdminLogic {
                 p.setAdTypeId(rs.getInt(1));
                 // p.setAdType(rs.getInt(1));
                 p.setAdTypeName(rs.getString(2));
+              
                 list.add(p);
 
             }
@@ -630,12 +768,39 @@ public class AdminLogic {
 
         return list;
     }
+    public List get_typeById(int GroupId) {
+        List list = new ArrayList();
+        AdType p;
+        sql = "select *from adtype where GroupId='"+GroupId+"' ";
+        connection = new ConnectDB();
+        ResultSet rs = connection.executeQuery(sql);
+        System.out.println("rs=" + rs);
+        try {
+            while (rs.next()) {
+                p = new AdType();
+                p.setAdTypeId(rs.getInt(1));
+                // p.setAdType(rs.getInt(1));
+                p.setAdTypeName(rs.getString(2));
+              
+                list.add(p);
 
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            connection.close();
+        }
+
+        return list;
+    }
+    
+    
     // 保存广告类别
     public boolean saveType(AdType p) {
         connection = new ConnectDB();
         sql = "insert into adtype values('" + p.getAdTypeId() + "','"
-                + p.getAdTypeName() + "')";
+                + p.getAdTypeName() +"','"+p.getGroupId()+    "')";
         boolean flag = connection.executeUpdate(sql);
         connection.close();
         return flag;
@@ -682,6 +847,25 @@ public class AdminLogic {
         return flag;
     }
 
+    public List<Integer> getAdByAdTypeId(int id){
+        connection= new ConnectDB();
+        List<Integer> list=new ArrayList<Integer>();
+        sql ="select * from ad where adTypeId='" + id + "'";
+        ResultSet rs=connection.executeQuery(sql);
+        try {
+            while(rs.next()){
+                list.add(rs.getInt(1));
+            }
+        } catch (SQLException e) {
+          
+            e.printStackTrace();
+        }
+        finally{
+            connection.close();
+        }
+        return list;
+    }
+    
     // 获取所有单位类别信息
     public List get_pasteType() {
         List list = new ArrayList();
@@ -759,6 +943,25 @@ public class AdminLogic {
         return flag;
     }
 
+    // 根据类别Groupid返回组类别名字
+    public String typeGroupName(int id) {
+        String name = null;
+        sql = "select *from typeGroup where id='" + id + "' ";
+        connection = new ConnectDB();
+        ResultSet rs = connection.executeQuery(sql);
+        try {
+            while (rs.next()) {
+                name = rs.getString(2);
+
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            connection.close();
+        }
+        return name;
+    }
     // 根据单位类别id返回单位所属类别
     public String typeName(int id) {
         String name = null;
