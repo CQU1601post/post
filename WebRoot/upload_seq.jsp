@@ -33,9 +33,8 @@ $(function() {
 	var path,
 	FileReader = window.FileReader; 
 	count=0;//记录图片张数
-	$("#addButton").click(function(){//添加图片
-		//alert("add");
-		//alert($(':file').size());
+
+	function addImg(){
 		if($(':file').size()>=10){//判断当前照片的个数，如果已经有十张图片，则不能继续添加
 			alert('一个最多只能上传十张图片');
 		}
@@ -52,8 +51,8 @@ $(function() {
 				var end2=file.substring(file.length-3);
 				if(end1!='jpeg'&end2!='jpg'&end2!='bmp'&end2!='gif'&end2!='png'){//不符合格式则提示并清除
 					alert("只允许上传格式为jpg，jpeg，bmp，gif的文件");	
-					$file.val('');	
-					$img.attr('src','');	
+					/*$file.val('');*/	
+					/*$img.attr('src','');*/	
 				}
 				else{
 					if(window.File && window.FileReader && window.FileList && window.Blob) {
@@ -68,7 +67,8 @@ $(function() {
 							$img.attr('src',src);
 							$tr.addClass('shine');
 							//$img.style('display','block');			
-						};						
+						};
+						addImg();						
 					}
 					else {
 						path = $(this).val();
@@ -86,8 +86,17 @@ $(function() {
 			}); 	
 			$("#ImgList").append($tr);
 			$tr.append($img).append($tdFile).append($dele);
-		}	 
+		}
+	}
+
+	$("#addButton").click(function(){
+		if($(':file').size()==0||$('.shine').length==$(':file').size()){
+			addImg();
+		}
 	});
+
+	addImg();
+
 	var el = document.getElementById('ImgList');
 	var sortable_1 = Sortable.create(el,{
 		animation: 500
@@ -159,6 +168,7 @@ function changeType(){
 			</div>
 			<div class='note'>关键信息：
 				<input type='text' value='' name='remark' id='remark' onBlur='checkRemark()'> 
+				<p class="error">注：请将最关键的信息写在前20个字中！</p>
 			</div>
 			<div class='but'>
             	<input type="submit" value="完成" class="button">

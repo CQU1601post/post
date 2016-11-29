@@ -21,7 +21,7 @@ i { font-style:normal;}
 <!-- search css -->
 .search_form{position:relative; height:31px; margin:0 auto;display:inline-block;} 
 .search_form:hover{-webkit-box-shadow:0 0 3px #999;-moz-box-shadow:0 0 3px #999} 
-.sinput{width:400px; height:21px; line-height:21px; padding:4px 7px; color:b3b3b3;  border:1px solid #999; border-radius:2px 0 0 2px; background-color:#fbfbfb; margin-top:10px;} 
+.sinput{width:400px; height:31px; line-height:21px; padding:4px 7px; color:b3b3b3;  border:1px solid #999; border-radius:2px 0 0 2px; background-color:#fbfbfb; margin-top:10px;} 
 .sbtn{float:left; width:100px; height:31px; padding:0 12px; margin-left:-1px;  border-radius:0 2px 2px 0; border:1px solid #3c3c3c; background-color:#3c3c3c; cursor:pointer;  display:inline-block; font-size:12px; vertical-align:middle; color:#f3f7fc;position:absolute; margin-top:10px;} 
 .sbtn:hover{background:#666666}
 

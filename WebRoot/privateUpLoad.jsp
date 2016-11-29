@@ -162,9 +162,9 @@
 	<c:if test='${sessionScope.user.userType>0}'>
 		<div class="step">
 			<!-- 显示第几步 -->
-			<div class="current">第一步：选择上传广告的分类</div>
-			<div class="not_current">第二步：选择上传的图片</div>
-			<div class="not_current"><br><br>第三步：完成上传</div>
+			<div class="current_step">第一步：选择上传广告的分类</div>
+			<!-- <div class="not_current">第二步：选择上传的图片</div>
+			<div class="not_current"><br><br>第三步：完成上传</div> -->
 		</div>
 
 		<div id="CategoryTitle">
@@ -198,34 +198,33 @@
 		</div> 
 		
 		
-			<form action='upLoad2.jsp' onsubmit='return check()' method='post'>
+			<form action='upload_seq.jsp' class="upload_type_form" onsubmit='return check()' method='post'>
 				<!-- 点击广告后向upLoad2发送adTypeId和postId,发送前先确定是否选中-->
-				<div class='info'>
-				<ul><li>
-				<input type='text' style='display:none' id='selectedAdTypeId'
-					name='adTypeId' value='<%=adTypeId%>'>
-				<!--用隐藏域显示选中的广告类别id -->
-				</li>
-				<li>
-				
-				<input type='text' style='display:none' id='selectedPostId'
-					name='postId' value='<%=postId%>'>
+				<ul class="upload_type_info">
+					<li>
+						<input type='text' style='display:none' id='selectedAdTypeId'
+							name='adTypeId' value='<%=adTypeId%>'>
+						<!--用隐藏域显示选中的广告类别id -->
 					</li>
-				<li>
-				上传广告到：<input type="text" style='width:300'  id='selectedPostName' name='postName' readonly='true' value=''>	<!--显示选中的粘贴栏名称 -->		
-				</li>
-				<li>
-				所选类别：<input type="text" style='width:80'  id='selectedAdTypeName' name='adTypeName' readonly='true' value='<%=adTypeName%>'>	<!--显示选中的粘贴栏名称 -->
-				</li>								
-			   <li>
-		        <div class="but">
-				<p>
-					<input type="submit" value="下一步" class="button" />
-				</p>
-				</div>
-				</li>
+					<li>
+						<input type='text' style='display:none' id='selectedPostId'
+							name='postId' value='<%=postId%>'>
+					</li>
+
+					<li>
+						<span>上传广告到：</span><input type="text"  id='selectedPostName' name='postName' readonly='true' value=''>	<!--显示选中的粘贴栏名称 -->		
+					</li>
+					<li>
+						<span>所选类别：</span><input type="text"  id='selectedAdTypeName' name='adTypeName' readonly='true' value='<%=adTypeName%>'>	<!--显示选中的粘贴栏名称 -->
+					</li>								
+			        <div class="but">
+		                <p>
+		                    <input type="submit" value="下一步"
+		                        class="button"
+		                    />
+		                </p>
+	            	</div>
 				</ul>
-				</div>
 			</form>
 		</div>
 		

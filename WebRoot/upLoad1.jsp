@@ -46,217 +46,134 @@
 <script type="text/javascript" src="js/jquery-1.4.4.js"></script>
 <title>upLoad ads</title>
 <script type="text/javascript">
-    $(document)
-            .ready(
-                    function() {
-                        
-                        $("#unitTypeContainer li")
-                                .click(
-                                        function(event) {
-                                            var clicked = $(this);
-                                            var unitTypeId = clicked
-                                                    .attr('value');
-                                            $('#unitTypeContainer li')
-                                                    .removeClass('Selected');
-                                            $(this).addClass('Selected');
-                                            $("#unitContainer").html("");// 改变类别之后首先清除单位、粘贴栏选择框中信息
-                                            $("#postContainer").html("");
-                                            $
-                                                    .post(
-                                                            // 发送异步传输请求，获取对应类别的单位
-                                                            "PostLogical",
-                                                            {
-                                                                functionName : "unitsWithPublicPost",
-                                                                unitTypeId : unitTypeId
-                                                            },
-                                                            function(
-                                                                    returnedData,
-                                                                    status) {// 返回的是单位
-                                                                if (returnedData.length <= 0) {// 如果返回的没有任何包含非专栏的单位，则在文本框显示当前类别没有公共粘贴栏
-                                                                    $(
-                                                                            "#unitContainer")
-                                                                            .text(
-                                                                                    "当前类别没有公共粘贴栏");
-                                                                } else { // 如果有则显示
-                                                                    for ( var i = 0; i < returnedData.length; i++) {
-                                                                        var obj = returnedData[i];// 获取obj中的每个对象
-                                                                        var unitId = obj.unitId;
-                                                                        var unitName = obj.unitName;
-                                                                        //var onclick="showPosts()";//点击单位后显示该单位的粘贴栏内容
-                                                                        // alert(unitName);
-                                                                        // 点击单位后显示该单位的粘贴栏内容
-                                                                        var html = "<li  value='" + unitId + "'>"
-                                                                                + unitName
-                                                                                + "</li>";
-                                                                        var $li = $(html);
-                                                                        $li
-                                                                                .click(function(
-                                                                                        event) {//点击单位时会显示出对应粘贴栏
-                                                                                    //alert("执行");
-                                                                                    //alert(unitId+":"+unitName);
-                                                                                    var clicked = $(this);
-                                                                                    var html = clicked
-                                                                                            .html();
-                                                                                    //alert(html);
-                                                                                    var unitId = clicked
-                                                                                            .attr('value');
-                                                                                    //alert(unitId);
-                                                                                    $(
-                                                                                            '#unitContainer li')
-                                                                                            .removeClass(
-                                                                                                    'Selected');
-                                                                                    $(
-                                                                                            clicked)
-                                                                                            .addClass(
-                                                                                                    'Selected');
-                                                                                    $(
-                                                                                            "#postContainer")
-                                                                                            .html(
-                                                                                                    ""); //清空原来显示的内容
-                                                                                    $
-                                                                                            .post(
-                                                                                                    "PostLogical",
-                                                                                                    {
-                                                                                                        functionName : "publicPostsOfUnit",
-                                                                                                        unitId : unitId
-                                                                                                    },
-                                                                                                    function(
-                                                                                                            returnedData,
-                                                                                                            status) {//返回的是粘贴栏
-                                                                                                        if (returnedData.length <= 0) {//如果返回的没有任何包含非专栏的单位，则在文本框显示当前类别没有公共粘贴栏
-                                                                                                            $(
-                                                                                                                    "#postContainer")
-                                                                                                                    .val(
-                                                                                                                            "当前类别没有公共粘贴栏");
-                                                                                                        } else {
-                                                                                                            for ( var i = 0; i < returnedData.length; i++) {
-                                                                                                                var obj = returnedData[i];//获取obj中的每个对象
-                                                                                                                var postId = obj.postId;
-                                                                                                                var postName = obj.postName;
-                                                                                                                //点击类别后将隐藏域内容设置为PostId
-                                                                                                                var html = "<li value='"+postId+"' onclick='"+onclick+"'>"
-                                                                                                                        + postName
-                                                                                                                        + "</li>";
-                                                                                                                var $li = $(html);
-                                                                                                                $li
-                                                                                                                        .click(function(
-                                                                                                                                event) {//为当前对象添加点击事件
-                                                                                                                            var clicked = $(this);
-                                                                                                                            //var html=clicked.html();
-                                                                                                                            //alert(html);
-                                                                                                                            var postId = clicked
-                                                                                                                                    .attr('value');
-                                                                                                                            var postName = clicked
-                                                                                                                                    .text();
-                                                                                                                            $(
-                                                                                                                                    '#postContainer li')
-                                                                                                                                    .removeClass(
-                                                                                                                                            'Selected');
-                                                                                                                            $(
-                                                                                                                                    this)
-                                                                                                                                    .addClass(
-                                                                                                                                            'Selected');
-                                                                                                                            $(
-                                                                                                                                    '#selectedPostId')
-                                                                                                                                    .val(
-                                                                                                                                            postId);//在隐藏域中记录选种粘贴栏Id
-                                                                                                                            $(
-                                                                                                                                    '#selectedPostName')
-                                                                                                                                    .val(
-                                                                                                                                            postName);
-                                                                                                                            $("#adTypeContainer").html("");
-                                                                                                                            $
-                                                                                                                                    .post(
-                                                                                                                                            "PostLogical",
-                                                                                                                                            {
-                                                                                                                                                functionName : "unitsWithPublicAD",
-                                                                                                                                                postId : postId
-                                                                                                                                            },
-                                                                                                                                            function(
-                                                                                                                                                    returnedData,
-                                                                                                                                                    status) {
-                                                                                                                                                if (returnedData.length <= 0) {
-                                                                                                                                                    $(
-                                                                                                                                                            "#adTypeContainer")
-                                                                                                                                                            .val(
-                                                                                                                                                                    "当前类别没有公共粘贴栏");
-                                                                                                                                                } else {
-                                                                                                                                                    for ( var i = 0; i < returnedData.length; i++) {
-                                                                                                                                                        var obj = returnedData[i];//获取obj中的每个对象
-                                                                                                                                                        var adTypeId = obj.adTypeId;
-                                                                                                                                                        var adTypeName = obj.adTypeName;
-                                                                                                                                                        
-                                                                                                                                                        //点击类别后将隐藏域内容设置为PostId
-                                                                                                                                                        var html = "<li value='"+adTypeId+"' onclick='"+onclick+"'>"
-                                                                                                                                                                + adTypeName
-                                                                                                                                                                + "</li>";
-                                                                                                                                                        var $li = $(html);
-                                                                                                                                                        $li
-                                                                                                                                                                .click(function(
-                                                                                                                                                                        event) {//为当前对象添加点击事件
-                                                                                                                                                                    var clicked = $(this);
-                                                                                                                                                                    //var html=clicked.html();
-                                                                                                                                                                    //alert(html);
-                                                                                                                                                                    var adTypeId = clicked
-                                                                                                                                                                            .attr('value');
-                                                                                                                                                                    var adTypeName = clicked
-                                                                                                                                                                            .text();
-                                                                                                                                                                
-                                                                                                                                                                    $(
-                                                                                                                                                                            '#adTypeContainer li')
-                                                                                                                                                                            .removeClass(
-                                                                                                                                                                                    'Selected');
-                                                                                                                                                                    $(
-                                                                                                                                                                            this)
-                                                                                                                                                                            .addClass(
-                                                                                                                                                                                    'Selected');
-                                                                                                                                                                    $(
-                                                                                                                                                                            '#selectedAdTypeId')
-                                                                                                                                                                            .val(
-                                                                                                                                                                                    adTypeId);//在隐藏域中记录选种粘贴栏Id
-                                                                                                                                                                    $(
-                                                                                                                                                                            '#selectedAdTypeName')
-                                                                                                                                                                            .val(
-                                                                                                                                                                                    adTypeName);
-                                                                                                                                                                });
-                                                                                                                                                        $(
-                                                                                                                                                                "#adTypeContainer")
-                                                                                                                                                                .append(
-                                                                                                                                                                        $li);
-                                                                                                                                                    }
-
-                                                                                                                                                }
-                                                                                                                                            });
-
-                                                                                                                        });
-                                                                                                                $(
-                                                                                                                        "#postContainer")
-                                                                                                                        .append(
-                                                                                                                                $li);
-                                                                                                            }
-                                                                                                        }
-                                                                                                    });
-
-                                                                                });
-                                                                        $(
-                                                                                "#unitContainer")
-                                                                                .append(
-                                                                                        $li);
-                                                                    }
-                                                                }
-                                                            });
-                                        });
-
-                    });
+$(document).ready(function() {               
+    $("#unitTypeContainer li").click(function(event) {
+        var clicked = $(this);
+        var unitTypeId = clicked.attr('value');
+        $('#unitTypeContainer li').removeClass('Selected');
+        $(this).addClass('Selected');
+        $("#unitContainer").html("");// 改变类别之后首先清除单位、粘贴栏选择框中信息
+        $("#postContainer").html("");
+        $.post(
+            // 发送异步传输请求，获取对应类别的单位
+            "PostLogical",
+            {
+                functionName : "unitsWithPublicPost",
+                unitTypeId : unitTypeId
+            },
+            function(returnedData,status) {// 返回的是单位
+                if (returnedData.length <= 0) {// 如果返回的没有任何包含非专栏的单位，则在文本框显示当前类别没有公共粘贴栏
+                    $("#unitContainer").text("当前类别没有公共粘贴栏");
+                } else { // 如果有则显示
+                    for ( var i = 0; i < returnedData.length; i++) {
+                        var obj = returnedData[i];// 获取obj中的每个对象
+                        var unitId = obj.unitId;
+                        var unitName = obj.unitName;
+                        //var onclick="showPosts()";//点击单位后显示该单位的粘贴栏内容
+                        // alert(unitName);
+                        // 点击单位后显示该单位的粘贴栏内容
+                        var html = "<li  value='" + unitId + "'>"
+                                + unitName
+                                + "</li>";
+                        var $li = $(html);
+                        $li.click(function(event) {//点击单位时会显示出对应粘贴栏
+                            //alert("执行");
+                            //alert(unitId+":"+unitName);
+                            var clicked = $(this);
+                            var html = clicked.html();
+                            //alert(html);
+                            var unitId = clicked.attr('value');
+                            //alert(unitId);
+                            $('#unitContainer li').removeClass('Selected');
+                            $(clicked).addClass('Selected');
+                            $("#postContainer").html(""); //清空原来显示的内容
+                            $.post(
+                                "PostLogical",
+                                {
+                                    functionName : "publicPostsOfUnit",
+                                    unitId : unitId
+                                },
+                                function(returnedData,status) {//返回的是粘贴栏
+                                    if (returnedData.length <= 0) {//如果返回的没有任何包含非专栏的单位，则在文本框显示当前类别没有公共粘贴栏
+                                        $("#postContainer").val("当前类别没有公共粘贴栏");
+                                    }else{
+                                        for( var i = 0; i < returnedData.length; i++) {
+                                            var obj = returnedData[i];//获取obj中的每个对象
+                                            var postId = obj.postId;
+                                            var postName = obj.postName;
+                                            //点击类别后将隐藏域内容设置为PostId
+                                            var html = "<li value='"+postId+"' onclick='"+onclick+"'>"+ postName+ "</li>";
+                                            var $li = $(html);
+                                            $li.click(function(event) {//为当前对象添加点击事件
+                                                var clicked = $(this);
+                                                //var html=clicked.html();
+                                                //alert(html);
+                                                var postId = clicked.attr('value');
+                                                var postName = clicked.text();
+                                                $('#postContainer li').removeClass('Selected');
+                                                $(this).addClass('Selected');
+                                                $('#selectedPostId').val(postId);//在隐藏域中记录选种粘贴栏Id
+                                                $('#selectedPostName').val(postName);
+                                                $("#adTypeContainer").html("");
+                                                $.post( "PostLogical",
+                                                    {
+                                                        functionName : "unitsWithPublicAD",
+                                                        postId : postId
+                                                    },
+                                                    function(returnedData,status) {
+                                                        if (returnedData.length <= 0) {
+                                                            $("#adTypeContainer").val("当前类别没有公共粘贴栏");
+                                                        } else {
+                                                            for ( var i = 0; i < returnedData.length; i++) {
+                                                                var obj = returnedData[i];//获取obj中的每个对象
+                                                                var adTypeId = obj.adTypeId;
+                                                                var adTypeName = obj.adTypeName;
+                                                                
+                                                                //点击类别后将隐藏域内容设置为PostId
+                                                                var html = "<li value='"+adTypeId+"' onclick='"+onclick+"'>"
+                                                                        + adTypeName
+                                                                        + "</li>";
+                                                                var $li = $(html);
+                                                                $li.click(function(event) {//为当前对象添加点击事件
+                                                                    var clicked = $(this);
+                                                                    //var html=clicked.html();
+                                                                    //alert(html);
+                                                                    var adTypeId = clicked.attr('value');
+                                                                    var adTypeName = clicked.text();
+                                                                
+                                                                    $('#adTypeContainer li').removeClass('Selected');
+                                                                    $(this).addClass('Selected');
+                                                                    $('#selectedAdTypeId').val(adTypeId);//在隐藏域中记录选种粘贴栏Id
+                                                                    $('#selectedAdTypeName').val(adTypeName);
+                                                                });
+                                                                $("#adTypeContainer").append($li);
+                                                            }   
+                                                        }
+                                                    }
+                                                );
+                                            });
+                                            $("#postContainer").append($li);
+                                        }      
+                                    }
+                                }
+                            );
+                        });
+                        $("#unitContainer").append($li);
+                    }
+                }
+            }
+        );
+    });
+});
 </script>
 </head>
 <body>
 
     <div class="step">
         <!-- 显示第几步 -->
-        <div class="current">第一步：选择上传广告的分类</div>
-        <div class="not_current">第二步：选择上传的图片</div>
-        <div class="not_current">第三步：完成上传</div>
+        <div class="current_step">第一步：选择上传广告的分类</div>
+        <!-- <div class="not_current">第二步：选择上传的图片</div>
+        <div class="not_current">第三步：完成上传</div> -->
     </div>
 
     <div id="CategoryTitle">
@@ -289,48 +206,39 @@
         </ul>
     </div>
 
-
-    <form action='upload_seq.jsp' onsubmit='return check()'
-        method='post'
-    >
+    <form class="upload_type_form" action='upload_seq.jsp' onsubmit='return check()' method='post'>
         <!-- 点击广告后向upLoad2发送adTypeId和postId,发送前先确定是否选中-->
-        <div class='info'>
-            <ul>
-                <li><input type='text' style='display:none'
-                    id='selectedAdTypeId' name='adTypeId'
-                    value='<%=adTypeId%>'
-                ></li>
-                <!--用隐藏域显示选中的广告类别id -->
-                <li><input type='text' style='display:none'
-                    id='selectedPostId' name='postId'
-                    value='<%=postId%>'
-                ></li>
+        <ul class="upload_type_info">
+            <li><input type='text' style='display:none'
+                id='selectedAdTypeId' name='adTypeId'
+                value='<%=adTypeId%>'
+            ></li>
+            <!--用隐藏域显示选中的广告类别id -->
+            <li><input type='text' style='display:none'
+                id='selectedPostId' name='postId'
+                value='<%=postId%>'
+            ></li>
 
 
-                <li>上传广告到：<input type='text' readonly='true'
-                    id='selectedPostName' name='postName'
-                    value='<%=postName%>'
-                ></li>
-                <!-- 搜索当前类别对应的类别名 -->
-                <!-- 如果传来的adTypeId为0则改为1 -->
+            <li><span>上传广告到：</span><input type='text' readonly='true'
+                id='selectedPostName' name='postName'
+                value='<%=postName%>'
+            ></li>
+            <!-- 搜索当前类别对应的类别名 -->
+            <!-- 如果传来的adTypeId为0则改为1 -->
 
-                <li>所选类别：<input type='text' id='selectedAdTypeName'
-                    readonly='true' name='adTypeName'
-                    value='<%=adTypeName%>'
-                >
-                </li>
-                <!--用隐藏域显示选中的粘贴栏id -->
-                <li>
-                    <div class="but">
-                        <p>
-                            <input type="submit" value="下一步"
-                                class="button"
-                            />
-                        </p>
-                    </div>
-                </li>
-            </ul>
-        </div>
+            <li><span>所选类别：</span><input type='text' id='selectedAdTypeName'
+                readonly='true' name='adTypeName'
+                value='<%=adTypeName%>'
+            >
+            </li>
+            <!--用隐藏域显示选中的粘贴栏id -->
+            <div class="but">
+                <input type="submit" value="下一步"
+                    class="button"
+                />
+            </div>
+        </ul>
     </form>
 
 </body>

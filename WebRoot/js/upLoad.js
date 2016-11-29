@@ -21,8 +21,8 @@ function deleteAll(){//删除所有图片
 
 function checkRemark(){//限制备注的长度
 	var remark=$("#remark").val();
-	if(remark.length>10){
-		alert('备注最多为10个字');
+	if(remark.length>100){
+		alert('备注最多为100个字');
 		$("#remark").val('');
 	}
 }

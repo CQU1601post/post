@@ -31,20 +31,19 @@
 <body>
 
 <div class="step">
-<div class="not_current">
+<!-- <div class="not_current">
 第一步：选择上传广告的分类
 </div>
 <div class="not_current">
 第二步：选择上传的图片
-</div>
-<div class="current">
+</div> -->
+<div class="current_step">
 第三步：完成上传
 </div>
 </div>
 
-<div class="but">
-恭喜您上传成功！
-<p><p><p><p>
+<div class="upload_result">
+<p>恭喜您上传成功！</p>
 <!-- 此处返回的应该是进来的地方，history.go(-2) -->
 <input type='button' value="  继续上传"" class="button" onclick="goBack()">
 <input type="button" value="返回首页" class="button" onclick="window.open('index.jsp','_self')">  

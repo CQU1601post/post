@@ -133,20 +133,19 @@ $(document).ready(function () {
 
     <div class="homepage_search">
 	
-	<div class="logo">
-	<img src="images/logo07.png" width="150" height="150">
-	<img src="images/logo06.png" width="150" height="150">
-	</div>
+		<div class="logo">
+			<img src="images/logo07.png" width="150" height="150">
+			<img src="images/logo06.png" width="150" height="150">
+		</div>
 
-    <div class="search">
-
-		 <!-- 搜索 -->
+	    <div class="search">
+			 <!-- 搜索 -->
 			<form action="PostLogical?functionName=searchPosts" method="post" onsubmit='return checkText();'>
 				<input type="text" id="searchText" name="searchText" class="sinput" placeholder="请输入搜索内容">
 				<input type="submit" value="搜索" class="sbtn">
 			</form>
 		</div>
-		
+			
 		<div class="post"><!-- 显示所有单位类别 -->
 		  <font size="3"> 
 		    <c:forEach var="item" items="<%=unitTypes%>">
@@ -154,10 +153,10 @@ $(document).ready(function () {
 				target="_blank">${item.unitTypeName}</a> &nbsp;	&nbsp;&nbsp;	     
 		    </c:forEach>
 		   
-   	       </font>
+		       </font>
 		</div>
-		</div>
-		<div class="background"></div>
+	</div>
+	<div class="background"></div>
 	</center>
 	<jsp:include page="buttom.jsp" flush="true" />
 </body>
