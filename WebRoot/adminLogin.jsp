@@ -18,9 +18,10 @@
 
 }
 .STYLE3 {
-	font-size: 36px;
+	font-size:3.5em;
 	color: #FF8040;
 	font-family: Georgia, "Times New Roman", Times, serif;
+	top:-30px;
 }
 .STYLE4 {font-family: "宋体"; font-size: 24px; }
 .STYLE5 {font-size: 24px}
@@ -49,14 +50,17 @@ a:active {
 
 <body>
 <p><br></p>
+<div style="margin:0 auto;width:550px;"><img src="images/logo02.png" width="252" height="180" /><span class="STYLE3">&nbsp;&nbsp;后台管理</span>
+</div>
+<hr width="1000px">
+<hr width="1100px">
+<hr width="1000px">
 <form action="AdminManagerLogical?info=adminlogin" method="post" >
-<table width="450" height="266" border="0" align="center" cellpadding="0" cellspacing="0">
+<table width="600" height="266" border="0" align="center" cellpadding="0" cellspacing="0">
+  <tr><td>&nbsp;&nbsp;</td></tr>
   <tr>
-    <td height="104" colspan="2" valign="middle" class="STYLE1"><div align="left"><img src="images/logo02.png" width="232" height="49" align="bottom" /><span class="STYLE3"> --后台管理</span></div></td>
-  </tr>
-  <tr>
-    <td width="153" height="76" class="STYLE1"><div align="right" class="STYLE6">管理员：</div></td>
-    <td width="297">
+    <td width="200px" height="36" class="STYLE1"><div align="right" class="STYLE6">管理员：</div></td>
+    <td width="397">
       <div align="left">
         <input name="name" type="text" class="STYLE1" size="20" />
       </div></td>

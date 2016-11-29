@@ -112,7 +112,7 @@ public class FunctionsForUserLogical {
 				request.getSession().setAttribute("user",user);
 				// out.println("<script type='text/javascript'>alert('success')</script>");
 				 out.println("<script type='text/javascript'>window.opener.location.reload();window.close();</script>");				
-				  
+				 response.sendRedirect("index.jsp");
 				//System.out.println("查找到用户"); 
 			}
 			

@@ -35,7 +35,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     <a class="hiddenanchor" id="toregister"></a>
                     <a class="hiddenanchor" id="tologin"></a>
                     <div id="wrapper">
-                    <img alt="" src="css/images/copy1     .jpg" style="width:1100px;height:680px;right:500px;margin: 0px auto;position:relative">
+                    <img alt="" src="css/images/copy1.jpg" style="width:1100px;height:680px;right:500px;margin: 0px auto;position:relative">
                         <div id="login" class="animate form">
                             <form  action='UserLogical?functionName=login'  id='userInfo' method='post'> 
                                 <div align="left" style="margin-left:60px; margin-top:30px">

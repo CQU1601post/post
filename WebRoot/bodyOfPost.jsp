@@ -215,12 +215,27 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                      
                      <div class="ad_cell">
                       <a href="PostLogical?functionName=picsOfAd&adId=${ad['adId']}&postId=${post.postId}" target="_blank">
-                        <img  class="img" alt="点击查看" src="${ad['firstPicAddr']}"
-                        id="${ad['adId']}"/></a>                     
+                        <img  class="img" alt="点击查看" src="${ad['firstPicAddr']}" id="${ad['adId']}"/>
+                        <c:if test="${empty ad['remark']}">
+                            <span class='keyInfo' height="18px">
+                                                                                        无文字介绍
+                        </span>
+                        </c:if>
+                        <c:if test="${!empty ad['remark']}">
+                            <span class='keyInfo' height="36px">
+                            ${fn:substring(ad['remark'],0,20)}
+                            </span>
+                        </c:if>
+                       <%--  <span class='keyInfo' height="">
+                            <c:if test="${empty ad['remark']}">
+                                                                                   无文字介绍
+                            </c:if>
+                            <c:if test="${!empty ad['remark']}">
+                                ${fn:substring(ad['remark'],0,20)}
+                            </c:if>
+                        </span> --%>
+                        </a>                     
                     </div>
-                      
-                     
-                   
                 </c:forEach>
                 <div style="clear:both"></div>                       
             </c:if>
