@@ -386,7 +386,7 @@ public class AdminManagerLogical extends HttpServlet {
         JSONArray jsonArray = JSONArray.fromObject(jsonADCheckedID);
         for (int i = 0; i < jsonArray.size(); i++) {
             AdList.add(i, Integer.parseInt((String) jsonArray.get(i)));
-            // System.out.println(" 广告ID" + (String) jsonArray.get(i));
+            System.out.println(" 广告ID" + (String) jsonArray.get(i));
         }
         data.delBatch_pic_ad(AdList);
         int state = 1;
@@ -646,7 +646,7 @@ public class AdminManagerLogical extends HttpServlet {
       
         request.setAttribute("list", list);
         System.out.println("t4");
-        request.getRequestDispatcher("pasteManage.jsp").forward(request,
+        request.getRequestDispatcher("pasteManage1.jsp").forward(request,
                 response);
     }
 
