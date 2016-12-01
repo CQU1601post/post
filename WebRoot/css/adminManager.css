@@ -1,0 +1,121 @@
+@CHARSET "UTF-8";
+.adminManager_table_mui-switch {
+  width: 52px;
+  height: 31px;
+  position: relative;
+  border: 1px solid #dfdfdf;
+  background-color: #fdfdfd;
+  box-shadow: #dfdfdf 0 0 0 0 inset;
+  border-radius: 20px;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  background-clip: content-box;
+  display: inline-block;
+  -webkit-appearance: none;
+  user-select: none;
+  outline: none;
+}
+.adminManager_table_mui-switch:before {
+    content: '';
+    width: 29px;
+    height: 29px;
+    position: absolute;
+    top: 0px;
+    left: 0;
+    border-radius: 20px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    background-color: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4); 
+    }
+  .adminManager_table_mui-switchh:checked {
+    border-color: #FAA07D;;
+    box-shadow: #FAA07D; 0 0 0 16px inset;
+    background-color: #FAA07D;
+    
+    }
+    .adminManager_table_mui-switch:checked:before {
+      left: 21px; 
+   }
+      
+      .adminManager_table_mui-switch.mui-switch-animbg {
+    transition: background-color ease 0.4s; 
+    }
+    .adminManager_table_mui-switch.mui-switch-animbg:before {
+      transition: left 0.3s; 
+      }
+    .adminManager_table_mui-switch.mui-switch-animbg:checked {
+      box-shadow: #dfdfdf 0 0 0 0 inset;
+      background-color: #FAA07D;
+      transition: border-color 0.4s, background-color ease 0.4s; 
+      }
+      .adminManager_table_mui-switch.mui-switch-animbg:checked:before {
+        transition: left 0.3s; 
+     }
+    .picShow{
+        width:210px;
+        height:210px;
+        
+        padding:10px;
+    }
+    .deletePic{
+        width:200px;
+        height:20px;
+        background-color: #DEDEDE;
+        font-family: "Microsoft YaHei",tahoma,arial,'Hiragino Sans GB','\5b8b\4f53',sans-serif;
+        font-size: 10px;
+        
+    }
+    .deletePic a,.deletePic input{
+        float:right;
+        color:#970102;
+    }
+   .STYLE7{
+    color:#FAA07D;
+    font-size:2.5em;
+}
+a:hover{
+   color:#970102;
+}
+a{
+   color:black;
+   text-decoration:none;
+}
+.top_logo{
+	width:1000px;
+	margin: auto;
+	.STYLE1{
+	   height:104px;
+	   width:600;
+	   colspan:2;
+	   valign:middle;
+	   align:center;
+	} 
+}
+.operation a{
+	background-color:black;
+	border-radius:3px 3px;
+	display:block;width:100px;
+	height:20px;
+	color:white;
+	opacity:0.7
+}
+.table_content{
+	margin:0 auto;
+	width:1300px;
+	border-spacing:0;
+	
+}
+.tr_one{
+       align:center;
+       height:40;
+       background-color:#add9c0;
+}
+.tr_two{
+	background-color:#CCF0CC;
+	border:0;
+}
