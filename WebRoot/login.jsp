@@ -12,20 +12,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     
     <title>登录页面</title>
     
-	<meta http-equiv="pragma" content="no-cache">
-	<meta http-equiv="cache-control" content="no-cache">
-	<meta http-equiv="expires" content="0">    
-	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
-	<meta http-equiv="description" content="This is my page">
-	<!--
-	<link rel="stylesheet" type="text/css" href="styles.css">
-	-->
-	<!-- <link rel="stylesheet" type="text/css" href="css/login.css"> -->
-	<link rel="shortcut icon" href="../favicon.ico"> 
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="expires" content="0">    
+    <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+    <meta http-equiv="description" content="This is my page">
+    <!--
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    -->
+    <!-- <link rel="stylesheet" type="text/css" href="css/login.css"> -->
+    <link rel="shortcut icon" href="../favicon.ico"> 
     <link rel="stylesheet" type="text/css" href="css/demo.css" />
     <link rel="stylesheet" type="text/css" href="css/style.css" />
    <!--  <link rel="stylesheet" type="text/css" href="css/animate-custom.css" /> -->
-	<script type="text/javascript" src="js/jquery-1.4.4.js" ></script>
+    <script type="text/javascript" src="js/jquery-1.4.4.js" ></script>
   </head>
   
   <body style="background:url(css/images/back_login.jpg) top center no-repeat; background-size:cover;overflow-y:auto;opacity: 0.8;">
@@ -63,6 +63,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     </div>
                 </div>  
             </section>
-        </div>	 
+        </div>   
   </body>
 </html>

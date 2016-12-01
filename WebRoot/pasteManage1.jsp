@@ -37,11 +37,11 @@ for(int i=0;i<unitIds.length;i++){
 	<meta http-equiv="expires" content="0">    
 	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 	<meta http-equiv="description" content="This is my page">
-	
+
 	   <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 	
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
-	
+	   <link href="css/adminManager.css" rel="stylesheet" type="text/css" />
 	
 	<style type="text/css">
 <!--
@@ -152,15 +152,18 @@ function changeGroupID(id,oldGroupId){
   
   <body>
   <jsp:include page="managertop.jsp" flush="true" />
-  <p align="center" class="p">粘贴栏管理</p>
-  
-     <p align="center"> 
-     	<a href=""  onclick="insert()"id="add">添加粘贴栏</a>
+   <table class="top_logo">
+   <tr>
+    <td class="STYLE1"><div align="center"><img src="images/logo02.png" width="252" height="150" align="bottom" /><span class="STYLE7">&nbsp;粘贴栏管理</span></div></td>
+  </tr>
+ </table>
+      <p align="center" class="operation"> 
+        <a href=""  onclick="insert()"id="add" style="background-color:black;border-radius:3px 3px;display:block;width:100px;height:20px;color:white;opacity:0.7">添加粘贴栏</a>
      </p>
-  <br>
-  <br>
-   <table  align="center" >
-    <tr align="center">
+
+ 
+   <table  class="table_content" >
+    <tr class="tr_one">
    		<td width="100" align="center">粘贴栏编号</td>     		
   	    <td width="150" align="center">粘贴栏名称</td>	
   	    <td width="100" align="center">单位id</td> 
@@ -181,7 +184,7 @@ function changeGroupID(id,oldGroupId){
    			String userName=data.userName(userId);
    			userName=userId+":"+userName;//同时显示类别标号和名称
     %>
-    <tr>
+    <tr class="tr_two">
   	 		<td width="100" align="center"><%=p.getPostId()%></td>    	 		
   			<td width="150" align="center"><%=p.getPostName() %></td>	  			
   			<td width="100" align="center"><%=unitName%></td>

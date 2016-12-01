@@ -7,12 +7,12 @@
 }
  
 .ad_cell{
-	position: relative;
-	width: 250px;
-	height: 250px;
-	float: left;
-	margin: 5px;
-	z-index: 1;
+    position: relative;
+    width: 250px;
+    height: 250px;
+    float: left;
+    margin: 5px;
+    z-index: 1;
 }
 .ad_cell .keyInfo{
     display:none;
@@ -23,34 +23,33 @@
     top:170px;
     left:100px;
     width:120px;
-    height:18px;
     border: 1px solid gray;
     background-color:white;
     color:black;
     font-family: "Microsoft YaHei" ! important;
-    font-size:12;
+    font-size:10;
     opacity:0.9;
     box-shadow: 4px 5px 5px #121212;
     padding:1px;
     z-index:20;
 }
 .ads{
-	background-color: #fde0d8;
-	width: 1300px;
-	margin:0 auto;
-	padding: 5px;
+    background-color: #fde0d8;
+    width: 1300px;
+    margin:0 auto;
+    padding: 5px;
 }
 .adpost_none img{
-	width: 1300px;
+    width: 1300px;
 }
 .info{
-	font-size: 16px;
-	margin: 20px 100px;
+    font-size: 16px;
+    margin: 20px 100px;
 }
 .info span{
-	margin: 0 10px;
+    margin: 0 10px;
 }
 .info span em{
-	color: #FFAA8C;
-	font-weight: bold;
+    color: #FFAA8C;
+    font-weight: bold;
 }

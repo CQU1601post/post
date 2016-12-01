@@ -21,6 +21,8 @@ String delete="delete";
 	<meta http-equiv="expires" content="0">    
 	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 	<meta http-equiv="description" content="This is my page">
+    <link href="css/adminManager.css" rel="stylesheet" type="text/css" />
+       <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 	<!--
 	<link rel="stylesheet" type="text/css" href="styles.css">
 	-->
@@ -67,13 +69,18 @@ function delete1(id){
   
   <body>
     <jsp:include page="managertop.jsp" flush="true" />
-     <p align="center" class="p">广告组类别管理</p>
-  <p align="center">
+    <table class="top_logo">
+   <tr>
+    <td class="STYLE1"><div align="center"><img src="images/logo02.png" width="252" height="150" align="bottom" /><span class="STYLE7">&nbsp;广告组类别管理</span></div></td>
+  </tr>
+   </table>
+    
+  <p align="center"  class="operation">
       <a href=" " id="add" onclick="add()">添加</a>
     </p>
       <br>
    <table  align="center" >
-    <tr align="center">    
+    <tr align="center" class="tr_one">    
         <td width="150" align="center">组Id</td>       
         <td width="150" align="center">组别名</td>         
         <td width="200" align="center">操作  </td>
@@ -84,10 +91,10 @@ function delete1(id){
         for(int j=0;j<list.size();j++){
             TypeGroup t=(TypeGroup)list.get(j); 
     %>
-    <tr>
+    <tr class="tr_two">
             <td width="150" align="center"><%=t.getId()%></td>            
             <td width="150" align="center"><%=t.getName()%></td>   
-            <td>
+            <td bgcolor="#D1EEEE" align="center">
                 <table width="300" >  
                 <tr align="center">         
                     <td width="100" align="center"><a href=" " onclick="change('<%=t.getId()%>','<%=t.getName() %>')"  id="<%=t.getId()%>" >修改</a></td>

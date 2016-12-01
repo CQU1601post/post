@@ -72,16 +72,50 @@
     }
     .deletePic a,.deletePic input{
         float:right;
-        color:gray;
-    }
-    a:hover
-    {
         color:#970102;
     }
-    a{
-        color:gray;
-        text-decoration:none;
-    }
-    .adminManager_table_a_insert{
-    color:red;
-    }
+   .STYLE7{
+    color:#FAA07D;
+    font-size:2.5em;
+}
+a:hover{
+   color:#970102;
+}
+a{
+   color:black;
+   text-decoration:none;
+}
+.top_logo{
+    width:1000px;
+    margin: auto;
+    .STYLE1{
+       height:104px;
+       width:600;
+       colspan:2;
+       valign:middle;
+       align:center;
+    } 
+}
+.operation a{
+    background-color:black;
+    border-radius:3px 3px;
+    display:block;width:100px;
+    height:20px;
+    color:white;
+    opacity:0.7
+}
+.table_content{
+    margin:0 auto;
+    width:1300px;
+    border-spacing:0;
+    
+}
+.tr_one{
+       align:center;
+       height:40;
+       background-color:#add9c0;
+}
+.tr_two{
+    background-color:#CCF0CC;
+    border:0;
+}

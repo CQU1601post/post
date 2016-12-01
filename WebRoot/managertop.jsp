@@ -9,7 +9,6 @@
 <title>发布信息</title>
 
 <style >
-
 .top-a{
     color:gray;
     text-decoration: none;
@@ -29,10 +28,6 @@
 body{
     width:100%;
     height:100%;
-}
-.STYLE7{
-    color:#FAA07D;
-    font-size:3em;
 }
 .navigation{
     bgcolor:#FFA07A;
@@ -68,11 +63,7 @@ body{
    </table>
    
   </div>
-   <table width="1000" align="center">
-   <tr>
-    <td height="104"  width="600" colspan="2" valign="middle"  align="center" class="STYLE1"><div align="center"><img src="images/logo02.png" width="252" height="150" align="bottom" /><span class="STYLE7"> 后台管理</span></div></td>
-  </tr>
-   </table>
+ 
 
  </body>
 </html>
