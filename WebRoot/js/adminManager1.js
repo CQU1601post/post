@@ -113,7 +113,7 @@ $(function() {
     $(".adminManager_table_a_insert").click(function() {
         
         
-        $.MsgBox.Confirm("温馨提示", "对于审核操作要慎重，确定继续吗？温馨提示", function () { 
+        $.MsgBox.Confirm("温馨提示", "对于审核操作要慎重，确定继续吗？", function () { 
             
             var noAuditChoice = $(".adminManager_table_noaudit_input_checkbox");
             var auditChoice=$(".adminManager_table_audit_input_checkbox");
@@ -129,10 +129,10 @@ $(function() {
                 var jsonADCheckedID = JSON.stringify(ADCheckedID);
                 $.ajax({
                     type:"get",
-                    url : "AdminManagerLogical?info= &jsonADCheckedID="
+                    url : "AdminManagerLogical?info=batchAuditBy&jsonADCheckedID="
                         +jsonADCheckedID,
                      success:function(data){
-                         alert("成功");
+                         alert("成功le");
                      },
                 });
             }

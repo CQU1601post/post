@@ -4,6 +4,11 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.sql.Date;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -98,15 +103,40 @@ public class FunctionsForPostLogical {
 			response.sendRedirect("index.jsp");
 		}
 		else{
-			//Get the IP of client 
-			String visitorip=null;
-			if (request.getHeader("x-forwarded-for") == null) {   
-				visitorip= request.getRemoteAddr();   
-				  }  
-			else
-			{
-				visitorip=request.getHeader("x-forwarded-for");  
-	        }
+		    String visitorip=null;
+		    visitorip= request.getHeader("x-forwarded-for");   
+		     if(visitorip == null || visitorip.length() == 0 || "unknown".equalsIgnoreCase(visitorip)) {   
+		         visitorip =  request.getHeader("Proxy-Client-IP");   
+		     }   
+		     if(visitorip== null || visitorip.length() == 0 || "unknown".equalsIgnoreCase(visitorip)) {   
+		         visitorip = request.getHeader("WL-Proxy-Client-IP");   
+		     }   
+		     if(visitorip == null || visitorip.length() == 0 || "unknown".equalsIgnoreCase(visitorip)) {   
+		         visitorip =  request.getRemoteAddr();   
+		      if(visitorip.equals("127.0.0.1")){   
+		       //根据网卡取本机配置的IP   
+		       InetAddress inet=null;   
+		    try {   
+		     inet = InetAddress.getLocalHost();   
+		    } catch (UnknownHostException e) {   
+		     e.printStackTrace();   
+		    }   
+		    visitorip= inet.getHostAddress();   
+		      }               
+		     }  
+//			if (request.getHeader("x-forwarded-for") == null) {   
+//				visitorip= request.getRemoteAddr();   
+//				  }  
+//			else
+//			{
+//				visitorip=request.getHeader("x-forwarded-for");  
+//	        }
+		     //处理日期
+		     Date date=new Date(System.currentTimeMillis());
+		     SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		     String currentTime=simpleDateFormat.format(date);
+		     Timestamp timestamp=Timestamp.valueOf(currentTime);
+		     
 			System.out.println("visitorip===="+visitorip);
 			int adTypeId=Integer.parseInt(request.getParameter("adTypeId")); 
 			int postId=Integer.parseInt(request.getParameter("postId"));
@@ -120,6 +150,8 @@ public class FunctionsForPostLogical {
 		    //vl.setVisitorid();
 			vl.setVisitorip(visitorip);
 			vl.setVisitorpostname(post.getPostName());
+			vl.setPostId(postId);
+			vl.setTime(timestamp);
 			OperationData od=new OperationData();
 			System.out.println("addVisitorLog......");
 			od.addVisitorLog(vl);

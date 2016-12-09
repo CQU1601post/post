@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -47,6 +48,27 @@ public class OperationData {
 
         return typeName;
 
+    }
+    /**
+     * 查询unittype表中数据总数
+     * @return
+     */
+    public int query_unitTypeNum(){
+        sql="select count(*) from unittype ";
+        connection=new ConnectDB();
+        ResultSet rs=connection.executeQuery(sql);
+        int num=0;
+        try {
+            // advertise ad;
+            while (rs.next()) {
+                num= rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            connection.close();
+        }
+        return num;
     }
 
     // /根据广告Id返回该广告的所属粘贴栏
@@ -214,6 +236,52 @@ public class OperationData {
         return adList;
 
     }
+    
+    // 查询广告的所有类别
+    public List query_adType(List<String> unitTypeList) throws SQLException {
+        String sqlString="";
+        AdType type;
+        HashSet<Integer> h=new HashSet<Integer>();
+        List<Integer> groupList=new ArrayList<Integer>();
+        connection = new ConnectDB();
+        List<AdType>adTypes = new ArrayList<AdType>();
+     for (Iterator iterator =unitTypeList.iterator(); iterator.hasNext();) {
+        String string = (String) iterator.next();
+        int UnitTypeId=Integer.parseInt(string);
+        sql="select unitId from unit where unitTypeId='"+UnitTypeId+"'";
+        ResultSet result = connection.executeQuery(sql);
+        // List<UnitType> unitTypes =
+        // changeResultSetToArray.unitTypeArrays(result);
+        while (result.next()) {
+            int unitId = result.getInt("unitId");
+            sql="select * from post where unitId='"+unitId+"'";
+            ResultSet   result2 = connection.executeQuery(sql);
+            while(result2.next()){
+               int groupid=result2.getInt("groupId");
+               h.add(groupid);
+            }
+            result2.close();
+        }
+        result.close();
+    }
+     for (Iterator iterator = h.iterator(); iterator.hasNext();) {
+      int groupId = (Integer) iterator.next();
+      sql="select * from adtype where groupId='"+groupId+"'";
+      ResultSet result3= connection.executeQuery(sql);
+      while(result3.next()){
+          type = new AdType();
+          type.setAdTypeId(result3.getInt("adTypeId"));
+          type.setAdTypeName(result3.getString("adTypeName"));              
+          adTypes.add(type);
+      }
+      result3.close();
+    }
+       
+        connection.close();
+        return adTypes;
+
+    }
+    
 
     // 返回所有包含非专栏粘贴栏的类别
     public List publicPasteType() {
@@ -288,9 +356,38 @@ public class OperationData {
             String p = result.getString("postName");
             postList.add(p);
         }
-
+        result.close();
         connection.close();
         return postList;
+
+    }
+    
+    public List<String> postTypes(List<String> scopeList) throws SQLException {
+        String sqlString="";
+        connection = new ConnectDB();
+        List<String> postNameList = new ArrayList<String>();
+     for (Iterator iterator = scopeList.iterator(); iterator.hasNext();) {
+        String string = (String) iterator.next();
+        int UnitTypeId=Integer.parseInt(string);
+        sql="select unitId from unit where unitTypeId='"+UnitTypeId+"'";
+        ResultSet result = connection.executeQuery(sql);
+        // List<UnitType> unitTypes =
+        // changeResultSetToArray.unitTypeArrays(result);
+        while (result.next()) {
+            int unitId = result.getInt("unitId");
+            sql="select * from post where unitId='"+unitId+"'";
+            ResultSet result2 = connection.executeQuery(sql);
+            while(result2.next()){
+                String postName=result2.getString("postName");
+                postNameList.add(postName);
+            }
+            result2.close();
+        }
+        result.close();
+    }
+       
+        connection.close();
+        return postNameList;
 
     }
 
@@ -557,8 +654,8 @@ public class OperationData {
          * e) { // TODO Auto-generated catch block e.printStackTrace(); }
          */
         System.out.println(vl.getVisitorip() + "," + vl.getVisitorpostname());
-        sql = "insert into visitorlog(visitorIP,visitorPostName)" + " values('"
-                + vl.getVisitorip() + "','" + vl.getVisitorpostname() + "') ";
+        sql = "insert into visitorlog(visitorIP,visitorPostName,postId,time)" + " values('"
+                + vl.getVisitorip() + "','" + vl.getVisitorpostname() + "','" + vl.getPostId() +"','" + vl.getTime() + "') ";
 
         // sql="insert into tb_name values('"+0+"','"+name+"','"+password+"')";
         System.out.println("addVisitorLog.0000.....");
@@ -605,5 +702,48 @@ public class OperationData {
         hour = Double.parseDouble(times.substring(8, 10));
 
         return year + month + day + hour;
+    }
+    public List<UnitType> getUnitTypes(){
+        connection = new ConnectDB();
+        sql = "select * from unittype ";
+        ResultSet result = connection.executeQuery(sql);
+        List<UnitType> unitTypes=new ArrayList<UnitType>();
+        try {
+            while(result.next()){
+                UnitType unitType=new UnitType();
+                unitType.setUnitTypeId(result.getInt("unitTypeId"));
+                unitType.setUnitTypeName(result.getString("unitTypeName"));
+                unitTypes.add(unitType);
+            }
+        } catch (SQLException e) {
+         
+            e.printStackTrace();
+        }finally{
+            connection.close();
+        }     
+        return unitTypes;
+    }
+    public String getUnitTypeName(String id){    
+        String unitTypeName="";
+        int  unitTypeId=Integer.parseInt(id);
+        if(unitTypeId==0){
+            unitTypeName="所有";
+        return  unitTypeName;
+        }else{
+            connection=new ConnectDB();
+            sql="select unitTypeName from unittype where unitTypeId='"+id+"'";
+            ResultSet resultSet=connection.executeQuery(sql);
+          
+            try {
+                while(resultSet.next()){
+                  unitTypeName= resultSet.getString("unitTypeName");
+                }
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+            return unitTypeName;
+        }
+        
+      
     }
 }

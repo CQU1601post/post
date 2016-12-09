@@ -3,8 +3,10 @@ package logicalConduct;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.enterprise.inject.New;
 
@@ -31,17 +33,31 @@ public class AdminLogic {
     // private SearchAboutPost searchFromDB=new SearchAboutPost();
     // 返回所有管理员信息
 
-    public Administrator get_admin() {
+    public boolean judgeExistAdmin(String name,String password){
+        int adPassword=Integer.parseInt(password);
+       sql="select * from administrator where administratorName='"+name+"'and password='"+adPassword+"'";
+       connection =new ConnectDB();
+       ResultSet rs=connection.executeQuery(sql);
+       if(!rs.equals(null)){
+          connection.close();
+            return true;
+        }else {
+            connection.close();
+            return false;
+        }    
+    }
+    public Administrator getAdmin(String name,String password){
+        int adPassword=Integer.parseInt(password);
+        sql="select * from administrator where administratorName='"+name+"'and password='"+adPassword+"'";
+        connection =new ConnectDB();
         Administrator a = new Administrator();
-        sql = "select * from administrator";
-        connection = new ConnectDB();
-        ResultSet rs = connection.executeQuery(sql);
-        System.out.println("rs=" + rs);
+        ResultSet rs=connection.executeQuery(sql);
         try {
-            while (rs.next()) {
+            while (rs.next()) {          
                 a.setAdministratorName(rs.getString("administratorName"));
                 a.setPassword(rs.getString("password"));
-
+                a.setLevel(rs.getInt("level"));
+                a.setScope(rs.getString("scope"));          
             }
 
         } catch (SQLException e) {
@@ -50,11 +66,51 @@ public class AdminLogic {
         } finally {
             connection.close();
         }
-
         return a;
-
+     }
+    
+    
+    public List<Administrator> getAllAdmin(){
+        sql="select * from administrator ";
+        connection=new ConnectDB();
+        ResultSet rs=connection.executeQuery(sql);
+        List<Administrator> administrators=new ArrayList<Administrator>();
+        try {
+            while(rs.next()){
+                Administrator administrator=new Administrator();
+                administrator.setId(rs.getInt("id"));
+                administrator.setAdministratorName(rs.getString("administratorName"));
+                administrator.setLevel(rs.getInt("level"));
+                administrator.setPassword(rs.getString("password"));
+                administrator.setScope(rs.getString("scope"));
+                administrators.add(administrator);
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return administrators;
     }
-
+    
+    public void insertAdminManager(String name,String password,int level,String scope){
+        sql="insert into administrator (administratorName,password,level,scope) values('" + name+ "','"+password+"','"+
+                + level + "','" + scope + "')";
+        connection=new ConnectDB();
+        boolean flag=connection.executeUpdate(sql);
+    }
+   
+    public void deleteAdminManager(int id){
+        sql="delete from administrator where id='"+id+"'";
+        connection=new ConnectDB();
+        boolean flag=connection.executeUpdate(sql);
+        System.out.println(flag);
+    }
+    public void updateAdminManager(String name,String password,int level,String scope,int  updateModelID){
+        sql="update administrator set administratorName='" + name+ "',password='" + password+ "',level='" + level+ "',scope='" + scope+ "'where id='"+updateModelID+"'" ;
+        connection=new ConnectDB();
+        boolean flag=connection.executeUpdate(sql);
+        System.out.println(flag);
+    }
+    
     // 返回所有未通过审核的图片的信息
     public List getAuditInfo(int checked) {
         List list = new ArrayList();
@@ -472,6 +528,39 @@ public class AdminLogic {
         return list;
     }
 
+    // 根据单位类别获取所有粘贴栏信息
+    public List get_paste(List<Unit> units) {
+        List list = new ArrayList();
+        Post p;
+        connection = new ConnectDB();
+        ResultSet rs =null;
+        for (Iterator iterator = units.iterator(); iterator.hasNext();) {
+           Unit unit=(Unit) iterator.next();
+           int unitId=unit.getUnitId();
+           sql = "select *from post where unitId='"+unitId+"'";
+           rs=connection.executeQuery(sql);
+           try {
+               while (rs.next()) {
+                   p = new Post();
+                   p.setPostId(rs.getInt("postId"));
+                   p.setPostName(rs.getString("postName"));
+                   p.setUnitId(rs.getInt("unitId"));
+                   p.setUserId(rs.getInt("userId"));
+                   p.setCreateTime(rs.getString("createtime"));
+                   p.setGroupId(rs.getInt("groupId"));
+                   list.add(p);
+
+               }
+
+           } catch (SQLException e) {
+               e.printStackTrace();
+           } 
+        }
+       connection.close();
+        return list;
+    }
+    
+    
     public List<Integer> getPasteGroup() {
         List<Integer> list = new ArrayList<Integer>();
         ConnectDB connectDB = new ConnectDB();
@@ -605,6 +694,38 @@ public class AdminLogic {
         }
         return list;
     }
+    
+    // 通过单位所属类别获取所有单元信息
+    public List get_unit(List<UnitType> unitTypes) {
+        List list = new ArrayList();
+        Unit u;
+        connection = new ConnectDB();
+        ResultSet rs=null;
+        for (Iterator iterator =unitTypes.iterator(); iterator.hasNext();) {
+         UnitType unitType = (UnitType) iterator.next();
+         int unitTypeId = unitType.getUnitTypeId();
+         sql = "select * from unit where unitTypeId='"+unitTypeId+"'";
+         rs= connection.executeQuery(sql);
+         try {
+             while (rs.next()) {
+                 u = new Unit();
+                 u.setUnitId(rs.getInt("unitId"));
+                 u.setUnitName(rs.getString("unitName"));
+                 u.setUnitTypeId(rs.getInt("unitTypeId"));
+                 // u.setPasteType(rs.getInt("pasteType"));
+                 list.add(u);
+
+             }
+
+         } catch (SQLException e) {
+             e.printStackTrace();
+         } 
+         }  
+    connection.close();
+      
+        return list;
+    }
+
 
     // 保存单元信息
     public boolean saveUnit(Unit u) {
@@ -683,6 +804,41 @@ public class AdminLogic {
         } finally {
             connection.close();
         }
+        return list;
+    }
+    
+    
+    // 通过掌火获取所有组类别信息
+    public List<TypeGroup> getTypeGroup(List posts){
+        Set<Integer> set=new HashSet<Integer>();
+        List<TypeGroup> list = new ArrayList<TypeGroup>();
+        TypeGroup p;
+        connection = new ConnectDB();
+        ResultSet rs = null;
+        for (Iterator iterator = posts.iterator(); iterator.hasNext();) {
+            Post post = (Post) iterator.next();
+            set.add(post.getGroupId());
+        }
+        for (Iterator iterator = set.iterator(); iterator.hasNext();) {
+            Integer integer = (Integer) iterator.next();
+            sql = "select *  from typeGroup where id='"+integer+"'";
+            rs=  connection.executeQuery(sql);
+            try {
+                while (rs.next()) {
+                    p = new TypeGroup();
+                    p.setId(rs.getInt(1));
+                    // p.setAdType(rs.getInt(1));
+                    p.setName(rs.getString(2));
+                    list.add(p);
+
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } 
+        }
+
+        connection.close();
         return list;
     }
 
@@ -894,6 +1050,38 @@ public class AdminLogic {
         return list;
     }
 
+    public List<UnitType> get_pasteType(List<String> scopeList) {
+        List<UnitType> list = new ArrayList<UnitType>();
+        UnitType p;
+        connection = new ConnectDB();
+        ResultSet rs =null;
+        for (Iterator iterator = scopeList.iterator(); iterator.hasNext();) {
+            int scope=Integer.parseInt((String) iterator.next());
+            sql = "select *from unittype where unitTypeId='"+scope+"' ";
+            rs= connection.executeQuery(sql);
+            try {
+                while (rs.next()) {
+                    p = new UnitType();
+                    p.setUnitTypeId(rs.getInt(1));
+                    // p.setPasteType(rs.getInt(1));
+                    // p.setTypeName(rs.getString(2));
+                    p.setUnitTypeName(rs.getString(2));
+                    list.add(p);
+
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+        }
+            
+      connection.close();    
+        return list;
+    }
+
+    
+    
     // 保存单位类别
     public boolean savePasteType(UnitType p) {
         connection = new ConnectDB();

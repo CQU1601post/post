@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -45,6 +47,14 @@ public class AdminManagerLogical extends HttpServlet {
         if (info.equals("adminlogin")) {
             this.adminLogin(request, response);// 管理员登陆
             System.out.println("管理员登陆");
+        } else if (info.equals("adminManager")) {
+            this.adminManager(request, response);// 管理员管理
+        } else if (info.equals("insertAdminManager")) {
+            this.insertAdminManager(request, response);// 添加管理员
+        } else if (info.equals("deleteAdminManager")) {
+            this.deleteAdminManager(request, response);// 删除管理员
+        } else if (info.equals("updateAdminManager")) {
+            this.updateAdminManager(request, response);// 修改管理员
         } else if (info.equals("adminloginout")) {
             this.adminLoginOut(request, response);// 管理员退出
         } else if (info.equals("auditInfo")) {
@@ -64,11 +74,10 @@ public class AdminManagerLogical extends HttpServlet {
         } else if (info.equals("delInfo")) {
             this.delInfo(request, response);// 删除信息，就是删除图片
         } else if (info.equals("pasteShow")) {
-            this.pasteShow(request, response);// 展示所有张贴栏      
+            this.pasteShow(request, response);// 展示所有张贴栏
         } else if (info.equals("updatePasteGroupId")) {
-            this.updatePasteGroupId(request, response);// 展示所有张贴栏            
-        } 
-        else if (info.equals("insertPaste")) {
+            this.updatePasteGroupId(request, response);// 展示所有张贴栏
+        } else if (info.equals("insertPaste")) {
             this.insertPaste(request, response);// 添加张贴栏
         } else if (info.equals("updatePaste")) {
             this.updatePaste(request, response);// 更改张贴栏
@@ -90,7 +99,7 @@ public class AdminManagerLogical extends HttpServlet {
             this.updateType(request, response);
         } else if (info.equals("delType")) {
             this.delType(request, response);
-        }  else if (info.equals("typeGroupShow")) {
+        } else if (info.equals("typeGroupShow")) {
             this.typeGroupShow(request, response);
         } else if (info.equals("insertTypeGroup")) {
             this.insertTypeGroup(request, response);
@@ -118,7 +127,7 @@ public class AdminManagerLogical extends HttpServlet {
             this.batchAuditBy(request, response);
         } else if (info.equals(" TimingProcess")) {
             this.TimingProcess(request, response);
-        }else if (info.equals("delAuditBatchInfo")) {
+        } else if (info.equals("delAuditBatchInfo")) {
             this.delAuditBatchInfo(request, response);
         }
 
@@ -129,35 +138,79 @@ public class AdminManagerLogical extends HttpServlet {
     public void adminLogin(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
         String infomation = "";
+        Administrator a = new Administrator();
         response.setContentType("text/html;charset=utf-8");
         request.setCharacterEncoding("UTF-8");
         String name = request.getParameter("name");
         String password = request.getParameter("password");
         System.out.println("name=" + name);
         data = new AdminLogic();
-        Administrator a = data.get_admin();// 此处只默认有一个管理员
-
         if (name.equals("") || password.equals("")) {
             infomation = "请输入信息";
-        }
-        if (a.getName().equals(name)) {
-            if (a.getPassword().equals(password)) {
-                System.out.println("right...");
+        } else {
+            if (data.judgeExistAdmin(name, password)) {
+                a = data.getAdmin(name, password);
                 request.getSession().setAttribute("adminInfo", a);
                 request.getRequestDispatcher("adminManager.jsp").forward(
                         request, response);
-              
+
                 return;
             } else {
                 infomation = "登录失败";
             }
-        } else {
-            infomation = "登录失败";
         }
+
         request.setAttribute("infomation", infomation);
         request.getRequestDispatcher("adminLogin.jsp").forward(request,
                 response);
 
+    }
+
+    public void adminManager(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html;charset=utf-8");
+        request.setCharacterEncoding("UTF-8");
+        data = new AdminLogic();
+        List<Administrator> administrators = data.getAllAdmin();
+        request.setAttribute("administrators", administrators);
+        request.getRequestDispatcher("administratorAccountManager.jsp")
+                .forward(request, response);
+    }
+
+    public void insertAdminManager(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html;charset=utf-8");
+        request.setCharacterEncoding("UTF-8");
+        String text = request.getParameter("text");
+        String insertName = request.getParameter("insertName");
+        int insertLevel = Integer.parseInt(request.getParameter("insertLevel"));
+        String insertPassword = request.getParameter("insertPassword");
+        data = new AdminLogic();
+        data.insertAdminManager(insertName, insertPassword, insertLevel, text);
+
+    }
+
+    public void deleteAdminManager(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html;charset=utf-8");
+        request.setCharacterEncoding("UTF-8");
+       int deleteModelID =Integer.parseInt( request.getParameter("deleteModelID"));
+        data = new AdminLogic();
+        data.deleteAdminManager(deleteModelID);
+    }
+
+    public void updateAdminManager(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html;charset=utf-8");
+        request.setCharacterEncoding("UTF-8");
+        String text = request.getParameter("text");   
+        int  updateModelID= Integer.parseInt(request.getParameter("updateModelID"));
+        String updateName = request.getParameter("updateName");
+        int updateLevel = Integer.parseInt(request.getParameter("updateLevel"));
+        String updatePassword = request.getParameter("updatePassword");
+        System.out.println("123");
+        data = new AdminLogic();
+        data.updateAdminManager(updateName,updatePassword, updateLevel, text, updateModelID);
     }
 
     // 管理员退出
@@ -204,11 +257,26 @@ public class AdminManagerLogical extends HttpServlet {
         System.out.println("执行aduitInfo，要显示的图片状态为：" + audit);
         OperationData od = new OperationData();
         if (audit.equals("未审核")) {
-          
+
             state = 0;
             noauditlistOriginal = data.getAuditInfo(state);
             if (adType.equals("所有广告")) {
-                noauditlist = noauditlistOriginal;
+                List adtypesList = getAdtypeBySession(request, response);
+                for (int i = 0; i < noauditlistOriginal.size(); i++)// 按类别展示
+                {
+                    Pic p = (Pic) noauditlistOriginal.get(i);
+                    int picId = p.getPicId();
+                    String adTypeName = od.query_adTypeBypicId(picId);
+                    System.out.println("adTypeName=" + adTypeName);
+                    for (Iterator iterator = adtypesList.iterator(); iterator
+                            .hasNext();) {
+                        AdType adType2 = (AdType) iterator.next();
+                        if (adTypeName.equals(adType2.getAdTypeName())) {
+                            noauditlist.add(p);
+                        }
+                    }
+                }
+
             } else {
                 for (int i = 0; i < noauditlistOriginal.size(); i++)// 按类别展示
                 {
@@ -239,7 +307,7 @@ public class AdminManagerLogical extends HttpServlet {
             System.out.println("size : ----->" + noauditlist.size());
 
         } else if (audit.equals("已审核")) {
-            
+
             System.out.println("----------------->111");
             state = 1;
             auditlistOriginal = data.getAuditInfo(state);
@@ -284,6 +352,54 @@ public class AdminManagerLogical extends HttpServlet {
 
     }
 
+    public List getPostListBySession(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException {
+        Administrator administrator = (Administrator) request.getSession()
+                .getAttribute("admininfo");
+        List<String> scopeList = new ArrayList<String>();
+        List<String> postList = new ArrayList<String>();
+        try {
+            if (administrator.getLevel() == 1) {
+                String[] scopes = administrator.getScope().split("\\|");
+                for (int i = 0; i < scopes.length; i++) {
+                    scopeList.add(scopes[i]);
+                }
+                postList = new OperationData().postTypes(scopeList);
+
+            }
+            if (administrator.getLevel() == 0) {
+                postList = new OperationData().postTypes();
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return postList;
+    }
+
+    public List getAdtypeBySession(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException {
+        Administrator administrator = (Administrator) request.getSession()
+                .getAttribute("adminInfo");
+        List<String> scopeList = new ArrayList<String>();
+        List<AdType> adList = new ArrayList<AdType>();
+        try {
+            if (administrator.getLevel() == 1) {
+                String[] scopes = administrator.getScope().split("\\|");
+                for (int i = 0; i < scopes.length; i++) {
+                    scopeList.add(scopes[i]);
+                }
+                adList = new OperationData().query_adType(scopeList);
+
+            }
+            if (administrator.getLevel() == 0) {
+                adList = new OperationData().query_adType();
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return adList;
+    }
+
     // 通过审核的图片
     public void auditBy(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -303,7 +419,6 @@ public class AdminManagerLogical extends HttpServlet {
     public void batchAuditBy(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
         data = new AdminLogic();
-
         boolean flag1 = data.BatchchangeState_pic(getIDJsonArray(request,
                 response));
         boolean flag2 = data.BatchchangeState_ad(getIDJsonArray(request,
@@ -396,6 +511,7 @@ public class AdminManagerLogical extends HttpServlet {
         request.getRequestDispatcher("adminManager.jsp").forward(request,
                 response);
     }
+
     public void delAuditBatchInfo(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
         data = new AdminLogic();
@@ -416,6 +532,7 @@ public class AdminManagerLogical extends HttpServlet {
         request.getRequestDispatcher("adminManager.jsp").forward(request,
                 response);
     }
+
     // 注册新用户
 
     public void registerUser(HttpServletRequest request,
@@ -642,9 +759,25 @@ public class AdminManagerLogical extends HttpServlet {
     public void pasteShow(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
         data = new AdminLogic();
-        List list = data.get_paste();
-      
-        request.setAttribute("list", list);
+        List postList=new ArrayList();
+        List<UnitType> list=new  ArrayList<UnitType>();
+        List units=new ArrayList();
+        Administrator administrator=(Administrator)request.getSession().getAttribute("adminInfo");
+        if(administrator.getLevel()==0){//可以写成一个方法，但是为了结合以前的程序，没写
+            postList= data.get_paste();
+        }else{
+            List<String> scopeList=new ArrayList<String>();
+            String[] scopes=  administrator.getScope().split("\\|");
+            for(int i=0;i<scopes.length;i++){
+              scopeList.add(scopes[i]);
+          }
+             list= data.get_pasteType(scopeList);
+             units=data.get_unit(list);
+             postList=data.get_paste(units);
+        }
+        
+ 
+        request.setAttribute("list", postList);
         System.out.println("t4");
         request.getRequestDispatcher("pasteManage1.jsp").forward(request,
                 response);
@@ -712,38 +845,41 @@ public class AdminManagerLogical extends HttpServlet {
             HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("utf-8");
         response.setContentType("text/html;charset=utf-8");
-        data = new AdminLogic();   
+        data = new AdminLogic();
         String Id = request.getParameter("id");
         int id = Integer.parseInt(Id);// 获取传入粘贴栏id
         String paste_name = request.getParameter("newName");// 获取传入的粘贴栏名
-         paste_name=new String(paste_name.getBytes("iso-8859-1"),"UTF-8");
+        paste_name = new String(paste_name.getBytes("iso-8859-1"), "UTF-8");
         System.out.println("paste_name1=" + paste_name);
         paste_name = URLDecoder.decode(paste_name, "utf-8");
         System.out.println("paste_name=" + paste_name);
         data.updatePaste(id, paste_name);
         pasteShow(request, response);
     }
-    public void updatePasteGroupId(HttpServletRequest request,HttpServletResponse response)throws ServletException, IOException{
+
+    public void updatePasteGroupId(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("utf-8");
         response.setContentType("text/html;charset=utf-8");
-        int groupId=Integer.parseInt(request.getParameter("newgroupid"));
-        int oldgroupId=Integer.parseInt(request.getParameter("oldGroupId"));
-        int id=Integer.parseInt(request.getParameter("id"));
-        if(groupId!=oldgroupId){
-            data = new AdminLogic();  
-            List list= data.getAdtypeById(oldgroupId);
-            if(!list.isEmpty()){
-                String sql="select * from ad where adTypeId=? and postId='"
-                    + id + "'";
-                List list2=data.selectAdID(sql, list);
-                data.delBatch_pic_ad(list2);//删除类别下面的所有广告
-                System.out.println("执行了"+id);
+        int groupId = Integer.parseInt(request.getParameter("newgroupid"));
+        int oldgroupId = Integer.parseInt(request.getParameter("oldGroupId"));
+        int id = Integer.parseInt(request.getParameter("id"));
+        if (groupId != oldgroupId) {
+            data = new AdminLogic();
+            List list = data.getAdtypeById(oldgroupId);
+            if (!list.isEmpty()) {
+                String sql = "select * from ad where adTypeId=? and postId='"
+                        + id + "'";
+                List list2 = data.selectAdID(sql, list);
+                data.delBatch_pic_ad(list2);// 删除类别下面的所有广告
+                System.out.println("执行了" + id);
             }
-            data.updatePasteGroupId(id,groupId);
+            data.updatePasteGroupId(id, groupId);
         }
         pasteShow(request, response);
-       
+
     }
+
     // 删除粘贴栏
     public void delPaste(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
@@ -760,10 +896,24 @@ public class AdminManagerLogical extends HttpServlet {
     public void unitShow(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
         data = new AdminLogic();
-        List list = data.get_unit();
+        List<UnitType> list=new  ArrayList<UnitType>();
+        List units=new ArrayList();
+        Administrator administrator=(Administrator)request.getSession().getAttribute("adminInfo");
+        if(administrator.getLevel()==0){//可以写成一个方法，但是为了结合以前的程序，没写
+            units = data.get_unit();
+        }else{
+            List<String> scopeList=new ArrayList<String>();
+            String[] scopes=  administrator.getScope().split("\\|");
+            for(int i=0;i<scopes.length;i++){
+              scopeList.add(scopes[i]);
+          }
+             list= data.get_pasteType(scopeList);
+             units=data.get_unit(list);
+        }
+       
         List type = data.get_type();// 返回所有的粘贴栏类别信息
-        request.setAttribute("list", list);
-        request.setAttribute("type", type);
+        request.setAttribute("list", units);
+        request.setAttribute("type", type);//似乎没用
         request.getRequestDispatcher("unitManager.jsp").forward(request,
                 response);
     }
@@ -838,16 +988,36 @@ public class AdminManagerLogical extends HttpServlet {
 
     }
 
-    //显示类别组信息
+    // 显示类别组信息
     public void typeGroupShow(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
-        data=new AdminLogic();
-        List list = data.getTypeGroup();
-        request.setAttribute("list", list);
+        data = new AdminLogic();
+        
+        
+        List typeGroupList=new ArrayList();
+        List<UnitType> list=new  ArrayList<UnitType>();
+        List units=new ArrayList();
+        Administrator administrator=(Administrator)request.getSession().getAttribute("adminInfo");
+        if(administrator.getLevel()==0){//可以写成一个方法，但是为了结合以前的程序，没写
+            typeGroupList=  data.getTypeGroup();
+        }else{
+            List<String> scopeList=new ArrayList<String>();
+            String[] scopes=  administrator.getScope().split("\\|");
+            for(int i=0;i<scopes.length;i++){
+              scopeList.add(scopes[i]);
+          }
+             list= data.get_pasteType(scopeList);
+             units=data.get_unit(list);
+            List posts=data.get_paste(units);
+            typeGroupList=data.getTypeGroup(posts);
+        }
+
+        request.setAttribute("list",typeGroupList);
         request.getRequestDispatcher("typeGroupManager.jsp").forward(request,
                 response);
-    
+
     }
+
     // 插入一个组类别
     public void insertTypeGroup(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
@@ -856,7 +1026,7 @@ public class AdminManagerLogical extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
 
         String paste_type = request.getParameter("typeGroupName");
-        paste_type=new String(paste_type.getBytes("iso-8859-1"),"UTF-8");
+        paste_type = new String(paste_type.getBytes("iso-8859-1"), "UTF-8");
         paste_type = URLDecoder.decode(paste_type, "utf-8");
         System.out.println("paste_type:" + paste_type);
 
@@ -867,6 +1037,7 @@ public class AdminManagerLogical extends HttpServlet {
         data.saveTypeGroup(t);
         typeGroupShow(request, response);
     }
+
     public void updateTypeGroup(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
         data = new AdminLogic();
@@ -876,56 +1047,56 @@ public class AdminManagerLogical extends HttpServlet {
         String typeGroupid = request.getParameter("typeGroupId");
         int typeGroupId = Integer.parseInt(typeGroupid);
         String typeGroupName = request.getParameter("typeGroupName");
-        typeGroupName=new String(typeGroupName.getBytes("iso-8859-1"),"UTF-8");
+        typeGroupName = new String(typeGroupName.getBytes("iso-8859-1"),
+                "UTF-8");
         data.updateTypeGroup(typeGroupId, typeGroupName);
         typeGroupShow(request, response);
     }
-    public void delTypeGroup(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+
+    public void delTypeGroup(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException {
         data = new AdminLogic();
         String typeGroupId = request.getParameter("typeGroupId");
         System.out.println("typeGroupId=" + typeGroupId);
         int id = Integer.parseInt(typeGroupId);
-        List list=data.getAdtypeById(id);
-        if(!list.isEmpty()){
-            String sql="select * from ad where adTypeId=?";
-            List list2=data.selectAdID(sql, list);
-            data.delBatch_pic_ad(list2);//删除类别下面的所有广告
+        List list = data.getAdtypeById(id);
+        if (!list.isEmpty()) {
+            String sql = "select * from ad where adTypeId=?";
+            List list2 = data.selectAdID(sql, list);
+            data.delBatch_pic_ad(list2);// 删除类别下面的所有广告
         }
-       
+
         data.delTypeGroup(id);
         typeGroupShow(request, response);
 
     }
-    
-    
+
     // 显示类别信息
     public void typeShow(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
-        int id=-1;
+        int id = -1;
         String GroupId;
         GroupId = request.getParameter("GroupId");
-         if(!(GroupId==null)){
-              id = Integer.parseInt(GroupId);
+        if (!(GroupId == null)) {
+            id = Integer.parseInt(GroupId);
         }
-       if(GroupId==null){
-           GroupId= request.getSession().getAttribute("GroupId").toString();
-           id = Integer.parseInt(GroupId);
-       }
-       if(id!=-1){
-           data = new AdminLogic();
-           List list = data.get_typeById(id);
-           request.setAttribute("list", list);
-           HttpSession session= request.getSession();
-           session.setAttribute("GroupId", id);       
-           request.getRequestDispatcher("typeManager.jsp").forward(request,
-                   response);
-       }
-     
-    }
+        if (GroupId == null) {
+            GroupId = request.getSession().getAttribute("GroupId").toString();
+            id = Integer.parseInt(GroupId);
+        }
+        if (id != -1) {
+            data = new AdminLogic();
+            List list = data.get_typeById(id);
+            request.setAttribute("list", list);
+            HttpSession session = request.getSession();
+            session.setAttribute("GroupId", id);
+            request.getRequestDispatcher("typeManager.jsp").forward(request,
+                    response);
+        }
 
+    }
 
     // 插入一个广告类别
     public void insertType(HttpServletRequest request,
@@ -935,12 +1106,12 @@ public class AdminManagerLogical extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
 
         String paste_type = request.getParameter("typeName");
-         paste_type=new String(paste_type.getBytes("iso-8859-1"),"UTF-8");
+        paste_type = new String(paste_type.getBytes("iso-8859-1"), "UTF-8");
         paste_type = URLDecoder.decode(paste_type, "utf-8");
         System.out.println("paste_type:" + paste_type);
-        String Groupid=request.getParameter("GroupId");
+        String Groupid = request.getParameter("GroupId");
         System.out.println(Groupid);
-        int GroupId=Integer.parseInt(Groupid);
+        int GroupId = Integer.parseInt(Groupid);
         int typeId = data.maxTypeId() + 1;
         AdType t = new AdType();
         t.setAdTypeId(typeId);
@@ -957,13 +1128,13 @@ public class AdminManagerLogical extends HttpServlet {
         data = new AdminLogic();
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
-      
+
         String typeid = request.getParameter("typeId");
         int typeId = Integer.parseInt(typeid);
         String typeName = request.getParameter("typeName");
-        typeName=new String(typeName.getBytes("iso-8859-1"),"UTF-8");
+        typeName = new String(typeName.getBytes("iso-8859-1"), "UTF-8");
         data.updateType(typeId, typeName);
-      
+
         typeShow(request, response);
     }
 
@@ -972,15 +1143,15 @@ public class AdminManagerLogical extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
-      
+
         data = new AdminLogic();
         String typeId = request.getParameter("typeId");
         System.out.println("typeId=" + typeId);
         int id = Integer.parseInt(typeId);
-       List<Integer> list= data.getAdByAdTypeId(id);
-       data.delBatch_pic_ad(list);//删除类别是要删除此类别下面的广告
-       data.delType(id);
-      
+        List<Integer> list = data.getAdByAdTypeId(id);
+        data.delBatch_pic_ad(list);// 删除类别是要删除此类别下面的广告
+        data.delType(id);
+
         typeShow(request, response);
 
     }
@@ -989,7 +1160,19 @@ public class AdminManagerLogical extends HttpServlet {
     public void pasteTypeShow(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
         data = new AdminLogic();
-        List list = data.get_pasteType();
+        List list=new ArrayList();
+        Administrator administrator=(Administrator)request.getSession().getAttribute("adminInfo");
+        if(administrator.getLevel()==0){//可以写成一个方法，但是为了结合以前的程序，没写
+            list = data.get_pasteType();
+        }else{
+            List<String> scopeList=new ArrayList<String>();
+            String[] scopes=  administrator.getScope().split("\\|");
+            for(int i=0;i<scopes.length;i++){
+              scopeList.add(scopes[i]);
+          }
+             list= data.get_pasteType(scopeList);
+        }
+      
         request.setAttribute("list", list);
         request.getRequestDispatcher("pasteTypeManager.jsp").forward(request,
                 response);
@@ -1039,7 +1222,7 @@ public class AdminManagerLogical extends HttpServlet {
         String typeId = request.getParameter("typeId");
         System.out.println("typeId=" + typeId);
         int id = Integer.parseInt(typeId);
-       
+
         data.delPasteType(id);
         pasteTypeShow(request, response);
 
@@ -1055,7 +1238,7 @@ public class AdminManagerLogical extends HttpServlet {
     public void TimingProcess(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
         String flag = request.getParameter("flag");
-        int on_off=Integer.parseInt(flag);
+        int on_off = Integer.parseInt(flag);
         TimeProcessThread thread = TimeProcessThread.getTimeProcessThread();
         if (on_off == 1) {
             thread.run();
