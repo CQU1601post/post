@@ -36,14 +36,14 @@ $(function() {
 
 	function addImg(){
 		if($(':file').size()>=10){//判断当前照片的个数，如果已经有十张图片，则不能继续添加
-			alert('一个最多只能上传十张图片');
+			alert('一次最多只能上传十张图片');
 		}
 		else{
-			var $tr=$("<li class='img_upload'></li>");
+			var $tr=$("<li class='img_upload ignore'></li>");
 			var $tdFile=$("<div class='file_upload'></div>");
 			var $file=$("<input type='file' id='file' name='file'>");//增加file
 			$tdFile.append($file);
-			var $dele=$("<div class='dele'><img src='images/delete.jpg'/></div>");//增加删除按钮
+			var $dele=$("<div class='dele hide'><img src='images/delete.jpg'/></div>");//增加删除按钮
 			var $img=$("<input type='image' value='' class='image'/>");//样式	
 	 		$file.change(function() {//图片的路径改变时则在显示框显示图片
 				var file=$file.val().toLowerCase();//取到的并不是图片在本机上的保存路径，但是可以通过这个格式判断是不是图片
@@ -66,9 +66,13 @@ $(function() {
 							//$img=$("<input name='image' type='image' src='"+src+"' style='"+style+"'>");//图片   
 							$img.attr('src',src);
 							$tr.addClass('shine');
+							$tr.removeClass('ignore');
+							$dele.removeClass('hide');
 							//$img.style('display','block');			
 						};
-						addImg();						
+						if($(':file').size()<10){
+							addImg();	
+						}					
 					}
 					else {
 						path = $(this).val();
@@ -82,7 +86,11 @@ $(function() {
 				}			 
 			});
 			$dele.click(function(){//删除按钮
+				var num_add_button = $("#ImgList .ignore").length;
 				$tr.remove();
+				if(num_add_button == 0){
+					addImg();
+				}				
 			}); 	
 			$("#ImgList").append($tr);
 			$tr.append($img).append($tdFile).append($dele);
@@ -137,10 +145,10 @@ function changeType(){
 			上传广告到：<span><%=postName%></span> 所选类别：<span><%=adTypeName%></span>
 		</p>		
 		<div class="but1">
-			<input tabIndex=3 id='addButton' type='button' class="button" value='添加图片'>
+			<!-- <input tabIndex=3 id='addButton' type='button' class="button" value='添加图片'>
 			&nbsp;&nbsp;&nbsp;
 			<input tabIndex=3 type='button' size=3 name=pic value='清除所有图片' class="button" onclick='deleteAll()'>
-			&nbsp;&nbsp;&nbsp;
+			&nbsp;&nbsp;&nbsp; -->
 			<input type='button' value="修改类别" class="button" onclick="changeType()">
 			&nbsp;&nbsp;&nbsp;			
 			
@@ -160,8 +168,8 @@ function changeType(){
 				 <input type='text' value='true' name='privatePost' id='privatePost' style='display:none'> 
 			</c:if>
 			<div>
-				<fieldset style="min-height:270;width:810;">
-					<legend>图片展示</legend>
+				<fieldset style="min-height:270;width:810; margin-top: 20px;">
+					<legend>上传图片</legend>
 					<ul id="ImgList">						 
 					</ul>
 				</fieldset>

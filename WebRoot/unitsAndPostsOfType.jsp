@@ -61,7 +61,7 @@ String unitTypeId=request.getParameter("unitTypeId");
 					 <!--    <a href="PostLogical?functionName=enterUnit&adTypeId=0&unitInfo=${entry.key}">所有</a>
 						 --> 
 						<c:forEach var='post' items='${entry.value}'>
-							<a href="PostLogical?functionName=enterPost&adTypeId=0&postId=${post.postId}&unitTypeId=${unitTypeId}" target="_blank">${post.postName}</a>
+							<a href="PostLogical?functionName=enterPost&adTypeId=0&postId=${post.postId}&unitTypeId=${unitTypeId}">${post.postName}</a>
 						</c:forEach>
 						</div>
 					
