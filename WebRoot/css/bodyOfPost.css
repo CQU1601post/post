@@ -53,3 +53,26 @@
     color: #FFAA8C;
     font-weight: bold;
 }
+.scroll_feild{
+    width: 1300px;
+    margin:10px auto;
+    overflow: hidden;
+    border: 1px solid #ccc;  
+}
+.scroll_feild .wrapper{
+    width: 7000px;
+    overflow: hidden;
+}
+.scroll_feild ul{
+    float: left;
+}
+.scroll_feild ul li{
+    width: 250px;
+    height: 250px;
+    float: left;
+    padding: 5px;
+}
+.scroll_feild ul li img{
+    width: 250px;
+    height: 250px;
+}

@@ -105,6 +105,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 backgroundColor : backgroundColor
             }, animSpeed);
         });
+        scroll(document.getElementById('scroll_feild'));
     });
 
 </script>
@@ -113,9 +114,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 <body bgcolor="#F3F3F3">
 <div class='info'>
-<span>${unitName} -> ${post.postName}</span>
-<span>今日访问量：<em>${post.visitorsOfToday}</em></span>  
-<span>总访问量:<em>${post.allVisitors}</em></span>
+<span>${unitName} -> <em>${post.postName}</em></span>
+<!-- <span>今日访问量：<em>${post.visitorsOfToday}</em></span>  
+<span>总访问量:<em>${post.allVisitors}</em></span> -->
 </div>
     <!--单位名、粘贴栏名 -->
     <input type="hidden" id="recordScrollTop" value="0">
@@ -204,40 +205,65 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 </div>
             </div>
         </tr>
-        </table>
-        <div id="ads" class="ads">
+    </table>
+    <div class="col-btn">
+        <input type="button" name="" value="滚动一行" onclick="col_1()">
+        <input type="button" name="" value="滚动两行" onclick="col_2()">
+        <input type="button" name="" value="滚动三行" onclick="col_3()">
+    </div>
+    <div class="scroll_feild" id="scroll_feild">
+        <div class="wrapper" id="col_1">
+            <ul class="scroll_first">
+                <li><a href="#"><img src="images/1.jpg"></a></li>
+                <li><a href="#"><img src="images/2.jpg"></a></li>
+                <li><a href="#"><img src="images/3.jpg"></a></li>
+                <li><a href="#"><img src="images/4.jpg"></a></li>
+                <li><a href="#"><img src="images/5.jpg"></a></li>
+                <li><a href="#"><img src="images/6.jpg"></a></li>
+                <li><a href="#"><img src="images/7.jpg"></a></li>
+                <li><a href="#"><img src="images/8.jpg"></a></li>
+                <li><a href="#"><img src="images/9.jpg"></a></li>
+                <li><a href="#"><img src="images/10.jpg"></a></li>
+            </ul>
+            <ul>
+            </ul>
+        </div>
+        <div class="wrapper" id="col_2"></div>
+        <div class="wrapper" id="col_3"></div>
+    </div>
+    <div id="ads" class="ads">
+    
+     
+        <c:if test="${fn:length(ads)>0}">
         
-         
-            <c:if test="${fn:length(ads)>0}">
             
                 
-                    
-                <c:forEach var="ad" items="${ads}" varStatus="status">
-                     
-                     <div class="ad_cell">
-                      <a href="PostLogical?functionName=picsOfAd&adId=${ad['adId']}&postId=${post.postId}" target="_blank">
-                        <img  class="img" alt="点击查看" src="${ad['firstPicAddr']}"
-                        id="${ad['adId']}"/>
-                        <span class='keyInfo'>
-                            <c:if test="${empty ad['remark']}">
-                                                                                   无文字介绍
-                            </c:if>
-                            <c:if test="${!empty ad['remark']}">
-                                ${fn:substring(ad['remark'],0,8)}
-                            </c:if>
-                        </span>
-                        </a>                     
-                    </div>
-                      
-                     
-                   
-                </c:forEach>
-                <div style="clear:both"></div>                       
-            </c:if>
-            
-            <c:if test="${fn:length(ads)<=0 }">
-                <div class="adpost_none"><img src="images/adpost_none.jpg"></div>            
-            </c:if>
+            <c:forEach var="ad" items="${ads}" varStatus="status">
+                 
+                 <div class="ad_cell">
+                  <a href="PostLogical?functionName=picsOfAd&adId=${ad['adId']}&postId=${post.postId}" target="_blank">
+                    <img  class="img" alt="点击查看" src="${ad['firstPicAddr']}"
+                    id="${ad['adId']}"/>
+                    <span class='keyInfo'>
+                        <c:if test="${empty ad['remark']}">
+                           无文字介绍
+                        </c:if>
+                        <c:if test="${!empty ad['remark']}">
+                            ${fn:substring(ad['remark'],0,8)}
+                        </c:if>
+                    </span>
+                    </a>                     
+                </div>
+                  
+                 
+               
+            </c:forEach>
+            <div style="clear:both"></div>                       
+        </c:if>
+        
+        <c:if test="${fn:length(ads)<=0 }">
+            <div class="adpost_none"><img src="images/adpost_none.jpg"></div>            
+        </c:if>
 
     </div>
     <div id="returnTop" class="returnTop" onclick="returnTop() ">返回顶部</div>
