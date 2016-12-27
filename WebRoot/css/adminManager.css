@@ -77,6 +77,7 @@
    .STYLE7{
     color:#FAA07D;
     font-size:2.5em;
+    text-align:center;
 }
 a:hover{
    color:#970102;
@@ -118,4 +119,8 @@ a{
 .tr_two{
     background-color:#CCF0CC;
     border:0;
+}
+body{
+    padding:0;
+    margin:0;
 }

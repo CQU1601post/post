@@ -390,14 +390,45 @@ public class SearchAboutPost {
     public boolean saveAd(Ad ad){
     	ConnectDB connect = new ConnectDB(); 
     	System.out.println("ad.getFirstPicAddr():"+ad.getFirstPicAddr());
-    	String sql="insert into ad(adId,adTypeId,upLoadTime,userId,postId,firstPicAddr,money,sortValue,checked,remark,height,width,exist,click) " +
+    	String sql="insert into ad(adId,adTypeId,upLoadTime,userId,postId,firstPicAddr,money,sortValue,checked,remark,height,width,exist,click,auditMark) " +
     			"values('"+ad.getAdId()+"','"+ad.getAdTypeId()+"','"+ad.getUpLoadTime()+"','"+ad.getUserId()
-    			+"','"+ad.getPostId()+"','"+ad.getFirstPicAddr()+"','"+ad.getMoney()+"','"+ad.getSortValue()+"','"+ad.getChecked()+"','"+ad.getRemark()+"','"+ad.getHeight()+"','"+ad.getWidth()+"','"+ad.getExist()+"','"+ad.getClick()+"')";
+    			+"','"+ad.getPostId()+"','"+ad.getFirstPicAddr()+"','"+ad.getMoney()+"','"+ad.getSortValue()+"','"+ad.getChecked()+"','"+ad.getRemark()+"','"+ad.getHeight()+"','"+ad.getWidth()+"','"+ad.getExist()+"','"+ad.getClick()+"','"+ad.getAuditMark()+"')";
     	
     	boolean isSave=connect.executeUpdate(sql);
     	System.out.println("isSave:"+isSave);
     	return isSave;
     }
+    //存储广告的金额
+    public boolean saveMoney(int adId,int money){
+        ConnectDB connectDB=new ConnectDB();
+        String sql="update ad set money='"+money+"'where adId='"+adId+"'";
+        boolean flag=connectDB.executeUpdate(sql);
+        return flag;
+    }
+    
+    public List<Cost> getCost(){
+        ConnectDB connectDB=new ConnectDB();
+        String sql="select * from cost";
+        ResultSet rSet=connectDB.executeQuery(sql);
+        List<Cost> costs=new ArrayList<Cost>();
+        try {
+            while(rSet.next()){
+                Cost cost=new Cost();
+                cost.setCostId(rSet.getInt("costId"));
+                cost.setGrade(rSet.getInt("grade"));
+                cost.setMoney(rSet.getInt("money"));
+                costs.add(cost);
+            }
+        } catch (SQLException e) {
+          
+            e.printStackTrace();
+        }finally{
+            connectDB.close();
+        }
+        return costs;
+    }
+    
+    
     //存储图片
     public boolean savePic(Pic pic){
     	ConnectDB connect = new ConnectDB(); 
@@ -424,9 +455,9 @@ public class SearchAboutPost {
     public boolean savePrivateAd(PrivateAd ad){
     	ConnectDB connect = new ConnectDB(); 
     	System.out.println("ad.getRemark():"+ad.getRemark());
-    	String sql="insert into privatead(adId,adTypeId,upLoadTime,userId,postId,firstPicAddr,money,sortValue,remark,height,width,exist,click) " +
+    	String sql="insert into privatead(adId,adTypeId,upLoadTime,userId,postId,firstPicAddr,money,sortValue,remark,height,width,exist,click,auditMark) " +
     			"values('"+ad.getAdId()+"','"+ad.getAdTypeId()+"','"+ad.getUpLoadTime()+"','"+ad.getUserId()
-    			+"','"+ad.getPostId()+"','"+ad.getFirstPicAddr()+"','"+ad.getMoney()+"','"+ad.getSortValue()+"','"+ad.getRemark()+"','"+ad.getHeight()+"','"+ad.getWidth()+"','"+ad.getExist()+"','"+ad.getClick()+"')";
+    			+"','"+ad.getPostId()+"','"+ad.getFirstPicAddr()+"','"+ad.getMoney()+"','"+ad.getSortValue()+"','"+ad.getRemark()+"','"+ad.getHeight()+"','"+ad.getWidth()+"','"+ad.getExist()+"','"+ad.getClick()+"','"+ad.getAuditMark()+"')";
     	
     	boolean isSave=connect.executeUpdate(sql);
     	System.out.println("isSave:"+isSave);

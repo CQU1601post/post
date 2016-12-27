@@ -132,7 +132,7 @@ $(function() {
                     url : "AdminManagerLogical?info=batchAuditBy&jsonADCheckedID="
                         +jsonADCheckedID,
                      success:function(data){
-                         alert("成功le");
+                         alert("成功了");
                      },
                 });
             }

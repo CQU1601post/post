@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import com.sun.org.apache.regexp.internal.recompile;
+
 import tool.ChangeResultSetToArray;
 
 import allClasses.Ad;
@@ -91,6 +93,25 @@ public class OperationData {
         }
 
         return typeName;
+
+    }
+    
+    public int query_adPostByadId(int adId) {
+        sql = "select  postId  from ad where  adId ='"+adId+"'";
+        connection = new ConnectDB();
+        ResultSet rs = connection.executeQuery(sql);
+        int postId = 0;
+        try {
+            while (rs.next()) {
+                postId = rs.getInt("postId");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            connection.close();
+        }
+
+        return postId;
 
     }
 
@@ -362,6 +383,33 @@ public class OperationData {
 
     }
     
+    public List<Post> getPosts() throws SQLException {
+        // /ConnectDB connect = new ConnectDB();
+        // System.out.println("执行src/jdbc/SearchFromDB/unitTypeNames()");
+        String sql = "select * from post";
+        connection = new ConnectDB();
+        ResultSet result = connection.executeQuery(sql);
+        // List<UnitType> unitTypes =
+        // changeResultSetToArray.unitTypeArrays(result);
+        List<Post> postList = new ArrayList();
+        while (result.next()) {
+            Post post=new Post();
+            post.setPostId(result.getInt("postId"));
+            post.setPostName(result.getString("postName"));;
+            post.setUnitId(result.getInt("unitId"));
+            post.setUserId(result.getInt("userId"));
+            post.setCreateTime(result.getString("createTime"));
+            post.setVisitorsOfToday(result.getInt("visitorsOfToday"));
+            post.setAllVisitors(result.getInt("AllVisitors"));
+            post.setGroupId(result.getInt("groupId"));
+            postList.add(post);
+        }
+        result.close();
+        connection.close();
+        return postList;
+
+    }
+    
     public List<String> postTypes(List<String> scopeList) throws SQLException {
         String sqlString="";
         connection = new ConnectDB();
@@ -388,6 +436,43 @@ public class OperationData {
        
         connection.close();
         return postNameList;
+
+    }
+    
+    public List<Post> getPosts(List<String> scopeList) throws SQLException {
+        String sqlString="";
+        connection = new ConnectDB();
+        List<Post> postList = new ArrayList<Post>();
+     for (Iterator iterator = scopeList.iterator(); iterator.hasNext();) {
+        String string = (String) iterator.next();
+        int UnitTypeId=Integer.parseInt(string);
+        sql="select unitId from unit where unitTypeId='"+UnitTypeId+"'";
+        ResultSet result = connection.executeQuery(sql);
+        // List<UnitType> unitTypes =
+        // changeResultSetToArray.unitTypeArrays(result);
+        while (result.next()) {
+            int unitId = result.getInt("unitId");
+            sql="select * from post where unitId='"+unitId+"'";
+            ResultSet result2 = connection.executeQuery(sql);
+            while(result2.next()){
+                Post post=new Post();
+                post.setPostId(result2.getInt("postId"));
+                post.setPostName(result2.getString("postName"));;
+                post.setUnitId(result2.getInt("unitId"));
+                post.setUserId(result2.getInt("userId"));
+                post.setCreateTime(result2.getString("createTime"));
+                post.setVisitorsOfToday(result2.getInt("visitorsOfToday"));
+                post.setAllVisitors(result2.getInt("AllVisitors"));
+                post.setGroupId(result2.getInt("groupId"));
+                postList.add(post);
+            }
+            result2.close();
+        }
+        result.close();
+    }
+       
+        connection.close();
+        return postList;
 
     }
 
@@ -654,19 +739,33 @@ public class OperationData {
          * e) { // TODO Auto-generated catch block e.printStackTrace(); }
          */
         System.out.println(vl.getVisitorip() + "," + vl.getVisitorpostname());
-        sql = "insert into visitorlog(visitorIP,visitorPostName,postId,time)" + " values('"
-                + vl.getVisitorip() + "','" + vl.getVisitorpostname() + "','" + vl.getPostId() +"','" + vl.getTime() + "') ";
+        sql = "insert into visitorlog(visitorIP,visitorPostName,postId,time,adId)" + " values('"
+                + vl.getVisitorip() + "','" + vl.getVisitorpostname() + "','" + vl.getPostId() +"','" + vl.getTime() +"','" + vl.getAdId() +  "') ";
 
         // sql="insert into tb_name values('"+0+"','"+name+"','"+password+"')";
-        System.out.println("addVisitorLog.0000.....");
-        connection = new ConnectDB();
-        System.out.println("addVisitorLog.11111....");
-        boolean rs2 = connection.executeUpdate(sql);
-        System.out.println("addVisitorLog.2222.....");
+        connection = new ConnectDB();    
+        boolean rs2 = connection.executeUpdate(sql);    
         connection.close();
         return 1;
     }
 
+    public String getPostName(int postid){
+        sql="select postName from post where postId='"+postid+"'";
+        connection=new ConnectDB();
+        ResultSet rs=connection.executeQuery(sql);
+        String postName="";
+        try {
+            while(rs.next()){
+             postName =   rs.getString("postName");
+            }
+        } catch (SQLException e) {
+          
+            e.printStackTrace();
+        }finally{
+            connection.close();
+        }
+        return postName;
+    }
     // 获得所有广告
     public List<Ad> getAdList() {
         connection = new ConnectDB();

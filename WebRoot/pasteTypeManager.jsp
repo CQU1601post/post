@@ -51,7 +51,7 @@ List list=(List)request.getAttribute("list");
   <jsp:include page="managertop.jsp" flush="true" />
   <table class="top_logo">
    <tr>
-    <td class="STYLE1"><div align="center"><img src="images/logo02.png" width="252" height="150" align="bottom" /><span class="STYLE7">&nbsp;单位所属类别管理</span></div></td>
+    <td class="STYLE1"><div align="center"><span class="STYLE7">单位所属类别管理</span></div></td>
   </tr>
    </table>
  

@@ -14,9 +14,11 @@ public class PrivateAd {
 	private int width;
 	private int exist;
 	private int click;
+	private int auditMark;
+	
 	public PrivateAd(int adId, int adTypeId, String upLoadTime, int userId,
             int postId, String firstPicAddr, int money, long sortValue,
-            String remark, int height, int width, int exist, int click) {
+            String remark, int height, int width, int exist, int click,int auditMark) {
         super();
         this.adId = adId;
         this.adTypeId = adTypeId;
@@ -31,6 +33,7 @@ public class PrivateAd {
         this.width = width;
         this.exist = exist;
         this.click = click;
+        this.auditMark=auditMark;
     }
     public PrivateAd() {
 		super();
@@ -120,6 +123,12 @@ public class PrivateAd {
     }
     public void setClick(int click) {
         this.click = click;
+    }
+    public int getAuditMark() {
+        return auditMark;
+    }
+    public void setAuditMark(int auditMark) {
+        this.auditMark = auditMark;
     }
 	 
 }

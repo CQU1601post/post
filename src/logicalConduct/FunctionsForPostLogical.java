@@ -92,6 +92,41 @@ public class FunctionsForPostLogical {
 		}
 		
 	}
+	
+	public String getVisitorIp(HttpServletRequest request, HttpServletResponse response){
+	    String visitorip=null;
+        visitorip= request.getHeader("x-forwarded-for");   
+         if(visitorip == null || visitorip.length() == 0 || "unknown".equalsIgnoreCase(visitorip)) {   
+             visitorip =  request.getHeader("Proxy-Client-IP");   
+         }   
+         if(visitorip== null || visitorip.length() == 0 || "unknown".equalsIgnoreCase(visitorip)) {   
+             visitorip = request.getHeader("WL-Proxy-Client-IP");   
+         }   
+         if(visitorip == null || visitorip.length() == 0 || "unknown".equalsIgnoreCase(visitorip)) {   
+             visitorip =  request.getRemoteAddr();   
+          if(visitorip.equals("127.0.0.1")){   
+           //根据网卡取本机配置的IP   
+           InetAddress inet=null;   
+        try {   
+         inet = InetAddress.getLocalHost();   
+        } catch (UnknownHostException e) {   
+         e.printStackTrace();   
+        }   
+        visitorip= inet.getHostAddress();   
+          }               
+         }  
+	    
+	    
+	    return visitorip;
+	}
+	
+	public   Timestamp getTimestamp(){
+	    Date date=new Date(System.currentTimeMillis());
+        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String currentTime=simpleDateFormat.format(date);
+        Timestamp timestamp=Timestamp.valueOf(currentTime);
+        return timestamp;
+	}
 
 	//进入某个粘贴栏(包括专栏与非专栏),进入需传参数:postInfo、adTypeId
 	public void enterPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{	 		
@@ -104,40 +139,8 @@ public class FunctionsForPostLogical {
 		}
 		else{
 		    String visitorip=null;
-		    visitorip= request.getHeader("x-forwarded-for");   
-		     if(visitorip == null || visitorip.length() == 0 || "unknown".equalsIgnoreCase(visitorip)) {   
-		         visitorip =  request.getHeader("Proxy-Client-IP");   
-		     }   
-		     if(visitorip== null || visitorip.length() == 0 || "unknown".equalsIgnoreCase(visitorip)) {   
-		         visitorip = request.getHeader("WL-Proxy-Client-IP");   
-		     }   
-		     if(visitorip == null || visitorip.length() == 0 || "unknown".equalsIgnoreCase(visitorip)) {   
-		         visitorip =  request.getRemoteAddr();   
-		      if(visitorip.equals("127.0.0.1")){   
-		       //根据网卡取本机配置的IP   
-		       InetAddress inet=null;   
-		    try {   
-		     inet = InetAddress.getLocalHost();   
-		    } catch (UnknownHostException e) {   
-		     e.printStackTrace();   
-		    }   
-		    visitorip= inet.getHostAddress();   
-		      }               
-		     }  
-//			if (request.getHeader("x-forwarded-for") == null) {   
-//				visitorip= request.getRemoteAddr();   
-//				  }  
-//			else
-//			{
-//				visitorip=request.getHeader("x-forwarded-for");  
-//	        }
-		     //处理日期
-		     Date date=new Date(System.currentTimeMillis());
-		     SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		     String currentTime=simpleDateFormat.format(date);
-		     Timestamp timestamp=Timestamp.valueOf(currentTime);
-		     
-			System.out.println("visitorip===="+visitorip);
+
+		    visitorip=getVisitorIp(request, response);
 			int adTypeId=Integer.parseInt(request.getParameter("adTypeId")); 
 			int postId=Integer.parseInt(request.getParameter("postId"));
 			int unitTypeId=Integer.parseInt(request.getParameter("unitTypeId"));
@@ -151,7 +154,8 @@ public class FunctionsForPostLogical {
 			vl.setVisitorip(visitorip);
 			vl.setVisitorpostname(post.getPostName());
 			vl.setPostId(postId);
-			vl.setTime(timestamp);
+			vl.setTime(getTimestamp());
+			vl.setAdId(0);
 			OperationData od=new OperationData();
 			System.out.println("addVisitorLog......");
 			od.addVisitorLog(vl);
@@ -253,6 +257,19 @@ public class FunctionsForPostLogical {
 		else{				
 			int adId=Integer.parseInt(request.getParameter("adId")); 
 			int postId=Integer.parseInt(request.getParameter("postId"));//获取PostId
+			
+			   VisitorLog vl=new VisitorLog();
+			   OperationData od=new OperationData();
+	            //vl.setVisitorid();
+	            vl.setVisitorip(getVisitorIp(request, response));
+	            vl.setVisitorpostname(od.getPostName(postId));
+	            vl.setPostId(postId);
+	            vl.setTime(getTimestamp());
+	            vl.setAdId(adId);	    
+	            System.out.println("addVisitorLog......");
+	            od.addVisitorLog(vl);
+			
+			
 			Post post=searchFromDB.postOfId(postId);
 			List pics=new ArrayList();
 			//返回指定ID下所有图片 	
@@ -397,6 +414,22 @@ public class FunctionsForPostLogical {
 		}
 	}
 	
+	public void addLastAdMoney(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {	
+	    request.setCharacterEncoding("utf-8");
+        response.setCharacterEncoding("utf-8");
+        String money =request.getParameter("money");
+        int adId = searchFromDB.maxAdId();
+        int money1=Integer.parseInt(money);
+       boolean flag= searchFromDB.saveMoney(adId, money1);
+        if(flag){
+            response.getWriter().write("1");
+        }else{
+            response.getWriter().write("0");
+        }
+	}
+	
+	
 	//处理上传事件,获取上传粘贴栏（可能多个）、上传广告类别、广告信息
 	public void upLoad(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -416,6 +449,7 @@ public class FunctionsForPostLogical {
 		String[] postIds=null;// 可能一次上传多个粘贴栏
 		int adTypeId=0;
 		String remark="";//备注
+		String payment="";//是否滚屏显示
 		boolean isPrivateAd=false;//标示是否为专栏广告
 		// 每个表单域中数据会封装到一个对应的FileItem对象上
 		try {
@@ -447,6 +481,9 @@ public class FunctionsForPostLogical {
 					if ("privatePost".equals(fileName)) {
 						isPrivateAd = new Boolean(value);//标志是否为专栏广告
 					}
+					if("payment".equals(fileName)){
+                        payment = value;
+                    }
 
 				} else {// 文件域
 					if (item.getSize() > fileMax) {// 如果文件过大则返回上传页面，提示过大
@@ -483,7 +520,7 @@ public class FunctionsForPostLogical {
 				}
 				//存储广告到对应的粘贴栏、类别
 				else{
-					saveAds1(postIds,adTypeId,remark,isPrivateAd,fileItems,request,response);
+					saveAds1(postIds,adTypeId,remark,isPrivateAd,fileItems,request,response,payment);
 				}				
 			}	
 			
@@ -495,7 +532,7 @@ public class FunctionsForPostLogical {
 
 	//广告存储
     public void saveAds1(String[] postIds,int adTypeId,String remark,boolean isPrivateAd,List<FileItem> fileItems,HttpServletRequest request,
-            HttpServletResponse response)throws ServletException, IOException{ 
+            HttpServletResponse response,String payment)throws ServletException, IOException{ 
         request.setCharacterEncoding("utf-8");
         response.setCharacterEncoding("utf-8");
         File file=null;
@@ -604,7 +641,7 @@ public class FunctionsForPostLogical {
                 adId=searchAboutPost.maxPrivateAdId()+ 1;// 广告id为当前最大id+1
                 PrivateAd ad = new PrivateAd(adId, adTypeId, upLoadTime,
                         userId,Integer.parseInt(postIds[0]), firstPicAddr, money, sortValue, remark,
-                        250, 250,1,0);
+                        250, 250,1,0,0);
                 searchAboutPost.savePrivateAd(ad);
                 System.out.println("存储专栏广告");
             } 
@@ -614,7 +651,7 @@ public class FunctionsForPostLogical {
                     int id=adId+i;//当前广告的id
                     Ad ad = new Ad(id, adTypeId, upLoadTime, userId, Integer.parseInt(postIds[i]),
                             firstPicAddr, money, sortValue, checked, remark, 250,
-                            250,0,1);
+                            250,0,1,0);
                     searchAboutPost.saveAd(ad);                  
                 }               
             }
@@ -688,7 +725,7 @@ public class FunctionsForPostLogical {
             }
                     
         }   
-        response.sendRedirect("upLoad3.jsp");//成功则跳转到成功页面               
+        response.sendRedirect("upLoad3.jsp?payment="+payment);//成功则跳转到成功页面               
     }
 	
 	//广告存储
@@ -776,7 +813,7 @@ public class FunctionsForPostLogical {
 				adId=searchAboutPost.maxPrivateAdId()+ 1;// 广告id为当前最大id+1
 				PrivateAd ad = new PrivateAd(adId, adTypeId, upLoadTime,
 						userId,Integer.parseInt(postIds[0]), firstPicAddr, money, sortValue, remark,
-						250, 250,1,0);
+						250, 250,1,0,0);
 				searchAboutPost.savePrivateAd(ad);
 				System.out.println("存储专栏广告");
 			} 
@@ -786,7 +823,7 @@ public class FunctionsForPostLogical {
 					int id=adId+i;//当前广告的id
 					Ad ad = new Ad(id, adTypeId, upLoadTime, userId, Integer.parseInt(postIds[i]),
 							firstPicAddr, money, sortValue, checked, remark, 250,
-							250,0,1);
+							250,0,1,0);
 					searchAboutPost.saveAd(ad);					 
 				}				
 			}

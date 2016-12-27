@@ -1,11 +1,11 @@
 <%@ page pageEncoding="utf-8"%>
 <%@ page contentType="text/html;utf-8" language="java"
-	import="java.sql.*"%>
+    import="java.sql.*"%>
 <%
-	String path = request.getContextPath();
-	String basePath = request.getScheme() + "://"
-			+ request.getServerName() + ":" + request.getServerPort()
-			+ path + "/";
+    String path = request.getContextPath();
+    String basePath = request.getScheme() + "://"
+            + request.getServerName() + ":" + request.getServerPort()
+            + path + "/";
 %>
 <head>
 <base href="<%=basePath%>">
@@ -18,14 +18,14 @@
 
 <body style="background:url(css/images/back_register.jpg) top center no-repeat; background-size:100% 100%;opacity: 0.8;overflow:-Scroll;overflow-y:hidden;">
         <div class="container">
-	        
+            
             <section>               
                 <div id="container_demo">
                <!--  <img alt="" src="css/images/2.jpg" style="width:340px;height:300px;top:200px;right:-200px;float:left;position:relative"> -->
                     <div id="wrapper_register">
-		                     
+                             
                         <div id="register" class="animate form">
-                            <div align="left" style="margin-left:60px; margin-top:10px">
+                            <div align="left" style="margin-left:10px; margin-top:10px">
                                  <img src="logo/logo02.png" width="80" height="80">
                                 &nbsp;&nbsp;&nbsp;&nbsp; <font color="#FAA07D" size="+4">用户注册   </font>     
                             </div><br>
@@ -36,7 +36,7 @@
                                     <span id="info1" style="color:#FF0000; display:inline;float:right"></span>
                                 </p>
                                 <p> 
-                                    <label for="password" class="youpasswd" data-icon="p">密码（必填）</label>
+                                    <label for="password" class="youpasswd" data-icon="p">密  码（必填）</label>
                                     <input id="password" name="password" onBlur="check_pw()" onKeyUp=pwStrength(this.value) onBlur=pwStrength(this.value) required="required" type="password" placeholder="......"/>
                                     <span id="info2" style="color:#FF0000; display:inline;float:right"></span>
                                 </p>
@@ -52,7 +52,7 @@
                                     <span id="info3" style="color:#FF0000; display:inline;float:right"></span>
                                 </p>
                                 <p> 
-                                    <label for="email" class="youmail" data-icon="e" > 邮箱</label>
+                                    <label for="email" class="youmail" data-icon="e" >邮   箱&nbsp;</label>
                                     <input id="email" name="email" onblur="check_mail()" required="required" type="email" placeholder="mysupermail@mail.com"/> 
                                     <span id="info7" style="color:#FF0000; display:inline;float:right"></span>
                                 </p>

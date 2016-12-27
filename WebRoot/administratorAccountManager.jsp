@@ -34,7 +34,7 @@
 
 
 <link rel="stylesheet" href="css/bootstrap-multiselect.css" type="text/css"/>
-
+<script type="text/javascript" src="js/validation.js"></script>
 <script type="text/javascript " src="js/administratorAccountManager.js"></script>
 <!--
 	<link rel="stylesheet" type="text/css" href="styles.css">
@@ -53,28 +53,38 @@ function updateModel(id){
 }
  
 </script>
+<style type="text/css">
+
+.modal.fade {
+top: -100%;  
+-webkit-transition: opacity 0.3s linear, top 0.3s ease-out;
+-moz-transition: opacity 0.3s linear, top 0.3s ease-out;
+-o-transition: opacity 0.3s linear, top 0.3s ease-out;
+transition: opacity 0.3s linear, top 0.3s ease-out;
+}
+</style>
 </head>
 
 <body>
     <jsp:include page="managertop.jsp" flush="true" />
-    <table class="top_logo">
-        <tr>
-            <td class="STYLE1"><div align="center">
-                    <img src="images/logo02.png" width="252"
-                        height="150" align="bottom"
-                    /><span class="STYLE7">&nbsp;管理员管理</span>
-                </div></td>
-        </tr>
-    </table>
-    <p align="center" >
+  <table class="top_logo">
+   <tr>
+    <td class="STYLE1"><div align="center"><span class="STYLE7">管理员管理</span></div></td>
+   
+  </tr>
+ </table>
+ <br>
+    <p align="center"  class="operation" >
         <a href="javascript:void(0)"
             class="administratorAccountManager_insert"
         >添加新管理员</a>
     </p>
+     <br>
     <table class="table_content">
         <tr class="tr_one">
             <td width="150" align="center">管理员编号</td>
             <td width="150" align="center">管理员名称</td>
+             <td width="150" align="center">管理员密码</td>
             <td width="150" align="center">级别</td>
             <td width="150" align="center">范围</td>
             <td width="200" align="center">操作</td>
@@ -87,6 +97,7 @@ function updateModel(id){
             <tr class="tr_two">
                 <td width="150" align="center"><%=a.getId()%></td>
                 <td width="150" align="center"><%=a.getName()%></td>
+                 <td width="150" align="center"><%=a.getPassword()%></td>
                 <td width="150" align="center"><%=a.getLevel()%></td>
                <%--  <c:if test="${a.getScope()==0}" >
                     <td width="150" align="center">所有</td>
@@ -131,7 +142,7 @@ function updateModel(id){
 
 
  <div class="modal fade" id="insertModal" tabindex="-1" role="dialog"
-        aria-labelledby="insertModalLabel" aria-hidden="true"
+        aria-labelledby="insertModalLabel" aria-hidden="true" 
     >
         <div class="modal-dialog">
             <div class="modal-content">

@@ -12,6 +12,7 @@ import javax.enterprise.inject.New;
 
 import sun.print.resources.serviceui;
 
+import allClasses.Ad;
 import allClasses.AdType;
 import allClasses.Administrator;
 import allClasses.Pic;
@@ -96,6 +97,19 @@ public class AdminLogic {
                 + level + "','" + scope + "')";
         connection=new ConnectDB();
         boolean flag=connection.executeUpdate(sql);
+        connection.close();
+    }
+    
+    public boolean  selectAdminManager(String name){
+        boolean flag=true;
+        sql="select * from administrator   where administratorName='" + name+ "'";
+        connection=new ConnectDB();
+        ResultSet rs=connection.executeQuery(sql);
+        if(rs==null){
+             flag=false;
+        }
+        connection.close();
+        return flag;
     }
    
     public void deleteAdminManager(int id){
@@ -103,12 +117,14 @@ public class AdminLogic {
         connection=new ConnectDB();
         boolean flag=connection.executeUpdate(sql);
         System.out.println(flag);
+        connection.close();
     }
     public void updateAdminManager(String name,String password,int level,String scope,int  updateModelID){
         sql="update administrator set administratorName='" + name+ "',password='" + password+ "',level='" + level+ "',scope='" + scope+ "'where id='"+updateModelID+"'" ;
         connection=new ConnectDB();
         boolean flag=connection.executeUpdate(sql);
         System.out.println(flag);
+        connection.close();
     }
     
     // 返回所有未通过审核的图片的信息
@@ -119,7 +135,6 @@ public class AdminLogic {
                 + checked + "'";
         connection = new ConnectDB();
         ResultSet rs = connection.executeQuery(sql);
-
         try {
             while (rs.next()) {
                 p = new Pic();
@@ -133,16 +148,116 @@ public class AdminLogic {
                 // p.setState(rs.getInt("checked"));
                 list.add(p);
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             connection.close();
         }
-
         return list;
     }
 
+    //查询未审核或者已审核的广告数
+    public int selectAuditOrNoAuditNum(int checked){
+        sql="select count(*) from ad where  exist=1 and checked='"+checked+"'";
+        connection=new ConnectDB();
+        ResultSet rs=connection.executeQuery(sql);
+        int num=0;
+        try {
+            while (rs.next()) {
+                num= rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            connection.close();
+        }
+        return num;
+    }
+    
+    public int selectAuditOrNoAuditNum(int checked,int postId){
+        sql="select count(*) from ad where  exist=1 and checked='"+checked+"'+postId='"+postId+"'";
+        connection=new ConnectDB();
+        ResultSet rs=connection.executeQuery(sql);
+        int num=0;
+        try {
+            while (rs.next()) {
+                num= rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            connection.close();
+        }
+        return num;
+    }
+      
+    
+    
+    
+    
+    public int getRandAd(int checked ,int auditMark) {
+      int adId=0;
+        sql ="SELECT * FROM  ad AS t1 JOIN (SELECT ROUND(RAND() * ((SELECT MAX(adId) FROM ad)-" +
+        		"(SELECT MIN(adId) FROM ad))+(SELECT MIN(adId) FROM ad)) AS adId) AS t2 WHERE t1.adId >= t2.adId and checked='"+checked+"' and auditMark='"+auditMark+"' ORDER BY t1.adId LIMIT 1";
+        connection = new ConnectDB();
+        ResultSet rs = connection.executeQuery(sql);
+        try {
+            while (rs.next()) {          
+            adId =  rs.getInt("adId");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            connection.close();
+        }
+        return adId;
+    }
+    
+    public void setAdAuditMark(int adId){
+        connection = new ConnectDB();
+        sql="update ad set auditMark=1 where adId='"+adId+"'";
+        boolean flag = connection.executeUpdate(sql);
+        connection.close();
+    }
+    
+    public void recoveryAdAuditMark(int adId){
+        connection = new ConnectDB();
+        sql="update ad set auditMark=0 where adId='"+adId+"'";
+        boolean flag = connection.executeUpdate(sql);
+        connection.close();
+    }
+    
+    public List<Pic> getAuditByAdId(List<Integer> adIdList) {
+        List<Pic> list = new ArrayList<Pic>();
+        Pic p;
+        connection = new ConnectDB();
+        ResultSet rs=null;
+        for (Iterator iterator = adIdList.iterator(); iterator.hasNext();) {
+            int adId = (Integer) iterator.next();
+            sql = "select *from pic where adId ='"
+                    + adId + "'";
+           rs = connection.executeQuery(sql);
+            try {
+                while (rs.next()) {
+                    p = new Pic();
+                    p.setPicId(rs.getInt("picId"));
+                    p.setAdId(rs.getInt("adId"));
+                    p.setHeight(rs.getInt("height"));
+                    p.setWidth(rs.getInt("width"));
+                    // p.setPicName(rs.getString("picName"));
+                    p.setPicAddr(rs.getString("picAddr"));
+                    p.setChecked(rs.getInt("checked"));
+                    // p.setState(rs.getInt("checked"));
+                    list.add(p);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } 
+        }
+        connection.close();
+        return list;
+    }
+    
     // 将特定ID的图片状态改为通过
     public boolean changeState_pic(int adId) {
         connection = new ConnectDB();
@@ -158,6 +273,10 @@ public class AdminLogic {
         sql = "update pic set checked='" + 1 + "' where adId=?";
         boolean flag = connection
                 .executeBatch(sql, listTransformationInt(List));
+        for (Iterator iterator = List.iterator(); iterator.hasNext();) {
+          int integer = (Integer) iterator.next();
+            recoveryAdAuditMark(integer);
+        }
         System.out.println(flag);
         connection.close();
         return flag;

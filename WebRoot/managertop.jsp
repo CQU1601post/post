@@ -13,6 +13,7 @@
     color:gray;
     text-decoration: none;
     font-size: 10px;
+    
 }
 .top-a:hover{
     color:#970102;
@@ -20,7 +21,7 @@
 .top{
     background:#F2F2F2;
     width:100%;
-    height:50px;
+    height:80px;
     opacity:0.8;
     font-family: "Microsoft YaHei",tahoma,arial,'Hiragino Sans GB','\5b8b\4f53',sans-serif;
     font-size: 10px;
@@ -36,12 +37,11 @@ body{
 </head>
 <body >
 <div class="top">
-<table class="navigation" width="1201px" height="50px" border="0" align="center" cellpadding="0" cellspacing="0">
+<table class="navigation" style="width:1201px; height:80px; border:0; align:center; cellpadding:0; cellspacing:0">
   <!--DWLayoutTable-->
-   <tr  width="800px" height="50px" font-family='"微软雅黑", tahoma;'>
-  
+   <tr  width="800px" height="80px" font-family='"微软雅黑", tahoma;'>
+    <td><img src="images/logo02.png" style="width:120px; height:80px; align:bottom;  float:left ;max-width:none"/></td>
      <td width="50"  rowspan="2"></td>
-     <td width="180"  rowspan="2"><div align="center"></td>
      <td width="50"  rowspan="2"></td>
      <td width="140"  rowspan="2"><div align="center"><a href="adminManager.jsp" class="top-a">审核信息管理</a></div></td>    
      <td  width="120"  rowspan="2"><div align="center"><a href="AdminManagerLogical?info=showUser" class="top-a">注册用户管理</a></div></td>
@@ -49,7 +49,7 @@ body{
      <td width="120" rowspan="2"><div align="center"><a href="AdminManagerLogical?info=unitShow" class="top-a">单位管理</a></div></td>       
      <td width="120"  rowspan="2"><div align="center"><a href="AdminManagerLogical?info=typeGroupShow" class="top-a">类别管理</a></div></td> 
      <td width="150" rowspan="2"><div align="center"><a href="AdminManagerLogical?info=pasteTypeShow" class="top-a">单位所属类别管理</a></div></td>       
-     <c:if test="${sessionScope.adminInfo.scope==0 }">
+     <c:if test="${sessionScope.adminInfo.level==0 }">
      <td width="150" rowspan="2"><div align="center"><a href="AdminManagerLogical?info=adminManager" class="top-a">管理员账号管理</a></div></td> 
      </c:if>
      <c:if  test="${!empty sessionScope.adminInfo }">

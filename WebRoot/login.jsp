@@ -34,20 +34,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 <div id="container_demo" >
                     <a class="hiddenanchor" id="toregister"></a>
                     <a class="hiddenanchor" id="tologin"></a>
-                    <div id="wrapper">
-                    <img alt="" src="css/images/copy1.jpg" style="width:1100px;height:680px;right:500px;margin: 0px auto;position:relative">
+                    <div id="wrapper" >
                         <div id="login" class="animate form">
                             <form  action='UserLogical?functionName=login'  id='userInfo' method='post'> 
-                                <div align="left" style="margin-left:60px; margin-top:30px">
-            <img src="logo/logo02.png" width="80" height="80" style="margin-top:8px">
-             <font color="#FAA07D" size="+4">用户登录   </font>     
-        </div><br><br><br>
+                                <div align="left" style="margin-left:30px; margin-top:30px">
+                                    <img src="logo/logo02.png" width="80" height="80" style="margin-top:8px">
+                                     <font color="#FAA07D" size="+4">用户登录   </font>     
+                                </div>
+                                <br><br><br>
                                 <p> 
-                                    <label for="username" class="uname" data-icon="u" style="right:169px;">&nbsp;&nbsp;&nbsp;用户名</label>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <label for="username" class="uname" data-icon="u" style="right:169px;">用户名</label>
                                     <input id="username" name="userName" required="required" type="text" placeholder="username"/>
                                 </p>
                                 <p> 
-                                    <label for="password" class="youpasswd" data-icon="p" style="right:169px;">&nbsp;&nbsp;&nbsp;密     码 </label>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <label for="password" class="youpasswd" data-icon="p" style="right:169px;">密     码 </label>
                                     <input id="password" name="password" required="required" type="password" placeholder="......" /> 
                                 </p>
                                 <br>

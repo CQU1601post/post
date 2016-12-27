@@ -94,9 +94,9 @@ for(int i=0;i<pasteTypes.length;i++){
   
   <body>
   <jsp:include page="managertop.jsp" flush="true" />
-   <table class="top_logo">
+    <table class="top_logo">
    <tr>
-    <td class="STYLE1"><div align="center"><img src="images/logo02.png" width="252" height="150" align="bottom" /><span class="STYLE7">&nbsp;单位管理</span></div></td>
+    <td class="STYLE1"><div align="center"><span class="STYLE7">单位管理</span></div></td>
   </tr>
    </table>
   <p align="center" class="operation">

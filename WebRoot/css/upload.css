@@ -106,9 +106,16 @@ color:#333333;
 
 
 .but1{ width:400px; margin:20px auto; text-align:center;}
-.button{width:100px; height:31px;border-radius:3px 3px 3px 3px; border:1px solid #666666; background-color:#666666; cursor:pointer;font-size:12px;color:#f3f3f3; } 
+.button{width:80px; height:31px;border-radius:3px 3px 3px 3px; border:1px solid #666666; background-color:#666666; cursor:pointer;font-size:12px;color:#f3f3f3; } 
 .button:hover{background:#999999; border:#999999;}
-
+.gray:hover{
+	background: -webkit-linear-gradient(top,#fefefe,#ebeced);
+    background: -moz-linear-gradient(top,#f2f3f7,#ebeced);
+    background: linear-gradient(top,#f2f3f7,#ebeced);
+}
+/*新增*/
+.button_alert{width:60px; height:31px;border-radius:3px 3px 3px 3px; border:1px solid #666666; background-color:#666666; cursor:pointer;font-size:12px;color:#f3f3f3;margin-left:30px;float:right } 
+.button_alert:hover{background:#999999; border:#999999;}
 .main_{
 	width: 800px;
 	margin: 20px auto;
@@ -166,25 +173,39 @@ filter:alpha(opacity=0);/* ����IE */
 
 /*关键信息*/
 .note{
-	width: 550px;
+	width: 500px;
 	height: 25px;
 	line-height: 25px;
-	margin: 20px 20px;
+	margin-top: 20px;
 	float: left;
 }
 .note input{
 	padding: 5px;
 	width: 400px;
 }
+/*新增*/
 .but{
-	width: 100px;
+	width: 300px;
 	float: right;
-	margin: 20px 20px;
+	/* text-align:center; */
+	margin-top:20px;
+}
+.but input{
+	/* float:right */;
+	/* margin-left:10px; */
+}
+.but .radio{
+	/* float:left; */
 }
 .error{
 	color: red;
 }
-
+.but_upload1{
+	width: 180px;
+    float: right;
+    text-align:center;
+    margin-top:-5px;
+}
 
 /*外框*/
 .img_upload{
@@ -192,7 +213,7 @@ filter:alpha(opacity=0);/* ����IE */
 	height: 250px;
 	float: left;
 	margin: 5px;
-	background: url("../images/add_img.jpg");
+	background: url("../images/img_default.jpg");
 	background-clip: content-box;
 	position: relative;
 	padding: 5px;	
@@ -222,7 +243,7 @@ filter:alpha(opacity=0);/* ����IE */
 	opacity: 0;
 	filter: alpha(opacity=0);
 	display: inline-block;
-	width: 250px;
+	width: 200px;
 	height: 250px;
 	cursor:move;
 }
@@ -278,6 +299,23 @@ filter:alpha(opacity=0);/* ����IE */
 .upload_type_info .but{
 	margin:0 10px 0 0;
 }
-.hide{
-	display: none;
+/*新增*/
+.updateType{
+	margin:0 auto;
+	width:780px;
+}
+.but_upload{
+	width: 180px;
+    float: right;
+    margin-top:20px;
+    
+}
+.gray{
+	color: #8c96a0;
+text-shadow:1px 1px 1px #fff;
+border:1px solid #dce1e6;
+box-shadow: 0 1px 2px #fff inset,0 -1px 0 #a8abae inset;
+background: -webkit-linear-gradient(top,#f2f3f7,#e4e8ec);
+background: -moz-linear-gradient(top,#f2f3f7,#e4e8ec);
+background: linear-gradient(top,#f2f3f7,#e4e8ec);
 }

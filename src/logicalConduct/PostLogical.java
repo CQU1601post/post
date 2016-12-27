@@ -52,7 +52,10 @@ public class PostLogical extends HttpServlet {
 		//上传图片
 		else if("upLoad".equals(functionName)){ 
 			functions.upLoad(request,response);
-		}	
+		}
+		else if ("addMoney".equals(functionName)) {
+            functions.addLastAdMoney(request, response);
+        }
 	}
 
 	/**

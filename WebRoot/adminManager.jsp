@@ -44,7 +44,7 @@ if(administrator.getLevel()==0){
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title></title>
-<script type="text/javascript" src="js/jquery-3.1.1.js"></script>
+<script type="text/javascript" src="js/jquery-1.8.2.js"></script>
 <script type="text/javascript" src="js/adminManager1.js"></script>
 <link href="css/adminManager.css" rel="stylesheet" type="text/css" />
 <!--  <link href="css1/imgbubbles.css" rel="stylesheet" type="text/css" />-->
@@ -57,6 +57,7 @@ if(administrator.getLevel()==0){
 .pic-wrapper li {
     display: inline-block;
 }
+
 </style>
 
 <!-- <script type="text/javascript" src="js/imgbubbles.js"></script> -->
@@ -69,7 +70,7 @@ if(administrator.getLevel()==0){
 </head>
 
 <body>
-    <jsp:include page="managertop.jsp" flush="true" />
+   
     <script type="text/javascript">
                     function check(formObj) {
                         //alert("0000");
@@ -109,7 +110,12 @@ if(administrator.getLevel()==0){
                      }               
                      */
                 </script>
-
+  <jsp:include page="managertop.jsp" flush="true" />
+  <table style="width:100%; align:center">
+   <tr>
+    <td style="height:104px;  width:100%; colspan:2; valign:middle;  text-align:center ;" class="STYLE1"><div style=" text-align:center;"><span class="STYLE7"> 审核信息管理</span></div></td>
+  </tr>
+   </table>
     <c:if test="${audit!=null }">
         <input type="hidden" value="<%=audit%>" class="indirect_audit" />
     </c:if>

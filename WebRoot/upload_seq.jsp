@@ -24,7 +24,7 @@
 	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 	<meta http-equiv="description" content="This is my page">
 	<link rel="stylesheet" href="css/upload.css" type="text/css">
-	<script type="text/javascript" src="js/jquery-1.4.4.js" ></script>
+	<script type="text/javascript" src="js/jquery-1.8.2.js" ></script>
 	<script type="text/javascript" src="js/upLoad.js" ></script>
 	<script type="text/javascript" src="js/Sortable.js"></script>
 	<title>upLoad ads</title>
@@ -143,20 +143,36 @@ function changeType(){
 	<div class="main_">
 		<p class="upload_info">
 			上传广告到：<span><%=postName%></span> 所选类别：<span><%=adTypeName%></span>
+			<button class="button gray" id="adType">修改类别</button> 
 		</p>		
 		<div class="but1">
 			<!-- <input tabIndex=3 id='addButton' type='button' class="button" value='添加图片'>
 			&nbsp;&nbsp;&nbsp;
 			<input tabIndex=3 type='button' size=3 name=pic value='清除所有图片' class="button" onclick='deleteAll()'>
 			&nbsp;&nbsp;&nbsp; -->
-			<input type='button' value="修改类别" class="button" onclick="changeType()">
+		<!-- 	<input type='button' value="修改类别" class="button" onclick="changeType()">
 			&nbsp;&nbsp;&nbsp;			
+			 -->
 			
-			
+        <script src="js/jquery-1.8.2.js"></script> 
+            <script src="layer/layer.js"></script>  
+            <script>
+            var index = parent.layer.getFrameIndex(window.name);
+                 $('#adType').on('click', function(){
+                  layer.open({
+                  type: 2,
+                  title: '修改上传广告类别',
+                 /*  maxmin: true, */
+                  shadeClose: true, //点击遮罩关闭层
+                  area : ['800px' , '650px'],
+                  content: 'updateAdType.jsp',
+                  });
+                });
+            </script>
 		</div>
 			<!-- 图片展示区域 -->		
 		<!-- 将关于图片上传的信息都用form提交给服务器 -->
-		<form action="PostLogical?functionName=upLoad" method='post' enctype="multipart/form-data" onsubmit='return checkImageNum();'>
+		<form action="PostLogical?functionName=upLoad" method="post" enctype="multipart/form-data" onSubmit="return checkPayment();">
 			
 				<!-- 图片上传类别、粘贴栏、时间信息 -->
 			<input type='text' value='${param.adTypeId}' name='adTypeId' id='adTypeId' style='display:none'> 
@@ -177,8 +193,14 @@ function changeType(){
 			<div class='note'>关键信息：
 				<input type='text' value='' name='remark' id='remark' onBlur='checkRemark()'> 
 				<p class="error">注：请将最关键的信息写在前20个字中！</p>
+				
 			</div>
 			<div class='but'>
+			&nbsp;&nbsp;
+			<label>是否滚屏显示：</label>
+                 <input type="radio" class="radio" name="payment" value="yes">是</input>
+                 <input type="radio" class="radio" name="payment" value="no">否</input>
+                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             	<input type="submit" value="完成" class="button">
             </div>		
 		</form>

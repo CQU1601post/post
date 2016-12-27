@@ -69,9 +69,9 @@ function delete1(id){
   
   <body>
     <jsp:include page="managertop.jsp" flush="true" />
-    <table class="top_logo">
+   <table class="top_logo">
    <tr>
-    <td class="STYLE1"><div align="center"><img src="images/logo02.png" width="252" height="150" align="bottom" /><span class="STYLE7">&nbsp;广告组类别管理</span></div></td>
+    <td class="STYLE1"><div align="center"><span class="STYLE7">广告组类别管理</span></div></td>
   </tr>
    </table>
     
@@ -79,8 +79,8 @@ function delete1(id){
       <a href=" " id="add" onclick="add()">添加</a>
     </p>
       <br>
-   <table  align="center" >
-    <tr align="center" class="tr_one">    
+   <table   class="table_content"  >
+    <tr  class="tr_one">    
         <td width="150" align="center">组Id</td>       
         <td width="150" align="center">组别名</td>         
         <td width="200" align="center">操作  </td>
@@ -92,8 +92,8 @@ function delete1(id){
             TypeGroup t=(TypeGroup)list.get(j); 
     %>
     <tr class="tr_two">
-            <td width="150" align="center"><%=t.getId()%></td>            
-            <td width="150" align="center"><%=t.getName()%></td>   
+            <td width="350" align="center"><%=t.getId()%></td>            
+            <td width="350" align="center"><%=t.getName()%></td>   
             <td bgcolor="#D1EEEE" align="center">
                 <table width="300" >  
                 <tr align="center">         

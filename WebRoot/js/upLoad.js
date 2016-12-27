@@ -26,6 +26,22 @@ function checkRemark(){//限制备注的长度
 		$("#remark").val('');
 	}
 }
+function checkPayment(){
+    var select_obj = document.getElementsByName('payment'); 
+   var temp_select = false;   
+    for(var i = 0; i < select_obj.length; i ++){   
+         if(select_obj[i].checked){   
+             var select = select_obj[i].value;   
+             temp_select = true;   
+             break;   
+         }   
+    }   
+    if(temp_select == false){   
+        alert('请选择是否滚屏显示');   
+        return false;   
+    }
+    return true;   
+}
 function checkImageNum(){//检查上传文件个数
 	var imageNum=$(":image").size();
 	if(imageNum>10){

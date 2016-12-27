@@ -15,10 +15,12 @@ public class Ad {
 	private int width;
 	private int click;
 	private int exist;
+	private int auditMark;
+	
 	public Ad(int adId, int adTypeId, String upLoadTime, int userId,
             int postId, String firstPicAddr, int money, long sortValue,
             int checked, String remark, int height, int width, int click,
-            int exist) {
+            int exist,int auditMark) {
         super();
         this.adId = adId;
         this.adTypeId = adTypeId;
@@ -34,6 +36,7 @@ public class Ad {
         this.width = width;
         this.click = click;
         this.exist = exist;
+        this.auditMark=auditMark;
     }
     public Ad() {
 		super();
@@ -129,6 +132,12 @@ public class Ad {
     }
     public void setExist(int exist) {
         this.exist = exist;
+    }
+    public int getAuditMark() {
+        return auditMark;
+    }
+    public void setAuditMark(int auditMark) {
+        this.auditMark = auditMark;
     }
 	
 	

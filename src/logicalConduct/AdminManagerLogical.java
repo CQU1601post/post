@@ -59,7 +59,11 @@ public class AdminManagerLogical extends HttpServlet {
             this.adminLoginOut(request, response);// 管理员退出
         } else if (info.equals("auditInfo")) {
             this.aduitInfo(request, response);// 审核信息
-        } else if (info.equals("auditBy")) {
+        }else if (info.equals("auditInfo1")) {
+            this.aduitInfo1(request, response);// 审核信息
+        }else if (info.equals("getAdTypeList")) {
+            this.getAdTypeList(request, response);//动态 获取adtype
+        }else if (info.equals("auditBy")) {
             this.auditBy(request, response);// 信息审核通过
         } else if (info.equals("allBy")) {
             this.allBy(request, response);// 信息审核通过
@@ -151,7 +155,8 @@ public class AdminManagerLogical extends HttpServlet {
             if (data.judgeExistAdmin(name, password)) {
                 a = data.getAdmin(name, password);
                 request.getSession().setAttribute("adminInfo", a);
-                request.getRequestDispatcher("adminManager.jsp").forward(
+                
+                request.getRequestDispatcher("adminManager1.jsp").forward(
                         request, response);
 
                 return;
@@ -182,11 +187,18 @@ public class AdminManagerLogical extends HttpServlet {
         response.setContentType("text/html;charset=utf-8");
         request.setCharacterEncoding("UTF-8");
         String text = request.getParameter("text");
-        String insertName = request.getParameter("insertName");
+        String insertName = request.getParameter("insertName");//少了一步查找姓名的方法
+        
         int insertLevel = Integer.parseInt(request.getParameter("insertLevel"));
         String insertPassword = request.getParameter("insertPassword");
         data = new AdminLogic();
-        data.insertAdminManager(insertName, insertPassword, insertLevel, text);
+        if(data.selectAdminManager(insertName)){
+            data.insertAdminManager(insertName, insertPassword, insertLevel, text);
+            response.getWriter().write("1");
+        }else {
+            response.getWriter().write("0");
+        }
+      
 
     }
 
@@ -210,7 +222,13 @@ public class AdminManagerLogical extends HttpServlet {
         String updatePassword = request.getParameter("updatePassword");
         System.out.println("123");
         data = new AdminLogic();
-        data.updateAdminManager(updateName,updatePassword, updateLevel, text, updateModelID);
+        if(data.selectAdminManager(updateName)){
+            data.updateAdminManager(updateName,updatePassword, updateLevel, text, updateModelID);
+            response.getWriter().write("1");
+        }else {
+            response.getWriter().write("0");
+        }
+        
     }
 
     // 管理员退出
@@ -259,52 +277,55 @@ public class AdminManagerLogical extends HttpServlet {
         if (audit.equals("未审核")) {
 
             state = 0;
-            noauditlistOriginal = data.getAuditInfo(state);
-            if (adType.equals("所有广告")) {
-                List adtypesList = getAdtypeBySession(request, response);
-                for (int i = 0; i < noauditlistOriginal.size(); i++)// 按类别展示
-                {
-                    Pic p = (Pic) noauditlistOriginal.get(i);
-                    int picId = p.getPicId();
-                    String adTypeName = od.query_adTypeBypicId(picId);
-                    System.out.println("adTypeName=" + adTypeName);
-                    for (Iterator iterator = adtypesList.iterator(); iterator
-                            .hasNext();) {
-                        AdType adType2 = (AdType) iterator.next();
-                        if (adTypeName.equals(adType2.getAdTypeName())) {
+            if(data.selectAuditOrNoAuditNum(state)<20){//未审核的广告数小于20
+                noauditlistOriginal = data.getAuditInfo(state);
+                if (adType.equals("所有广告")) {
+                    List adtypesList = getAdtypeBySession(request, response);
+                    for (int i = 0; i < noauditlistOriginal.size(); i++)// 按类别展示
+                    {
+                        Pic p = (Pic) noauditlistOriginal.get(i);
+                        int picId = p.getPicId();
+                        String adTypeName = od.query_adTypeBypicId(picId);
+                        System.out.println("adTypeName=" + adTypeName);
+                        for (Iterator iterator = adtypesList.iterator(); iterator
+                                .hasNext();) {
+                            AdType adType2 = (AdType) iterator.next();
+                            if (adTypeName.equals(adType2.getAdTypeName())) {
+                                noauditlist.add(p);
+                            }
+                        }
+                    }
+
+                } else {
+                    for (int i = 0; i < noauditlistOriginal.size(); i++)// 按类别展示
+                    {
+                        Pic p = (Pic) noauditlistOriginal.get(i);
+                        int picId = p.getPicId();
+                        String adTypeName = od.query_adTypeBypicId(picId);
+                        System.out.println("adTypeName=" + adTypeName);
+                        if (adTypeName.equals(adType)) {
+                            System.out.println("----------------->");
                             noauditlist.add(p);
                         }
                     }
-                }
 
-            } else {
-                for (int i = 0; i < noauditlistOriginal.size(); i++)// 按类别展示
+                }
+                if (!pasteName.equals("所有粘贴栏")) // 按粘贴栏展示
                 {
-                    Pic p = (Pic) noauditlistOriginal.get(i);
-                    int picId = p.getPicId();
-                    String adTypeName = od.query_adTypeBypicId(picId);
-                    System.out.println("adTypeName=" + adTypeName);
-                    if (adTypeName.equals(adType)) {
-                        System.out.println("----------------->");
-                        noauditlist.add(p);
+                    for (int i = 0; i < noauditlist.size(); i++) {
+                        String pasteStr = od.query_adPostBypicId(noauditlist.get(i)
+                                .getPicId());
+                        if (!pasteName.equals(pasteStr)) {
+                            System.out.println("删除一个数据----->");
+                            noauditlist.remove(i);
+                        }
                     }
                 }
-
+                // 按时间展示
+                noauditlist = new judgeTime().adjustTime(adTime, noauditlist);
+                System.out.println("size : ----->" + noauditlist.size());
             }
-            if (!pasteName.equals("所有粘贴栏")) // 按粘贴栏展示
-            {
-                for (int i = 0; i < noauditlist.size(); i++) {
-                    String pasteStr = od.query_adPostBypicId(noauditlist.get(i)
-                            .getPicId());
-                    if (!pasteName.equals(pasteStr)) {
-                        System.out.println("删除一个数据----->");
-                        noauditlist.remove(i);
-                    }
-                }
-            }
-            // 按时间展示
-            noauditlist = new judgeTime().adjustTime(adTime, noauditlist);
-            System.out.println("size : ----->" + noauditlist.size());
+            
 
         } else if (audit.equals("已审核")) {
 
@@ -351,11 +372,281 @@ public class AdminManagerLogical extends HttpServlet {
                 response);
 
     }
+  
+    // 点击审核、未审核显示对应状态广告
+    public void aduitInfo1(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
+        String audit = request.getParameter("audit");
+        String adType = request.getParameter("adType");
 
+        String pasteName = request.getParameter("pasteType");
+        String adTime = request.getParameter("adTime");
+
+        pasteName = new String(pasteName.getBytes("iso-8859-1"), "UTF-8");
+        adTime = new String(adTime.getBytes("iso-8859-1"), "UTF-8");
+        // pasteName=URLDecoder.decode(pasteName, "utf-8");
+        // adTime=URLDecoder.decode(adTime, "utf-8");
+        System.out.println("pasteName----->" + pasteName);
+        System.out.println("adTime----->" + adTime);
+        data = new AdminLogic();
+        List<Pic> noauditlist = new ArrayList(), auditlist = new ArrayList();
+        List<Pic> noauditlistOriginal = null;
+        List<Pic> auditlistOriginal = null;
+        int state = 0;
+        System.out.println("000000----->");
+        if (audit != null)
+            audit = new String(audit.getBytes("iso-8859-1"), "UTF-8");
+        // audit=URLDecoder.decode(audit, "utf-8");
+        System.out.println("audit----->" + audit);
+        adType = new String(adType.getBytes("iso-8859-1"), "UTF-8");
+        // adType=URLDecoder.decode(adType, "utf-8");
+        System.out.println("adType----->" + adType);
+        System.out.println("执行aduitInfo，要显示的图片状态为：" + audit);
+        OperationData od = new OperationData();
+        Administrator administrator = (Administrator) request.getSession()
+                .getAttribute("adminInfo");
+        List<String> scopeList = new ArrayList<String>();
+        List<Post> postList = new ArrayList<Post>();
+        int num=0;
+       
+         
+   
+        if (audit.equals("未审核")) {
+            state = 0;
+            try {
+                if (administrator.getLevel() == 1) {
+                    String[] scopes = administrator.getScope().split("\\|");
+                    for (int i = 0; i < scopes.length; i++) {
+                        scopeList.add(scopes[i]);
+                    }
+                    postList = new OperationData().getPosts(scopeList);
+                    for (Iterator iterator = postList.iterator(); iterator
+                            .hasNext();) {
+                        Post post = (Post) iterator.next();
+                       num+= data.selectAuditOrNoAuditNum(state, post.getPostId());
+                    }
+                }
+                
+                if (administrator.getLevel() == 0) {
+                    postList = new OperationData().getPosts();
+                    num =  data.selectAuditOrNoAuditNum(state);
+                }
+            } catch (Exception e) {
+                
+            }         
+            if(data.selectAuditOrNoAuditNum(state)<20){//未审核的广告数小于20
+                noauditlistOriginal = data.getAuditInfo(state);
+                if (pasteName .equals("所有类别")) {
+                    for (int i = 0; i < noauditlistOriginal.size(); i++)// 按类别展示
+                    {
+                        Pic p = (Pic) noauditlistOriginal.get(i);
+                        int adId=p.getAdId();  
+                         int postId = od.query_adPostByadId(adId);
+                        for (Iterator iterator = postList.iterator(); iterator
+                                .hasNext();) {
+                            Post post2 = (Post) iterator.next();
+                            if (postId==post2.getPostId()) {
+                                noauditlist.add(p);
+                            }
+                        }
+                    }
+                } else {
+                    for (int i = 0; i < noauditlistOriginal.size(); i++)// 按类别展示
+                    {
+                        Pic p = (Pic) noauditlistOriginal.get(i);
+                        int adId = p.getAdId();         
+                        int postId = od.query_adPostByadId(adId);
+                        List<String> unitTypeListTemp=new ArrayList<String>();
+                        unitTypeListTemp.add(pasteName);
+                        List<Post> postList2=new ArrayList<Post>();
+                        try {
+                           postList2 =   new OperationData().getPosts( unitTypeListTemp);
+                        } catch (SQLException e) {
+                         
+                            e.printStackTrace();
+                        }
+                        for (Iterator iterator = postList2.iterator(); iterator
+                                .hasNext();) {
+                            Post post2 = (Post) iterator.next();
+                            if (postId==post2.getPostId()) {
+                                noauditlist.add(p);
+                            }
+                        }
+                    }
+
+                }
+                if (!adType.equals("所有粘贴栏")) // 按粘贴栏展示
+                {
+                    for (int i = 0; i < noauditlist.size(); i++) {
+                       int postId = od.query_adPostByadId(noauditlist.get(i).getAdId());
+                       int postId2= Integer.parseInt(adType);
+                        if (postId!=postId2) {
+                            System.out.println("删除一个数据----->");
+                            noauditlist.remove(i);
+                        }
+                    }
+                }
+                // 按时间展示
+                noauditlist = new judgeTime().adjustTime(adTime, noauditlist);
+                for (Iterator iterator =   noauditlist .iterator(); iterator
+                        .hasNext();) {
+                    Pic pic = (Pic) iterator.next();              
+                    AdminLogic adminLogic=new AdminLogic();
+                    adminLogic.setAdAuditMark( pic.getAdId());                 
+                }
+                System.out.println("size : ----->" + noauditlist.size());
+            }
+            
+
+        } else if (audit.equals("已审核")) {
+
+            state = 1;
+            try {
+                if (administrator.getLevel() == 1) {
+                    String[] scopes = administrator.getScope().split("\\|");
+                    for (int i = 0; i < scopes.length; i++) {
+                        scopeList.add(scopes[i]);
+                    }
+                    postList = new OperationData().getPosts(scopeList);
+                    for (Iterator iterator = postList.iterator(); iterator
+                            .hasNext();) {
+                        Post post = (Post) iterator.next();
+                       num+= data.selectAuditOrNoAuditNum(state, post.getPostId());
+                    }
+                }
+                
+                if (administrator.getLevel() == 0) {
+                    postList = new OperationData().getPosts();
+                    num =  data.selectAuditOrNoAuditNum(state);
+                }
+            } catch (Exception e) {
+                
+            }         
+  
+            if(data.selectAuditOrNoAuditNum(state)<20){//审核的广告数小于20
+                auditlistOriginal = data.getAuditInfo(state);      
+                if (pasteName .equals("所有类别")) {
+                    for (int i = 0; i < auditlistOriginal.size(); i++)// 按类别展示
+                    {
+                        Pic p = (Pic) auditlistOriginal.get(i);
+                        int adId=p.getAdId();  
+                         int postId = od.query_adPostByadId(adId);
+                        for (Iterator iterator = postList.iterator(); iterator
+                                .hasNext();) {
+                            Post post2 = (Post) iterator.next();
+                            if (postId==post2.getPostId()) {
+                                auditlist.add(p);
+                            }
+                        }
+                    }
+                } else {                 
+                    for (int i = 0; i < auditlistOriginal.size(); i++)// 按类别展示
+                    {
+                        Pic p = (Pic) auditlistOriginal.get(i);
+                        int adId = p.getAdId();         
+                        int postId = od.query_adPostByadId(adId);
+                        List<String> unitTypeListTemp=new ArrayList<String>();
+                        unitTypeListTemp.add(pasteName);
+                        List<Post> postList2=new ArrayList<Post>();
+                        try {
+                           postList2 =   new OperationData().getPosts( unitTypeListTemp);
+                        } catch (SQLException e) {                       
+                            e.printStackTrace();
+                        }
+                        for (Iterator iterator = postList2.iterator(); iterator
+                                .hasNext();) {
+                            Post post2 = (Post) iterator.next();
+                            if (postId==post2.getPostId()) {
+                                auditlist.add(p);
+                            }
+                        }
+                    }
+                }
+
+                if (!adType.equals("所有粘贴栏")) // 按粘贴栏展示
+                {
+                    for (int i = 0; i < auditlist.size(); i++) {
+                       int postId = od.query_adPostByadId(auditlist.get(i).getAdId());
+                       int postId2= Integer.parseInt(adType);
+                        if (postId!=postId2) {
+                            System.out.println("删除一个数据----->");
+                            auditlist.remove(i);
+                        }
+                    }
+                }
+                // 按时间展示
+                auditlist = new judgeTime().adjustTime(adTime, auditlist);
+                for (Iterator iterator =   auditlist .iterator(); iterator
+                        .hasNext();) {
+                    Pic pic = (Pic) iterator.next();              
+                    AdminLogic adminLogic=new AdminLogic();
+                    adminLogic.setAdAuditMark( pic.getAdId());                 
+                }
+            }
+    
+        }
+        request.setAttribute("audit", audit);
+        request.setAttribute("noauditlist", noauditlist);
+        request.setAttribute("auditlist", auditlist);
+        request.getRequestDispatcher("adminManager1.jsp").forward(request,
+                response);
+
+    }
+  
+    
+    
+   public void  getAdTypeList(HttpServletRequest request,
+           HttpServletResponse response) throws ServletException, IOException {
+       response.setContentType("text/html;charset=UTF-8");
+       request.setCharacterEncoding("UTF-8");
+      String selectedValue = request.getParameter("selectedValue");
+      Administrator administrator = (Administrator) request.getSession()
+              .getAttribute("adminInfo");
+      
+      List<String> scopeList = new ArrayList<String>();
+      List<Post> postList = new ArrayList<Post>();
+      selectedValue = new String(selectedValue.getBytes("iso-8859-1"), "UTF-8");
+      if(selectedValue.equals("所有类别")){ 
+          try {
+              if (administrator.getLevel() == 1) {
+                  String[] scopes = administrator.getScope().split("\\|");
+                  for (int i = 0; i < scopes.length; i++) {
+                      scopeList.add(scopes[i]);
+                  }
+                  postList = new OperationData().getPosts(scopeList);
+
+              }
+              if (administrator.getLevel() == 0) {
+                  postList = new OperationData().getPosts();
+              }
+          } catch (SQLException e) {
+              System.out.println(e.getMessage());
+          }
+      }else{
+          try {         
+              scopeList.add(selectedValue);              
+              postList = new OperationData().getPosts(scopeList);
+          } catch (SQLException e) {
+              System.out.println(e.getMessage());
+          }
+      }
+      for (Iterator iterator = postList.iterator(); iterator.hasNext();) {
+        Post post = (Post) iterator.next();
+        System.out.println(post.getPostId());
+        System.out.println(post.getPostName());
+        System.out.println(post.getAllVisitors());
+    }
+      JSONArray jsonArray=JSONArray.fromObject(postList);
+      response.getWriter().print(jsonArray);
+   }
+    
+  
     public List getPostListBySession(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
         Administrator administrator = (Administrator) request.getSession()
-                .getAttribute("admininfo");
+                .getAttribute("adminInfo");
         List<String> scopeList = new ArrayList<String>();
         List<String> postList = new ArrayList<String>();
         try {
@@ -407,6 +698,7 @@ public class AdminManagerLogical extends HttpServlet {
         data = new AdminLogic();
         System.out.println("通过审核的广告id为：" + adId);
         boolean flag1 = data.changeState_pic(adId);
+        data.recoveryAdAuditMark(adId);
         boolean flag2 = data.changeState_ad(adId);
         int state = 0;
         List noauditlist = data.getAuditInfo(state);

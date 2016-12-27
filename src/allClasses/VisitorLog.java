@@ -9,6 +9,7 @@ public class VisitorLog {
      private  String visitorpostname;
      private int postId;
      private Timestamp time;
+     private int adId;
 	public int getVisitorid() {
 		return visitorid;
 	}
@@ -38,6 +39,12 @@ public class VisitorLog {
     }
     public void setTime(Timestamp time) {
         this.time = time;
+    }
+    public int getAdId() {
+        return adId;
+    }
+    public void setAdId(int adId) {
+        this.adId = adId;
     }
   
      

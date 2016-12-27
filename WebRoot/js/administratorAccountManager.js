@@ -110,14 +110,28 @@ $(document).ready(function() {
         var insertPassword=$("#insertPassword").val();
         var insertName=  $("#insertName").val();
         var insertLevel=$("#insertLevel").val();
-  
+        if(!(isNull(insertPassword)||isNull(insertName))&&isInteger(insertLevel)){
        $.ajax({
            type:"get",
            url:"AdminManagerLogical?info=insertAdminManager&text="+text+"&insertName="+insertName+"&insertLevel="+insertLevel+"&insertPassword="+insertPassword,
            success:function(data){
-               $('#insertModal').modal('hide');
+               if(data=="1"){
+                   $('#insertModal').modal('hide');
+                   alert("添加成功");
+               }else{
+                   $("#insertPassword").val("");
+                   $("#insertName").val("");
+                   $("#insertLevel").val("");
+                   alert("用户名重复");
+                   
+               }
+              
            }      
        });
+        }else{
+            alert("请重新输入");
+        }
+      
     });
     
     $('#example-order-button-update').on('click', function() {
@@ -142,16 +156,28 @@ $(document).ready(function() {
 
         var updatePassword=$("#updatePassword").val();
         var updateName=  $("#updateName").val();
-        var updateLevel=$("#updateLevel").val();
-  
-       $.ajax({
-           type:"get",
-           url:"AdminManagerLogical?info=updateAdminManager&text="+text+"&updateName="+updateName+"&updateLevel="+updateLevel+"&updatePassword="+updatePassword+"&updateModelID="+updateModelID,
-           success:function(data){
-               $('#updateModal').modal('hide');
-               alert("更新成功");
-           }      
-       });
+        var updateLevel=$("#updateLevel").val();     
+        if(!(isNull(updateName)||isNull(updatePassword))&&isInteger(updateLevel)){
+            $.ajax({
+                type:"get",
+                url:"AdminManagerLogical?info=updateAdminManager&text="+text+"&updateName="+updateName+"&updateLevel="+updateLevel+"&updatePassword="+updatePassword+"&updateModelID="+updateModelID,
+                success:function(data){
+                    if(data=="1"){
+                        $('#updateModal').modal('hide');
+                        alert("更新成功");
+                    }else{
+                        $("#updatePassword").val("");
+                        $("#updateName").val("");
+                        $("#updateLevel").val("");     
+                        alert("用户名重复");
+                    }
+                   
+                }      
+            });
+        }else{
+            alert("请重新输入");
+        }
+      
     });
 
     $('#example-order-button-delete').on('click', function() {

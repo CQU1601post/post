@@ -233,7 +233,7 @@ $(document).ready(function() {
             >
             </li>
             <!--用隐藏域显示选中的粘贴栏id -->
-            <div class="but">
+            <div class="but_upload1">
                 <input type="submit" value="下一步"
                     class="button"
                 />

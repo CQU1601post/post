@@ -84,7 +84,11 @@ function delete1(id){
   
   <body>
   <jsp:include page="managertop.jsp" flush="true" />
-  <p align="center" class="p">广告类别管理</p>
+<table class="top_logo">
+   <tr>
+    <td class="STYLE1"><div align="center"><span class="STYLE7">广告类别管理</span></div></td>
+  </tr>
+ </table>
    <p align="center">
       <a href=" " id="add" onclick="add()">添加新广告类别</a>
      </p>

@@ -40,7 +40,7 @@ for(int i=0;i<unitIds.length;i++){
 
 	   <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 	
-	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"> 
 	   <link href="css/adminManager.css" rel="stylesheet" type="text/css" />
 	
 	<style type="text/css">
@@ -73,10 +73,17 @@ width: 100px;
     right: 0px;
     cursor: pointer;
 }
+.modal.fade {
+top: -100%;  
+-webkit-transition: opacity 0.3s linear, top 0.3s ease-out;
+-moz-transition: opacity 0.3s linear, top 0.3s ease-out;
+-o-transition: opacity 0.3s linear, top 0.3s ease-out;
+transition: opacity 0.3s linear, top 0.3s ease-out;
+}
 -->
 </STYLE>
 <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
-<script type="text/javascript " src="js/bootstrap.min.js"></script>
+ <script type="text/javascript " src="js/bootstrap.min.js"></script>  
 <script type="text/javascript " src="js/jquery-ui.js"></script>
 <script type="text/javascript">
 $(function(){
@@ -152,15 +159,16 @@ function changeGroupID(id,oldGroupId){
   
   <body>
   <jsp:include page="managertop.jsp" flush="true" />
-   <table class="top_logo">
+  <table class="top_logo">
    <tr>
-    <td class="STYLE1"><div align="center"><img src="images/logo02.png" width="252" height="150" align="bottom" /><span class="STYLE7">&nbsp;粘贴栏管理</span></div></td>
+    <td class="STYLE1"><div align="center"><span class="STYLE7">粘贴栏管理</span></div></td>
   </tr>
  </table>
+ <br>
       <p align="center" class="operation"> 
         <a href=""  onclick="insert()"id="add" style="background-color:black;border-radius:3px 3px;display:block;width:100px;height:20px;color:white;opacity:0.7">添加粘贴栏</a>
      </p>
-
+<br>
  
    <table  class="table_content" >
     <tr class="tr_one">

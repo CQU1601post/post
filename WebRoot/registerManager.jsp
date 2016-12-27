@@ -44,12 +44,12 @@ List list=(List)request.getAttribute("list");
   
   <body>
   <jsp:include page="managertop.jsp" flush="true" />
-   <table class="top_logo">
+  <table class="top_logo">
    <tr>
-    <td class="STYLE1"><div align="center"><img src="images/logo02.png" width="252" height="150" align="bottom" /><span class="STYLE7">&nbsp;注册用户管理</span></div></td>
+    <td class="STYLE1"><div align="center"><span class="STYLE7">注册用户管理</span></div></td>
   </tr>
    </table>
-   <p align="center" class="operation">
+   <p align="center" class="operation" >
       <a href="register.jsp" id="add" >注册新用户</a><br>
       <a href="javascript:void(0)" class="registerManager_table_a">批量删除 </a>
      </p>
