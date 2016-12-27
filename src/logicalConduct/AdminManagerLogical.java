@@ -6,8 +6,10 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -409,6 +411,7 @@ public class AdminManagerLogical extends HttpServlet {
                 .getAttribute("adminInfo");
         List<String> scopeList = new ArrayList<String>();
         List<Post> postList = new ArrayList<Post>();
+        Set<Integer> adIdSet=new HashSet<Integer>();
         int num=0;
        
          
@@ -422,21 +425,21 @@ public class AdminManagerLogical extends HttpServlet {
                         scopeList.add(scopes[i]);
                     }
                     postList = new OperationData().getPosts(scopeList);
-                    for (Iterator iterator = postList.iterator(); iterator
-                            .hasNext();) {
-                        Post post = (Post) iterator.next();
-                       num+= data.selectAuditOrNoAuditNum(state, post.getPostId());
-                    }
+//                    for (Iterator iterator = postList.iterator(); iterator
+//                            .hasNext();) {
+//                        Post post = (Post) iterator.next();
+//                       num+= data.selectAuditOrNoAuditNum(state, post.getPostId());
+//                    }
                 }
                 
                 if (administrator.getLevel() == 0) {
                     postList = new OperationData().getPosts();
-                    num =  data.selectAuditOrNoAuditNum(state);
+                 //   num =  data.selectAuditOrNoAuditNum(state);
                 }
             } catch (Exception e) {
                 
             }         
-            if(data.selectAuditOrNoAuditNum(state)<20){//未审核的广告数小于20
+          //  if(data.selectAuditOrNoAuditNum(state)<20){//未审核的广告数小于20
                 noauditlistOriginal = data.getAuditInfo(state);
                 if (pasteName .equals("所有类别")) {
                     for (int i = 0; i < noauditlistOriginal.size(); i++)// 按类别展示
@@ -490,14 +493,18 @@ public class AdminManagerLogical extends HttpServlet {
                 }
                 // 按时间展示
                 noauditlist = new judgeTime().adjustTime(adTime, noauditlist);
-                for (Iterator iterator =   noauditlist .iterator(); iterator
+                for (Iterator iterator =   noauditlist .iterator(); iterator//设置为当前管理员审核
                         .hasNext();) {
-                    Pic pic = (Pic) iterator.next();              
+                    Pic pic = (Pic) iterator.next();  
+                    adIdSet.add(pic.getAdId());
                     AdminLogic adminLogic=new AdminLogic();
                     adminLogic.setAdAuditMark( pic.getAdId());                 
                 }
+                if(adIdSet.size()>5){
+                    
+                }
                 System.out.println("size : ----->" + noauditlist.size());
-            }
+           // }
             
 
         } else if (audit.equals("已审核")) {
@@ -513,19 +520,19 @@ public class AdminManagerLogical extends HttpServlet {
                     for (Iterator iterator = postList.iterator(); iterator
                             .hasNext();) {
                         Post post = (Post) iterator.next();
-                       num+= data.selectAuditOrNoAuditNum(state, post.getPostId());
+                    //   num+= data.selectAuditOrNoAuditNum(state, post.getPostId());
                     }
                 }
                 
                 if (administrator.getLevel() == 0) {
                     postList = new OperationData().getPosts();
-                    num =  data.selectAuditOrNoAuditNum(state);
+                  //  num =  data.selectAuditOrNoAuditNum(state);
                 }
             } catch (Exception e) {
                 
             }         
   
-            if(data.selectAuditOrNoAuditNum(state)<20){//审核的广告数小于20
+           // if(data.selectAuditOrNoAuditNum(state)<20){//审核的广告数小于20
                 auditlistOriginal = data.getAuditInfo(state);      
                 if (pasteName .equals("所有类别")) {
                     for (int i = 0; i < auditlistOriginal.size(); i++)// 按类别展示
@@ -584,7 +591,7 @@ public class AdminManagerLogical extends HttpServlet {
                     AdminLogic adminLogic=new AdminLogic();
                     adminLogic.setAdAuditMark( pic.getAdId());                 
                 }
-            }
+          //  }
     
         }
         request.setAttribute("audit", audit);

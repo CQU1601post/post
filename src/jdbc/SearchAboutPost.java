@@ -2,7 +2,10 @@ package jdbc;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
  
@@ -323,6 +326,58 @@ public class SearchAboutPost {
     		connect.close();
     	}    
     	return post;
+    }
+    
+    
+    public List<Ad> getAd(int postId,int money){
+        ConnectDB connectDB=new ConnectDB();
+        String sql="select * from ad where postId='"+postId+"'and money>'"+money+"'" ;
+        ResultSet result=connectDB.executeQuery(sql);
+        List<Ad> ads=new ArrayList<Ad>();
+        try {
+            while(result.next()){
+                Ad ad = new Ad(result.getInt(1), result.getInt(2),
+                        result.getString(3), result.getInt(4),result.getInt(5), result.getString(6),result.getInt(7),result.getLong(8),result.getInt(9),result.getString(10),result.getInt(11),result.getInt(12),result.getInt(13),result.getInt(14),result.getInt(15));//通过审核的广告checked属性必为1        
+                ads.add(ad);         
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally{
+            connectDB.close();
+        }
+        return ads;
+    }
+    
+    public List<Ad> getRandAd(int postId,int num,int money){
+        List<Ad> ads2=new ArrayList<Ad>();
+        if(money<0){
+            System.out.println("等级小于0");
+            return null;
+        }else{
+            List<Ad> ads=getAd(postId,money);
+            if(ads.size()<=num){
+                return ads;
+            }else{
+                for (Iterator iterator = ads.iterator(); iterator.hasNext();) {
+                    Ad ad = (Ad) iterator.next();
+                    if(ad.getMoney()==2){
+                        ads2.add(ad);
+                    }
+                    if(ad.getMoney()==3){
+                        ads2.add(ad);
+                        ads2.add(ad);
+                    }
+                }
+                ads.addAll(ads2);
+                Collections.shuffle(ads);
+                ads2.removeAll(ads2);
+                for(int i=0;i<num;i++){
+                    ads2.add(ads.get(i));
+                }
+                return ads2;
+            }
+        }
+ 
     }
     
     //将post对应的访问量增加
