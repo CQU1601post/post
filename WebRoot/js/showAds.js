@@ -31,6 +31,14 @@ function scroll(obj){
 	},5);
 }
 
+function getScrollAds(){
+	var postId = $("#postId").val();
+	var url = `PostLogical?functionName=getScrollAds&postId=${postId}&num=5&money=0`;
+	$.get(url,function(data){
+		
+	});
+}
+
 function scroll_step(obj,timer){
 	var li_wid = Math.ceil(obj.getElementsByTagName('li')[0].offsetWidth),
 		ul_wid = Math.ceil(obj.getElementsByTagName('ul')[0].offsetWidth),

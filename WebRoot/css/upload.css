@@ -299,6 +299,9 @@ filter:alpha(opacity=0);/* ����IE */
 .upload_type_info .but{
 	margin:0 10px 0 0;
 }
+.hide{
+	display: none;
+}
 /*新增*/
 .updateType{
 	margin:0 auto;

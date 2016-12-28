@@ -877,4 +877,19 @@ public class FunctionsForPostLogical {
 		}	
 		response.sendRedirect("upLoad3.jsp");//成功则跳转到成功页面				
 	}
+	
+	public void getScrollAds(HttpServletRequest request,
+			HttpServletResponse response)throws ServletException, IOException{ 
+		response.setContentType("application/json;utf-8");
+		response.setHeader("pragma","no-cache");
+		response.setHeader("cache-control","no-cache");
+		PrintWriter out=response.getWriter();
+		if(null==request.getParameter("num")||null==request.getParameter("postId")){
+			System.out.println("滚动图片数量为未设置！"); 
+			response.sendRedirect("index.jsp");
+		}
+		else{
+			
+		}
+	}
 }

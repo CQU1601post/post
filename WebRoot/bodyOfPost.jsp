@@ -219,11 +219,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 <li><a href="#"><img src="images/3.jpg"></a></li>
                 <li><a href="#"><img src="images/4.jpg"></a></li>
                 <li><a href="#"><img src="images/5.jpg"></a></li>
-                <li><a href="#"><img src="images/6.jpg"></a></li>
-                <li><a href="#"><img src="images/7.jpg"></a></li>
-                <li><a href="#"><img src="images/8.jpg"></a></li>
-                <li><a href="#"><img src="images/9.jpg"></a></li>
-                <li><a href="#"><img src="images/10.jpg"></a></li>
             </ul>
             <ul>
             </ul>

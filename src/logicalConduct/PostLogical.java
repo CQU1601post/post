@@ -56,6 +56,9 @@ public class PostLogical extends HttpServlet {
 		else if ("addMoney".equals(functionName)) {
             functions.addLastAdMoney(request, response);
         }
+		else if ("getScrollAds".equals(functionName)){
+			functions.getScrollAds(request,response);
+		}
 	}
 
 	/**
