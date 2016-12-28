@@ -348,6 +348,7 @@ public class SearchAboutPost {
         return ads;
     }
     
+    //postId 代表post的id(上传的粘贴栏) ; num 表示要随机生成的图片数量；money 表示什么等级以上的图片随机滚动，现在一般取0
     public List<Ad> getRandAd(int postId,int num,int money){
         List<Ad> ads2=new ArrayList<Ad>();
         if(money<0){

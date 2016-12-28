@@ -69,7 +69,7 @@ transition: opacity 0.3s linear, top 0.3s ease-out;
     <jsp:include page="managertop.jsp" flush="true" />
   <table class="top_logo">
    <tr>
-    <td class="STYLE1"><div align="center"><span class="STYLE7">管理员管理</span></div></td>
+    <td class="STYLE1"><div align="center"><span class="STYLE7">审核员管理</span></div></td>
    
   </tr>
  </table>
@@ -77,14 +77,14 @@ transition: opacity 0.3s linear, top 0.3s ease-out;
     <p align="center"  class="operation" >
         <a href="javascript:void(0)"
             class="administratorAccountManager_insert"
-        >添加新管理员</a>
+        >添加新审核员</a>
     </p>
      <br>
     <table class="table_content">
         <tr class="tr_one">
-            <td width="150" align="center">管理员编号</td>
-            <td width="150" align="center">管理员名称</td>
-             <td width="150" align="center">管理员密码</td>
+            <td width="150" align="center">审核员编号</td>
+            <td width="150" align="center">审核员名称</td>
+             <td width="150" align="center">审核员密码</td>
             <td width="150" align="center">级别</td>
             <td width="150" align="center">范围</td>
             <td width="200" align="center">操作</td>
@@ -102,7 +102,7 @@ transition: opacity 0.3s linear, top 0.3s ease-out;
                <%--  <c:if test="${a.getScope()==0}" >
                     <td width="150" align="center">所有</td>
                </c:if> --%><!-- 此段代码不起作用 -->
-                 <c:if test="${a.getScope()!='0' }" >
+                 <c:if test="${a.getLevell()!='0' }" >
                     <td width="150" align="center">
                
                   <select id="example-multiple-selected<%=a.getId()%>"  style="width:100px">

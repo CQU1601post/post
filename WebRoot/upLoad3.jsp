@@ -84,7 +84,7 @@
 <div class="upload_result">
 <p>恭喜您上传成功！</p>
 <!-- 此处返回的应该是进来的地方，history.go(-2) -->
-<input type='button' value="  继续上传"" class="button" onclick="goBack()">
+<input type='button' value="  继续上传"" class="button" onclick="window.open('upLoad1.jsp','_self')">
 <input type="button" value="返回首页" class="button" onclick="window.open('index.jsp','_self')">  
 </div>
 

@@ -6,6 +6,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -20,6 +21,7 @@ import javax.servlet.http.HttpSession;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+import tool.AuditInfoHelp;
 import tool.GetCurrentTime;
 import tool.judgeTime;
 
@@ -157,7 +159,7 @@ public class AdminManagerLogical extends HttpServlet {
             if (data.judgeExistAdmin(name, password)) {
                 a = data.getAdmin(name, password);
                 request.getSession().setAttribute("adminInfo", a);
-                
+                request.setAttribute("isAuditMark", "1");
                 request.getRequestDispatcher("adminManager1.jsp").forward(
                         request, response);
 
@@ -385,18 +387,21 @@ public class AdminManagerLogical extends HttpServlet {
 
         String pasteName = request.getParameter("pasteType");
         String adTime = request.getParameter("adTime");
-
+      
         pasteName = new String(pasteName.getBytes("iso-8859-1"), "UTF-8");
         adTime = new String(adTime.getBytes("iso-8859-1"), "UTF-8");
         // pasteName=URLDecoder.decode(pasteName, "utf-8");
         // adTime=URLDecoder.decode(adTime, "utf-8");
         System.out.println("pasteName----->" + pasteName);
         System.out.println("adTime----->" + adTime);
-        data = new AdminLogic();
+        
         List<Pic> noauditlist = new ArrayList(), auditlist = new ArrayList();
+        
         List<Pic> noauditlistOriginal = null;
         List<Pic> auditlistOriginal = null;
         int state = 0;
+        int auditMark=0;
+        int nextPage=0;
         System.out.println("000000----->");
         if (audit != null)
             audit = new String(audit.getBytes("iso-8859-1"), "UTF-8");
@@ -405,17 +410,16 @@ public class AdminManagerLogical extends HttpServlet {
         adType = new String(adType.getBytes("iso-8859-1"), "UTF-8");
         // adType=URLDecoder.decode(adType, "utf-8");
         System.out.println("adType----->" + adType);
-        System.out.println("执行aduitInfo，要显示的图片状态为：" + audit);
+        System.out.println("执行aduitInfo1，要显示的图片状态为：" + audit);
         OperationData od = new OperationData();
         Administrator administrator = (Administrator) request.getSession()
                 .getAttribute("adminInfo");
+        AuditInfoHelp auditInfoHelp=new AuditInfoHelp(audit,adType,pasteName,adTime);
         List<String> scopeList = new ArrayList<String>();
         List<Post> postList = new ArrayList<Post>();
         Set<Integer> adIdSet=new HashSet<Integer>();
         int num=0;
-       
-         
-   
+        AdminLogic adminLogic=new AdminLogic();
         if (audit.equals("未审核")) {
             state = 0;
             try {
@@ -440,7 +444,7 @@ public class AdminManagerLogical extends HttpServlet {
                 
             }         
           //  if(data.selectAuditOrNoAuditNum(state)<20){//未审核的广告数小于20
-                noauditlistOriginal = data.getAuditInfo(state);
+                noauditlistOriginal = adminLogic.getAuditInfo(state,auditMark);
                 if (pasteName .equals("所有类别")) {
                     for (int i = 0; i < noauditlistOriginal.size(); i++)// 按类别展示
                     {
@@ -497,14 +501,45 @@ public class AdminManagerLogical extends HttpServlet {
                         .hasNext();) {
                     Pic pic = (Pic) iterator.next();  
                     adIdSet.add(pic.getAdId());
-                    AdminLogic adminLogic=new AdminLogic();
-                    adminLogic.setAdAuditMark( pic.getAdId());                 
+             //       AdminLogic adminLogic=new AdminLogic();
+              //      adminLogic.setAdAuditMark( pic.getAdId());                 
                 }
                 if(adIdSet.size()>5){
+                    System.out.println("大小"+adIdSet.size());
+                    nextPage=1;
+                    noauditlist.removeAll(noauditlist);
+                  
+                    List<Integer> adIdList=new ArrayList<Integer>();
+                    List<Integer> adIdList2=new ArrayList<Integer>();
+                    adIdList2.removeAll(adIdList2);
+                    for (Iterator iterator = adIdSet.iterator(); iterator
+                            .hasNext();) {
+                        Integer integer = (Integer) iterator.next();
+                        adIdList.add(integer);
+                    }
+                    Collections.shuffle(adIdList);
+                    List<Integer> temp=new ArrayList<Integer>();
+                    for(int i=0;i<5;i++){                   
+                        noauditlist.addAll(adminLogic.getPicByAdId(adIdList.get(i)));
+                        adIdSet.remove(adIdList.get(i));  
+                        System.out.println("adidlist="+adIdList.get(i));
+                        temp.add(adIdList.get(i));
+                       
+                        
+                    }
+                    adminLogic.setAdAuditMark1(  temp);  
+                }else{
+                    List<Integer> temp=new ArrayList<Integer>();
+                    for (Iterator iterator =   noauditlist .iterator(); iterator//设置为当前管理员审核
+                            .hasNext();) {
+                        Pic pic = (Pic) iterator.next();                        
+                        temp.add(pic.getAdId());
+                                   
+                    }
                     
+                    adminLogic.setAdAuditMark1( temp);  
                 }
-                System.out.println("size : ----->" + noauditlist.size());
-           // }
+           
             
 
         } else if (audit.equals("已审核")) {
@@ -533,7 +568,7 @@ public class AdminManagerLogical extends HttpServlet {
             }         
   
            // if(data.selectAuditOrNoAuditNum(state)<20){//审核的广告数小于20
-                auditlistOriginal = data.getAuditInfo(state);      
+                auditlistOriginal = adminLogic.getAuditInfo(state,auditMark);      
                 if (pasteName .equals("所有类别")) {
                     for (int i = 0; i < auditlistOriginal.size(); i++)// 按类别展示
                     {
@@ -588,12 +623,49 @@ public class AdminManagerLogical extends HttpServlet {
                 for (Iterator iterator =   auditlist .iterator(); iterator
                         .hasNext();) {
                     Pic pic = (Pic) iterator.next();              
-                    AdminLogic adminLogic=new AdminLogic();
-                    adminLogic.setAdAuditMark( pic.getAdId());                 
+                 //   AdminLogic adminLogic=new AdminLogic();
+                //    adminLogic.setAdAuditMark( pic.getAdId());                 
                 }
           //  }
+                if(adIdSet.size()>5){
+                    System.out.println("大小"+adIdSet.size());
+                    nextPage=1;
+                   auditlist.removeAll(auditlist);
+                
+                    List<Integer> adIdList=new ArrayList<Integer>();
+                    List<Integer> adIdList2=new ArrayList<Integer>();
+                    adIdList2.removeAll(adIdList2);
+                    for (Iterator iterator = adIdSet.iterator(); iterator
+                            .hasNext();) {
+                        Integer integer = (Integer) iterator.next();
+                        adIdList.add(integer);
+                    }
+                    Collections.shuffle(adIdList);
+                    for(int i=0;i<5;i++){
+                        auditlist.addAll(adminLogic.getPicByAdId(adIdList.get(i)));
+                        adIdSet.remove(adIdList.get(i));  
+                        adminLogic.setAdAuditMark( adIdList.get(i));  
+                    }
+                }else{
+                    List<Integer> temp=new ArrayList<Integer>();
+                    for (Iterator iterator =   auditlist .iterator(); iterator//设置为当前管理员审核
+                            .hasNext();) {
+                        Pic pic = (Pic) iterator.next();                        
+                        temp.add(pic.getAdId());
+                                   
+                    }
+                   
+                    adminLogic.setAdAuditMark1( temp);  
+                }
     
         }
+      for (Iterator iterator =adminLogic.getAuditInfo(state,auditMark).iterator(); iterator.hasNext();) {
+       Pic integer = (Pic) iterator.next();
+        System.out.println(integer.getAdId());
+    }  
+      request.setAttribute("isAuditMark","0" );
+        request.setAttribute("auditInfoHelp", auditInfoHelp);
+        request.setAttribute("nextPage", nextPage);
         request.setAttribute("audit", audit);
         request.setAttribute("noauditlist", noauditlist);
         request.setAttribute("auditlist", auditlist);
@@ -710,8 +782,13 @@ public class AdminManagerLogical extends HttpServlet {
         int state = 0;
         List noauditlist = data.getAuditInfo(state);
         request.setAttribute("noauditlist", noauditlist);
-        request.getRequestDispatcher("adminManager.jsp").forward(request,
-                response);
+        if(flag1&&flag2){
+            response.getWriter().write("1");
+        }else{
+            response.getWriter().write("0");
+        }
+//        request.getRequestDispatcher("adminManager.jsp").forward(request,
+//                response);
     }
 
     // 批量审查
@@ -768,12 +845,18 @@ public class AdminManagerLogical extends HttpServlet {
         int adId = Integer.parseInt(request.getParameter("adId"));
         data = new AdminLogic();
         System.out.println("adId=" + adId);
-        data.del_pic_ad(adId);
+         boolean flag=  data.del_pic_ad(adId);
         int state = 0;
         List noauditlist = data.getAuditInfo(state);
         request.setAttribute("noauditlist", noauditlist);
-        request.getRequestDispatcher("adminManager.jsp").forward(request,
-                response);
+        if(flag){
+            response.getWriter().write("1");
+        }else{
+            response.getWriter().write("0");
+        }
+       
+//        request.getRequestDispatcher("adminManager.jsp").forward(request,
+//                response);
     }
 
     public void delInfo(HttpServletRequest request, HttpServletResponse response)
@@ -1494,10 +1577,19 @@ public class AdminManagerLogical extends HttpServlet {
 
         t.setUnitTypeId(typeId);
         t.setUnitTypeName(paste_type);
-        data.savePasteType(t);
+        String sql="select * from unittype where unitTypeName='"+paste_type+"'";
+        if(!data.checkRepeat(sql)){
+            data.updateSuperAdministrator(typeId);
+            data.savePasteType(t);
+        }else{
+            System.out.println("unitType名字重复");
+        }
+       
         pasteTypeShow(request, response);
     }
 
+    
+    
     // 修改粘贴栏类别
     public void updatePasteType(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {

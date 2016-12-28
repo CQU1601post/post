@@ -35,21 +35,27 @@ public class AdminLogic {
     // 返回所有管理员信息
 
     public boolean judgeExistAdmin(String name,String password){
-        int adPassword=Integer.parseInt(password);
-       sql="select * from administrator where administratorName='"+name+"'and password='"+adPassword+"'";
+       // int adPassword=Integer.parseInt(password);
+       sql="select * from administrator where administratorName='"+name+"'and password='"+password+"'";
        connection =new ConnectDB();
        ResultSet rs=connection.executeQuery(sql);
-       if(!rs.equals(null)){
-          connection.close();
-            return true;
-        }else {
-            connection.close();
-            return false;
-        }    
+       try {
+        if(rs.next()){
+              connection.close();
+                return true;
+            }else {
+                connection.close();
+                return false;
+            }
+    } catch (SQLException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+    }
+    return false;    
     }
     public Administrator getAdmin(String name,String password){
-        int adPassword=Integer.parseInt(password);
-        sql="select * from administrator where administratorName='"+name+"'and password='"+adPassword+"'";
+        //int adPassword=Integer.parseInt(password);
+        sql="select * from administrator where administratorName='"+name+"'and password='"+password+"'";
         connection =new ConnectDB();
         Administrator a = new Administrator();
         ResultSet rs=connection.executeQuery(sql);
@@ -105,8 +111,13 @@ public class AdminLogic {
         sql="select * from administrator   where administratorName='" + name+ "'";
         connection=new ConnectDB();
         ResultSet rs=connection.executeQuery(sql);
-        if(rs==null){
-             flag=false;
+        try {
+            if(rs.next()){
+                 flag=false;
+            }
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
         connection.close();
         return flag;
@@ -131,7 +142,7 @@ public class AdminLogic {
     public List getAuditInfo(int checked) {
         List list = new ArrayList();
         Pic p;
-        sql = "select *from pic where pic.adId in(select ad.adId from ad where exist=1) and checked='"
+        sql = "select *from pic where pic.adId in(select ad.adId from ad where exist=1 ) and checked='"
                 + checked + "'";
         connection = new ConnectDB();
         ResultSet rs = connection.executeQuery(sql);
@@ -156,6 +167,36 @@ public class AdminLogic {
         return list;
     }
 
+    // 返回所有未通过审核的图片的信息 且没有管理员在审核
+    public List getAuditInfo(int checked,int auditMark) {
+        List list = new ArrayList();
+        Pic p;
+        sql = "select *from pic where pic.adId in(select ad.adId from ad where exist=1 and ad.auditMark='"+auditMark+"') and checked='"
+                + checked + "'";
+        connection = new ConnectDB();
+        ResultSet rs = connection.executeQuery(sql);
+        try {
+            while (rs.next()) {
+                p = new Pic();
+                p.setPicId(rs.getInt("picId"));
+                p.setAdId(rs.getInt("adId"));
+                p.setHeight(rs.getInt("height"));
+                p.setWidth(rs.getInt("width"));
+                // p.setPicName(rs.getString("picName"));
+                p.setPicAddr(rs.getString("picAddr"));
+                p.setChecked(rs.getInt("checked"));
+                // p.setState(rs.getInt("checked"));
+                list.add(p);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            connection.close();
+        }
+        return list;
+    }
+
+    
     //查询未审核或者已审核的广告数
     public int selectAuditOrNoAuditNum(int checked){
         sql="select count(*) from ad where  exist=1 and checked='"+checked+"'";
@@ -217,13 +258,37 @@ public class AdminLogic {
         connection = new ConnectDB();
         sql="update ad set auditMark=1 where adId='"+adId+"'";
         boolean flag = connection.executeUpdate(sql);
+        System.out.println("setAdAuditMark"+flag);
         connection.close();
     }
+    public void setAdAuditMark1(List<Integer> temp){
+        connection = new ConnectDB();
+        for (Iterator iterator = temp.iterator(); iterator.hasNext();) {
+            int integer = (Integer) iterator.next();
+            sql="update ad set auditMark=1 where adId='"+integer+"'";
+            boolean flag = connection.executeUpdate(sql);
+            sql="select adId from ad  where auditMark=1 and adId='"+integer+"'";
+            ResultSet rsResultSet=connection.executeQuery(sql);
+            try {
+                while(rsResultSet.next()){
+                    System.out.println(rsResultSet.getInt(1));
+                }
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            System.out.println("setAdAuditMark1"+flag);
+        }
+       
+        connection.close();
+    }
+    
     
     public void recoveryAdAuditMark(int adId){
         connection = new ConnectDB();
         sql="update ad set auditMark=0 where adId='"+adId+"'";
         boolean flag = connection.executeUpdate(sql);
+        System.out.println("recoveryAdAuditMark"+flag);
         connection.close();
     }
     
@@ -257,6 +322,35 @@ public class AdminLogic {
         connection.close();
         return list;
     }
+    
+    public List<Pic> getPicByAdId(int adId){
+        connection=new ConnectDB();
+        sql="select * from pic where adId='"+adId+"'";
+        ResultSet rs = connection.executeQuery(sql);
+        List<Pic> pics=new ArrayList<Pic>();
+      
+        try {
+            if (rs == null) {
+                System.out.println("rs为空");
+            }
+            while (rs.next()) {
+                Pic p=new Pic();
+                p.setAdId(rs.getInt("adId"));
+                p.setPicAddr(rs.getString("picAddr"));
+                p.setWidth(rs.getInt("width"));
+                p.setHeight(rs.getInt("height"));
+                p.setPicId(rs.getInt("picId"));
+                p.setChecked(rs.getInt("checked"));
+                pics.add(p);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            connection.close();
+        }
+        return pics;
+    }
+    
     
     // 将特定ID的图片状态改为通过
     public boolean changeState_pic(int adId) {
@@ -322,14 +416,14 @@ public class AdminLogic {
     }
 
     // 删除某个id广告下所有的图片
-    public void del_pic_ad(int adId) {
+    public boolean del_pic_ad(int adId) {
         connection = new ConnectDB();
         sql = "delete from pic where adId='" + adId + "'";
         boolean flag = connection.executeUpdate(sql);
         sql = "delete from ad where adId='" + adId + "'";
         flag = connection.executeUpdate(sql);
         connection.close();
-
+        return flag;
     }
 
     // 通过改变ad的状态，来代表删除
@@ -1441,5 +1535,34 @@ public class AdminLogic {
         }
         return pasteTypes;
     }
-
+    
+    public boolean updateSuperAdministrator(int unitTypeId){
+        Administrator administrator=getAdmin("xjp", "123");//超级管理员默认为此用户名和密码
+        String scopes=administrator.getScope();
+        scopes=scopes+"|"+unitTypeId;
+        sql="update administrator set scope='"+scopes+"'where id=1";
+        connection=new ConnectDB();
+         boolean flag =  connection.executeUpdate(sql);
+         return flag;
+    }
+    
+    
+    
+    //根据sql语句查询结果判定是否有重复项
+    public boolean checkRepeat(String sqlString){
+        connection=new ConnectDB();
+        ResultSet rSet=connection.executeQuery(sqlString);
+        System.out.println(sqlString);
+        boolean flag=false;
+        try {
+           if(rSet.next()){
+               System.out.println("为真");
+                flag=true;            
+            }
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return flag;
+    }
 }

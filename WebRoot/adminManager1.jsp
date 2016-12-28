@@ -1,3 +1,5 @@
+<%@page import="javax.swing.JOptionPane"%>
+<%@page import="tool.AuditInfoHelp"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="javax.enterprise.context.*"%>
 <%@ page pageEncoding="UTF-8"%>
@@ -16,26 +18,28 @@ List noauditlist=(List)request.getAttribute("noauditlist");
 List auditlist=(List)request.getAttribute("auditlist");
 List<String> scopeList=new ArrayList<String>();
 Object  audit=request.getAttribute("audit");
-System.out.print("audit"+audit);
+Object nextPage=request.getAttribute("nextPage");
+String isAuditMark=request.getAttribute("isAuditMark").toString();
+System.out.print("isAuditMark"+isAuditMark);
+AuditInfoHelp auditInfoHelp=(AuditInfoHelp)request.getAttribute("auditInfoHelp");
 
 Administrator administrator=(Administrator)request.getSession().getAttribute("adminInfo");
-if(administrator.getLevel()==1){
+
     String[] scopes=administrator.getScope().split("\\|");
     for(int i=0;i<scopes.length;i++){
         scopeList.add(scopes[i]);
     }
     postList=new OperationData().getPosts(scopeList);
     adList=new OperationData().query_adType(scopeList); 
-}
-if(administrator.getLevel()==0){
-  //获取信息类别
-    adList=new OperationData().query_adType(); 
-   //List pasteType=new OperationData().publicPasteType();
-    postList=new  OperationData().getPosts();
-}
-   
 
 
+if(isAuditMark=="1"&&new OperationData().getAuditMarkState(scopeList)){
+     int confirm=JOptionPane.showConfirmDialog(null,"是否要把你所审核范围的广告置为初始状态?","提示", JOptionPane.YES_NO_OPTION);
+     if(confirm==JOptionPane.YES_OPTION){ 
+         new OperationData().setAuditMarkState(scopeList);
+     }
+ }
+String img="img";
 
 %>
 
@@ -72,6 +76,57 @@ if(administrator.getLevel()==0){
 <body>
    
     <script type="text/javascript">
+    
+  <%--    $( function(){
+            var flag='<%=new OperationData().getAuditMarkState(scopeList)%>';
+            var isAuditMark='<%=isAuditMark%>';
+            alert(isAuditMark);
+              if(flag=== 'true'&&isAuditMark==1){    
+                 
+                      if (confirm("是否要把你所审核范围的广告置为初始状态?")) {
+                          <%if(isAuditMark=="1"&&new OperationData().getAuditMarkState(scopeList)){
+                              new OperationData().setAuditMarkState(scopeList);
+                          }
+                          %>
+                              
+                                  }
+                        }
+      
+               });
+     --%>
+      
+      function adopt(adId,picid){
+   
+          $.ajax({
+              type:"get",
+              url : "AdminManagerLogical?info=auditBy&adId="
+                  +adId,
+               success:function(data){
+                   if(data=="1"){
+                      /*  var $dele=$("<div class='dele hide'><img src='images/delete.jpg'/></div>");//增加删除按钮
+                       var $cn=document.getElementById("img"+picid);
+                     
+                         $cn.append($dele); */
+                                 
+                       alert("审核成功");
+                   }
+               },
+          });
+      }
+      
+      function deleteAdId(adId){
+          $.ajax({
+              type:"get",
+              url : "AdminManagerLogical?info=auditnoBy&adId="
+                  +adId,
+               success:function(data){
+                   if(data=="1"){
+                       alert("删除成功");
+                   }
+               },
+          });
+      }
+    
                     function check(formObj) {
                         //alert("0000");
                         var str = "checked";
@@ -254,10 +309,10 @@ if(administrator.getLevel()==0){
                                                                             }
                                                                             String[] colorArray = {"#6B8E23","#A52A2A"};
                             %>
-                            <li>
+                            <li id="<%=img+p.getPicId() %>">
                                 <div class="picShow">
                                     <img src="<%=p.getPicAddr()%>"
-                                        width="200" height="200"
+                                        width="200" height="200"  
                                     />
                                     <div class="deletePic">
                                         <span
@@ -271,10 +326,10 @@ if(administrator.getLevel()==0){
                                         <input type="hidden"
                                             class="adminManager_table_noaudit_hidden_Adid"
                                             value=<%=p.getAdId()%>
-                                        /> <a
-                                            href="AdminManagerLogical?info=auditBy&adId=<%=p.getAdId()%>"
-                                        >通过</a> <a
-                                            href="AdminManagerLogical?info=auditnoBy&adId=<%=p.getAdId()%>"
+                                        /> <a onclick="adopt('<%=p.getAdId()%>','<%=p.getPicId() %>')"
+                                            href=" javascript:void(0)"
+                                        >通过</a> <a onclick="deleteAdId('<%=p.getAdId()%>')"
+                                            href=" javascript:void(0)"
                                         >删除</a> <input type="checkbox"
                                             class="adminManager_table_noaudit_input_checkbox"
                                         />
@@ -326,8 +381,8 @@ if(administrator.getLevel()==0){
                                         <input type="hidden"
                                             class="adminManager_table_audit_hidden_Adid"
                                             value=<%=p.getAdId()%>
-                                        /> <a class="delete"
-                                            href="AdminManagerLogical?info=delInfo&adId=<%=p.getAdId()%>"
+                                        /> <a class="delete" onclick="deleteAdId('<%=p.getAdId()%>')"
+                                            href=" javascript:void(0)"
                                         >删除</a> <input type="checkbox"
                                             class="adminManager_table_audit_input_checkbox"
                                         />
@@ -350,7 +405,9 @@ if(administrator.getLevel()==0){
         </tr>
 
     </table>
-
+<c:if test="${nextPage==1 }">
+       <a class="nextPage" href="AdminManagerLogical?info=auditInfo1&audit=<%=auditInfoHelp.getAudit() %>&adType=<%=auditInfoHelp.getAdType()%>&pasteType=<%=auditInfoHelp.getPasteName()%>&adTime=<%=auditInfoHelp.getAdTime()%>">下一页</a>
+    </c:if>
     <script type="text/javascript">
                     //alert(window.screen.width  );
                     enLarge();

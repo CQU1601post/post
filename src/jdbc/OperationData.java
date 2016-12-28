@@ -51,19 +51,21 @@ public class OperationData {
         return typeName;
 
     }
+
     /**
      * 查询unittype表中数据总数
+     * 
      * @return
      */
-    public int query_unitTypeNum(){
-        sql="select count(*) from unittype ";
-        connection=new ConnectDB();
-        ResultSet rs=connection.executeQuery(sql);
-        int num=0;
+    public int query_unitTypeNum() {
+        sql = "select count(*) from unittype ";
+        connection = new ConnectDB();
+        ResultSet rs = connection.executeQuery(sql);
+        int num = 0;
         try {
             // advertise ad;
             while (rs.next()) {
-                num= rs.getInt(1);
+                num = rs.getInt(1);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -95,9 +97,9 @@ public class OperationData {
         return typeName;
 
     }
-    
+
     public int query_adPostByadId(int adId) {
-        sql = "select  postId  from ad where  adId ='"+adId+"'";
+        sql = "select  postId  from ad where  adId ='" + adId + "'";
         connection = new ConnectDB();
         ResultSet rs = connection.executeQuery(sql);
         int postId = 0;
@@ -257,52 +259,117 @@ public class OperationData {
         return adList;
 
     }
-    
+
+    public boolean getAuditMarkState(List<String> scopeList) {
+        boolean flag = false;
+        try {
+            String sql = "";
+            List<Post> posts = getPosts(scopeList);
+            connection = new ConnectDB();
+            for (Iterator iterator = posts.iterator(); iterator.hasNext();) {
+                Post post = (Post) iterator.next();
+                sql = "select * from ad where auditMark=1 and postId='"
+                        + post.getPostId() + "'";
+                ResultSet rs = connection.executeQuery(sql);
+                if (rs.next()) {
+                    flag = true;
+                    System.out.println(flag);
+                    return flag;
+                }
+            }
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+        } finally {
+            connection.close();
+        }
+        return flag;
+
+    }
+
+//    public boolean getAuditMarkState() {
+//        boolean flag = false;
+//        String sql = "";
+//        connection = new ConnectDB();
+//        sql = "select auditMark from ad where auditMark=1";
+//        ResultSet rs = connection.executeQuery(sql);
+//        if (rs == null) {
+//            flag = true;
+//        }
+//        connection.close();
+//        return flag;
+//
+//    }
+
+    public boolean setAuditMarkState(List<String> scopeList) {
+        boolean flag=false;
+        try {
+            String sql = "";
+            List<Post> posts = getPosts(scopeList);
+            List<Integer> ads=new ArrayList<Integer>();
+            connection = new ConnectDB();
+            for (Iterator iterator = posts.iterator(); iterator.hasNext();) {
+                Post post = (Post) iterator.next();
+  
+                sql = "update ad set auditMark=0 where  postId='"
+                        + post.getPostId() + "'";
+                flag = connection.executeUpdate(sql);
+                System.out.println("setAdAuditMark"+flag);
+            }
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+        } finally {
+            connection.close();
+        }
+        return flag;
+    }
+
     // 查询广告的所有类别
     public List query_adType(List<String> unitTypeList) throws SQLException {
-        String sqlString="";
+        String sqlString = "";
         AdType type;
-        HashSet<Integer> h=new HashSet<Integer>();
-        List<Integer> groupList=new ArrayList<Integer>();
+        HashSet<Integer> h = new HashSet<Integer>();
+        List<Integer> groupList = new ArrayList<Integer>();
         connection = new ConnectDB();
-        List<AdType>adTypes = new ArrayList<AdType>();
-     for (Iterator iterator =unitTypeList.iterator(); iterator.hasNext();) {
-        String string = (String) iterator.next();
-        int UnitTypeId=Integer.parseInt(string);
-        sql="select unitId from unit where unitTypeId='"+UnitTypeId+"'";
-        ResultSet result = connection.executeQuery(sql);
-        // List<UnitType> unitTypes =
-        // changeResultSetToArray.unitTypeArrays(result);
-        while (result.next()) {
-            int unitId = result.getInt("unitId");
-            sql="select * from post where unitId='"+unitId+"'";
-            ResultSet   result2 = connection.executeQuery(sql);
-            while(result2.next()){
-               int groupid=result2.getInt("groupId");
-               h.add(groupid);
+        List<AdType> adTypes = new ArrayList<AdType>();
+        for (Iterator iterator = unitTypeList.iterator(); iterator.hasNext();) {
+            String string = (String) iterator.next();
+            int UnitTypeId = Integer.parseInt(string);
+            sql = "select unitId from unit where unitTypeId='" + UnitTypeId
+                    + "'";
+            ResultSet result = connection.executeQuery(sql);
+            // List<UnitType> unitTypes =
+            // changeResultSetToArray.unitTypeArrays(result);
+            while (result.next()) {
+                int unitId = result.getInt("unitId");
+                sql = "select * from post where unitId='" + unitId + "'";
+                ResultSet result2 = connection.executeQuery(sql);
+                while (result2.next()) {
+                    int groupid = result2.getInt("groupId");
+                    h.add(groupid);
+                }
+                result2.close();
             }
-            result2.close();
+            result.close();
         }
-        result.close();
-    }
-     for (Iterator iterator = h.iterator(); iterator.hasNext();) {
-      int groupId = (Integer) iterator.next();
-      sql="select * from adtype where groupId='"+groupId+"'";
-      ResultSet result3= connection.executeQuery(sql);
-      while(result3.next()){
-          type = new AdType();
-          type.setAdTypeId(result3.getInt("adTypeId"));
-          type.setAdTypeName(result3.getString("adTypeName"));              
-          adTypes.add(type);
-      }
-      result3.close();
-    }
-       
+        for (Iterator iterator = h.iterator(); iterator.hasNext();) {
+            int groupId = (Integer) iterator.next();
+            sql = "select * from adtype where groupId='" + groupId + "'";
+            ResultSet result3 = connection.executeQuery(sql);
+            while (result3.next()) {
+                type = new AdType();
+                type.setAdTypeId(result3.getInt("adTypeId"));
+                type.setAdTypeName(result3.getString("adTypeName"));
+                adTypes.add(type);
+            }
+            result3.close();
+        }
+
         connection.close();
         return adTypes;
 
     }
-    
 
     // 返回所有包含非专栏粘贴栏的类别
     public List publicPasteType() {
@@ -382,7 +449,7 @@ public class OperationData {
         return postList;
 
     }
-    
+
     public List<Post> getPosts() throws SQLException {
         // /ConnectDB connect = new ConnectDB();
         // System.out.println("执行src/jdbc/SearchFromDB/unitTypeNames()");
@@ -393,9 +460,10 @@ public class OperationData {
         // changeResultSetToArray.unitTypeArrays(result);
         List<Post> postList = new ArrayList();
         while (result.next()) {
-            Post post=new Post();
+            Post post = new Post();
             post.setPostId(result.getInt("postId"));
-            post.setPostName(result.getString("postName"));;
+            post.setPostName(result.getString("postName"));
+            ;
             post.setUnitId(result.getInt("unitId"));
             post.setUserId(result.getInt("userId"));
             post.setCreateTime(result.getString("createTime"));
@@ -409,68 +477,71 @@ public class OperationData {
         return postList;
 
     }
-    
+
     public List<String> postTypes(List<String> scopeList) throws SQLException {
-        String sqlString="";
+        String sqlString = "";
         connection = new ConnectDB();
         List<String> postNameList = new ArrayList<String>();
-     for (Iterator iterator = scopeList.iterator(); iterator.hasNext();) {
-        String string = (String) iterator.next();
-        int UnitTypeId=Integer.parseInt(string);
-        sql="select unitId from unit where unitTypeId='"+UnitTypeId+"'";
-        ResultSet result = connection.executeQuery(sql);
-        // List<UnitType> unitTypes =
-        // changeResultSetToArray.unitTypeArrays(result);
-        while (result.next()) {
-            int unitId = result.getInt("unitId");
-            sql="select * from post where unitId='"+unitId+"'";
-            ResultSet result2 = connection.executeQuery(sql);
-            while(result2.next()){
-                String postName=result2.getString("postName");
-                postNameList.add(postName);
+        for (Iterator iterator = scopeList.iterator(); iterator.hasNext();) {
+            String string = (String) iterator.next();
+            int UnitTypeId = Integer.parseInt(string);
+            sql = "select unitId from unit where unitTypeId='" + UnitTypeId
+                    + "'";
+            ResultSet result = connection.executeQuery(sql);
+            // List<UnitType> unitTypes =
+            // changeResultSetToArray.unitTypeArrays(result);
+            while (result.next()) {
+                int unitId = result.getInt("unitId");
+                sql = "select * from post where unitId='" + unitId + "'";
+                ResultSet result2 = connection.executeQuery(sql);
+                while (result2.next()) {
+                    String postName = result2.getString("postName");
+                    postNameList.add(postName);
+                }
+                result2.close();
             }
-            result2.close();
+            result.close();
         }
-        result.close();
-    }
-       
+
         connection.close();
         return postNameList;
 
     }
-    
+
     public List<Post> getPosts(List<String> scopeList) throws SQLException {
-        String sqlString="";
+        String sqlString = "";
         connection = new ConnectDB();
         List<Post> postList = new ArrayList<Post>();
-     for (Iterator iterator = scopeList.iterator(); iterator.hasNext();) {
-        String string = (String) iterator.next();
-        int UnitTypeId=Integer.parseInt(string);
-        sql="select unitId from unit where unitTypeId='"+UnitTypeId+"'";
-        ResultSet result = connection.executeQuery(sql);
-        // List<UnitType> unitTypes =
-        // changeResultSetToArray.unitTypeArrays(result);
-        while (result.next()) {
-            int unitId = result.getInt("unitId");
-            sql="select * from post where unitId='"+unitId+"'";
-            ResultSet result2 = connection.executeQuery(sql);
-            while(result2.next()){
-                Post post=new Post();
-                post.setPostId(result2.getInt("postId"));
-                post.setPostName(result2.getString("postName"));;
-                post.setUnitId(result2.getInt("unitId"));
-                post.setUserId(result2.getInt("userId"));
-                post.setCreateTime(result2.getString("createTime"));
-                post.setVisitorsOfToday(result2.getInt("visitorsOfToday"));
-                post.setAllVisitors(result2.getInt("AllVisitors"));
-                post.setGroupId(result2.getInt("groupId"));
-                postList.add(post);
+        for (Iterator iterator = scopeList.iterator(); iterator.hasNext();) {
+            String string = (String) iterator.next();
+            int UnitTypeId = Integer.parseInt(string);
+            sql = "select unitId from unit where unitTypeId='" + UnitTypeId
+                    + "'";
+            ResultSet result = connection.executeQuery(sql);
+            // List<UnitType> unitTypes =
+            // changeResultSetToArray.unitTypeArrays(result);
+            while (result.next()) {
+                int unitId = result.getInt("unitId");
+                sql = "select * from post where unitId='" + unitId + "'";
+                ResultSet result2 = connection.executeQuery(sql);
+                while (result2.next()) {
+                    Post post = new Post();
+                    post.setPostId(result2.getInt("postId"));
+                    post.setPostName(result2.getString("postName"));
+                    ;
+                    post.setUnitId(result2.getInt("unitId"));
+                    post.setUserId(result2.getInt("userId"));
+                    post.setCreateTime(result2.getString("createTime"));
+                    post.setVisitorsOfToday(result2.getInt("visitorsOfToday"));
+                    post.setAllVisitors(result2.getInt("AllVisitors"));
+                    post.setGroupId(result2.getInt("groupId"));
+                    postList.add(post);
+                }
+                result2.close();
             }
-            result2.close();
+            result.close();
         }
-        result.close();
-    }
-       
+
         connection.close();
         return postList;
 
@@ -739,33 +810,41 @@ public class OperationData {
          * e) { // TODO Auto-generated catch block e.printStackTrace(); }
          */
         System.out.println(vl.getVisitorip() + "," + vl.getVisitorpostname());
-        sql = "insert into visitorlog(visitorIP,visitorPostName,postId,time,adId)" + " values('"
-                + vl.getVisitorip() + "','" + vl.getVisitorpostname() + "','" + vl.getPostId() +"','" + vl.getTime() +"','" + vl.getAdId() +  "') ";
+        sql = "insert into visitorlog(visitorIP,visitorPostName,postId,time,adId)"
+                + " values('"
+                + vl.getVisitorip()
+                + "','"
+                + vl.getVisitorpostname()
+                + "','"
+                + vl.getPostId()
+                + "','"
+                + vl.getTime() + "','" + vl.getAdId() + "') ";
 
         // sql="insert into tb_name values('"+0+"','"+name+"','"+password+"')";
-        connection = new ConnectDB();    
-        boolean rs2 = connection.executeUpdate(sql);    
+        connection = new ConnectDB();
+        boolean rs2 = connection.executeUpdate(sql);
         connection.close();
         return 1;
     }
 
-    public String getPostName(int postid){
-        sql="select postName from post where postId='"+postid+"'";
-        connection=new ConnectDB();
-        ResultSet rs=connection.executeQuery(sql);
-        String postName="";
+    public String getPostName(int postid) {
+        sql = "select postName from post where postId='" + postid + "'";
+        connection = new ConnectDB();
+        ResultSet rs = connection.executeQuery(sql);
+        String postName = "";
         try {
-            while(rs.next()){
-             postName =   rs.getString("postName");
+            while (rs.next()) {
+                postName = rs.getString("postName");
             }
         } catch (SQLException e) {
-          
+
             e.printStackTrace();
-        }finally{
+        } finally {
             connection.close();
         }
         return postName;
     }
+
     // 获得所有广告
     public List<Ad> getAdList() {
         connection = new ConnectDB();
@@ -802,47 +881,49 @@ public class OperationData {
 
         return year + month + day + hour;
     }
-    public List<UnitType> getUnitTypes(){
+
+    public List<UnitType> getUnitTypes() {
         connection = new ConnectDB();
         sql = "select * from unittype ";
         ResultSet result = connection.executeQuery(sql);
-        List<UnitType> unitTypes=new ArrayList<UnitType>();
+        List<UnitType> unitTypes = new ArrayList<UnitType>();
         try {
-            while(result.next()){
-                UnitType unitType=new UnitType();
+            while (result.next()) {
+                UnitType unitType = new UnitType();
                 unitType.setUnitTypeId(result.getInt("unitTypeId"));
                 unitType.setUnitTypeName(result.getString("unitTypeName"));
                 unitTypes.add(unitType);
             }
         } catch (SQLException e) {
-         
+
             e.printStackTrace();
-        }finally{
+        } finally {
             connection.close();
-        }     
+        }
         return unitTypes;
     }
-    public String getUnitTypeName(String id){    
-        String unitTypeName="";
-        int  unitTypeId=Integer.parseInt(id);
-        if(unitTypeId==0){
-            unitTypeName="所有";
-        return  unitTypeName;
-        }else{
-            connection=new ConnectDB();
-            sql="select unitTypeName from unittype where unitTypeId='"+id+"'";
-            ResultSet resultSet=connection.executeQuery(sql);
-          
+
+    public String getUnitTypeName(String id) {
+        String unitTypeName = "";
+        int unitTypeId = Integer.parseInt(id);
+        if (unitTypeId == 0) {
+            unitTypeName = "所有";
+            return unitTypeName;
+        } else {
+            connection = new ConnectDB();
+            sql = "select unitTypeName from unittype where unitTypeId='" + id
+                    + "'";
+            ResultSet resultSet = connection.executeQuery(sql);
+
             try {
-                while(resultSet.next()){
-                  unitTypeName= resultSet.getString("unitTypeName");
+                while (resultSet.next()) {
+                    unitTypeName = resultSet.getString("unitTypeName");
                 }
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             }
             return unitTypeName;
         }
-        
-      
+
     }
 }
