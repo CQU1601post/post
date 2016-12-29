@@ -42,7 +42,8 @@ function getScrollAds(){
 	var num = 10;
 	var url = `PostLogical?functionName=getScrollAds&postId=${postId}&num=${num}&money=0`;
 	var ul_html = null;
-	$.get(url,function(data){
+	$.get(url,null,function(data){
+		console.log("hello");
 		console.log(data);
 		for(var i = 0;i<num;i++){
 			var li_html = `<li><a href="#"><img src="${data.imgs[i]}"></a></li>`;
