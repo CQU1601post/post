@@ -891,14 +891,19 @@ public class FunctionsForPostLogical {
 		else{
 		    int num=Integer.parseInt(request.getParameter("num"));
 		    int postId=Integer.parseInt(request.getParameter("postId"));
+		    System.out.println(postId);
 			List<Ad> ads = searchFromDB.getRandAd(postId, num, 0);
 			String[] firstPicAddrs=new String[num];
+			int i=0;
 			for (Iterator iterator = ads.iterator(); iterator.hasNext();) {
-			    int i=0;
                 Ad ad = (Ad) iterator.next();
                 firstPicAddrs[i]=ad.getFirstPicAddr();
                 i++;
             }
+			String picaddrs = "";
+			for(int j=0;j<firstPicAddrs.length;j++){
+				System.out.println(firstPicAddrs[j]);
+			}
 			out.print(firstPicAddrs);
 		}
 	}
