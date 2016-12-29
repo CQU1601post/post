@@ -889,7 +889,17 @@ public class FunctionsForPostLogical {
 			response.sendRedirect("index.jsp");
 		}
 		else{
-			
+		    int num=Integer.parseInt(request.getParameter("num"));
+		    int postId=Integer.parseInt(request.getParameter("postId"));
+			List<Ad> ads = searchFromDB.getRandAd(postId, num, 0);
+			String[] firstPicAddrs=new String[num];
+			for (Iterator iterator = ads.iterator(); iterator.hasNext();) {
+			    int i=0;
+                Ad ad = (Ad) iterator.next();
+                firstPicAddrs[i]=ad.getFirstPicAddr();
+                i++;
+            }
+			out.print(firstPicAddrs);
 		}
 	}
 }
