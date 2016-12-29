@@ -24,6 +24,8 @@ import javax.servlet.http.HttpSession;
 import jdbc.OperationData;
 import jdbc.SearchAboutPost;
 
+import net.sf.json.JSONArray;
+
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -44,6 +46,7 @@ import allClasses.User;
 import allClasses.VisitorLog;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 
 import configurations.Configuration;
 
@@ -880,7 +883,8 @@ public class FunctionsForPostLogical {
 	
 	public void getScrollAds(HttpServletRequest request,
 			HttpServletResponse response)throws ServletException, IOException{ 
-		response.setContentType("application/json;utf-8");
+	    response.setContentType("application/json;charset=UTF-8");
+	    request.setCharacterEncoding("UTF-8");
 		response.setHeader("pragma","no-cache");
 		response.setHeader("cache-control","no-cache");
 		PrintWriter out=response.getWriter();
@@ -891,20 +895,23 @@ public class FunctionsForPostLogical {
 		else{
 		    int num=Integer.parseInt(request.getParameter("num"));
 		    int postId=Integer.parseInt(request.getParameter("postId"));
-		    System.out.println(postId);
+		    System.out.println("postID"+postId);
 			List<Ad> ads = searchFromDB.getRandAd(postId, num, 0);
-			String[] firstPicAddrs=new String[num];
-			int i=0;
+		    List<String> fristPicList=new ArrayList<String>();
+		
 			for (Iterator iterator = ads.iterator(); iterator.hasNext();) {
                 Ad ad = (Ad) iterator.next();
-                firstPicAddrs[i]=ad.getFirstPicAddr();
-                i++;
+                fristPicList.add(ad.getFirstPicAddr());     
             }
-			String picaddrs = "";
-			for(int j=0;j<firstPicAddrs.length;j++){
-				System.out.println(firstPicAddrs[j]);
-			}
-			out.print(firstPicAddrs);
+			 JSONArray jsonArray=JSONArray.fromObject( fristPicList);
+		    //  response.getWriter().print(jsonArray);
+//			String picaddrs = " ";
+//			for(int j=0;j<firstPicAddrs.length-1;j++){
+//			    picaddrs=firstPicAddrs[i]+","+firstPicAddrs[i+1];
+//				System.out.println("firstPic"+firstPicAddrs[j]);
+//			}
+//			System.out.println("firstPic"+picaddrs);
+			out.print(jsonArray);
 		}
 	}
 }
