@@ -27,6 +27,7 @@ function scroll(obj){
 		ul_2 = uls[1];
 	ul_1.innerHTML = getScrollAds();
 	ul_2.innerHTML = getScrollAds();
+	console.log(ul_1.innerHTML);
 	if(obj.getElementsByTagName('li')[0]!==undefined){
 		var li_wid = Math.ceil(obj.getElementsByTagName('li')[0].offsetWidth),
 			ul_wid = Math.ceil(obj.getElementsByTagName('ul')[0].offsetWidth);
@@ -41,14 +42,14 @@ function getScrollAds(){
 	var postId = $("#postId").val();
 	var num = 10;
 	var url = `PostLogical?functionName=getScrollAds&postId=${postId}&num=${num}&money=0`;
-	var ul_html = null;
-	$.get(url,null,function(data){
-		console.log("hello");
-		console.log(data);
-		for(var i = 0;i<num;i++){
-			var li_html = `<li><a href="#"><img src="${data.imgs[i]}"></a></li>`;
+	var ul_html = '';
+	$.get(url,function(data){
+		for(var i = 0;i<data.length;i++){  
+		    console.log(data[i]);
+			var li_html = `<li><a href="#"><img src="${data[i]}"></a></li>`;
 			ul_html += li_html;
 		}
+		console.log(ul_html);
 	});
 	return ul_html;
 }

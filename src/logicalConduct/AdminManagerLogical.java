@@ -1578,7 +1578,7 @@ public class AdminManagerLogical extends HttpServlet {
         t.setUnitTypeId(typeId);
         t.setUnitTypeName(paste_type);
         String sql="select * from unittype where unitTypeName='"+paste_type+"'";
-        if(!data.checkRepeat(sql)){
+        if(data.checkRepeat(sql)){
             data.updateSuperAdministrator(typeId);
             data.savePasteType(t);
         }else{
