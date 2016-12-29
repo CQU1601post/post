@@ -64,6 +64,7 @@
     overflow: hidden;
 }
 .scroll_feild ul{
+    width: 1300px;
     float: left;
 }
 .scroll_feild ul li{

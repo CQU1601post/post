@@ -25,7 +25,8 @@ function scroll(obj){
 	var uls = obj.getElementsByTagName('ul');
 	var ul_1 = uls[0],
 		ul_2 = uls[1];
-	ul_2.innerHTML = ul_1.innerHTML;
+	ul_1.innerHTML = getScrollAds();
+	ul_2.innerHTML = getScrollAds();
 	var timer = setInterval(function(){
 		scroll_step(obj,timer);
 	},5);
@@ -33,19 +34,31 @@ function scroll(obj){
 
 function getScrollAds(){
 	var postId = $("#postId").val();
-	var url = `PostLogical?functionName=getScrollAds&postId=${postId}&num=5&money=0`;
+	var num = 10;
+	var url = `PostLogical?functionName=getScrollAds&postId=${postId}&num=${num}&money=0`;
+	var ul_html = null;
 	$.get(url,function(data){
-		
+		console.log(data);
+		for(var i = 0;i<num;i++){
+			var li_html = `<li><a href="#"><img src="${data.imgs[i]}"></a></li>`;
+			ul_html += li_html;
+		}
 	});
+	return ul_html;
 }
 
 function scroll_step(obj,timer){
+	var uls = obj.getElementsByTagName('ul');
+	var ul_1 = uls[0],
+		ul_2 = uls[1];
 	var li_wid = Math.ceil(obj.getElementsByTagName('li')[0].offsetWidth),
 		ul_wid = Math.ceil(obj.getElementsByTagName('ul')[0].offsetWidth),
 		obj_wid = Math.ceil(obj.offsetWidth);
 	
 	if(obj.scrollLeft>= ul_wid){
-		obj.scrollLeft = 0; 
+		ul_1.innerHTML = ul_2.innerHTML;
+		obj.scrollLeft = 0;
+		ul_2.innerHTML = getScrollAds(); 
 	}
 	if(obj.scrollLeft % li_wid == 0){
 		clearInterval(timer);
@@ -56,7 +69,7 @@ function scroll_step(obj,timer){
 	obj.scrollLeft ++;
 }
 
-function col_1(){
+/*function col_1(){
 	var col_1 = document.getElementById('col_1'),
 		col_2 = document.getElementById('col_2'),
 		col_3 = document.getElementById('col_3');
@@ -81,4 +94,4 @@ function col_3(){
 	col_3.innerHTML = col_1.innerHTML;
 	col_2.style.display = 'block';
 	col_3.style.display = 'block';
-}
+}*/

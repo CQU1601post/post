@@ -206,11 +206,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             </div>
         </tr>
     </table>
-    <div class="col-btn">
+    <!-- <div class="col-btn">
         <input type="button" name="" value="滚动一行" onclick="col_1()">
         <input type="button" name="" value="滚动两行" onclick="col_2()">
         <input type="button" name="" value="滚动三行" onclick="col_3()">
-    </div>
+    </div> -->
     <div class="scroll_feild" id="scroll_feild">
         <div class="wrapper" id="col_1">
             <ul class="scroll_first">
@@ -219,12 +219,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 <li><a href="#"><img src="images/3.jpg"></a></li>
                 <li><a href="#"><img src="images/4.jpg"></a></li>
                 <li><a href="#"><img src="images/5.jpg"></a></li>
+                <li><a href="#"><img src="images/6.jpg"></a></li>
+                <li><a href="#"><img src="images/7.jpg"></a></li>
+                <li><a href="#"><img src="images/8.jpg"></a></li>
+                <li><a href="#"><img src="images/9.jpg"></a></li>
+                <li><a href="#"><img src="images/10.jpg"></a></li>
             </ul>
             <ul>
             </ul>
         </div>
-        <div class="wrapper" id="col_2"></div>
-        <div class="wrapper" id="col_3"></div>
+        <!-- <div class="wrapper" id="col_2"></div>
+        <div class="wrapper" id="col_3"></div> -->
     </div>
     <div id="ads" class="ads">
     
