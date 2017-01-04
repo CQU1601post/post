@@ -21,6 +21,7 @@ import allClasses.TypeGroup;
 import allClasses.Unit;
 import allClasses.UnitType;
 import allClasses.User;
+import allClasses.VisitorLog;
 
 import jdbc.ConnectDB;
 import jdbc.SearchAboutPost;
@@ -138,6 +139,13 @@ public class AdminLogic {
         connection.close();
     }
     
+    public void updateAdminManager(String scope){
+        sql="update administrator set scope='" + scope+ "'where id=1'" ;
+        connection=new ConnectDB();
+        boolean flag=connection.executeUpdate(sql);
+        System.out.println(flag);
+        connection.close();
+    }
     // 返回所有未通过审核的图片的信息
     public List getAuditInfo(int checked) {
         List list = new ArrayList();
@@ -1566,6 +1574,37 @@ public class AdminLogic {
         sql="delete from cost where costId='"+costId+"'";
         connection=new ConnectDB();
         boolean flag=connection.executeUpdate(sql);
+        System.out.println(flag);
+        connection.close();
+        return flag;
+    }
+    
+    public List<VisitorLog> selectVisitorLogs(String sqlString){
+        connection=new ConnectDB();
+        ResultSet rSet=connection.executeQuery(sqlString);
+        List<VisitorLog> visitorLogs=new ArrayList<VisitorLog>();
+        try {
+            while(rSet.next()){
+                VisitorLog visitorLog=new VisitorLog();
+                visitorLog.setAdId(rSet.getInt("adID"));
+                visitorLog.setPostId(rSet.getInt("postId"));
+                visitorLog.setVisitorid(rSet.getInt("visitorID"));
+                visitorLog.setTime(rSet.getTimestamp("time"));
+                visitorLog.setVisitorip(rSet.getString("visitorIP"));
+                visitorLog.setVisitorpostname(rSet.getString("visitorPostName"));
+                visitorLogs.add(visitorLog);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally{
+            connection.close();
+        }
+        return visitorLogs;
+    }
+    
+    public boolean deleteLogManager(String sqlString){ 
+        connection=new ConnectDB();
+        boolean flag=connection.executeUpdate(sqlString);
         System.out.println(flag);
         connection.close();
         return flag;

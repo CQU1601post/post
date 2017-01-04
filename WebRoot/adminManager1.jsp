@@ -19,7 +19,10 @@ List auditlist=(List)request.getAttribute("auditlist");
 List<String> scopeList=new ArrayList<String>();
 Object  audit=request.getAttribute("audit");
 Object nextPage=request.getAttribute("nextPage");
-String isAuditMark=request.getAttribute("isAuditMark").toString();
+String isAuditMark="";
+if(request.getAttribute("isAuditMark")!=null){
+    isAuditMark=request.getAttribute("isAuditMark").toString();
+}
 System.out.print("isAuditMark"+isAuditMark);
 AuditInfoHelp auditInfoHelp=(AuditInfoHelp)request.getAttribute("auditInfoHelp");
 
