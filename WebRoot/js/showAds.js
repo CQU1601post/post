@@ -25,34 +25,48 @@ function scroll(obj){
 	var uls = obj.getElementsByTagName('ul');
 	var ul_1 = uls[0],
 		ul_2 = uls[1];
-	ul_1.innerHTML = getScrollAds();
-	ul_2.innerHTML = getScrollAds();
-	console.log(ul_1.innerHTML);
+	getScrollAds(obj,ul_1);
+	getScrollAds(obj,ul_2,true);
+}
+
+function scroll_start(obj){
 	if(obj.getElementsByTagName('li')[0]!==undefined){
 		var li_wid = Math.ceil(obj.getElementsByTagName('li')[0].offsetWidth),
 			ul_wid = Math.ceil(obj.getElementsByTagName('ul')[0].offsetWidth);
 		var timer = setInterval(function(){
 			scroll_step(obj,timer,ul_wid,li_wid);
 		},5);
+	}else{
+		console.log('load error!');
 	}
-	
 }
 
-function getScrollAds(){
+function getScrollAds(obj,ul_obj,flag=false){
+	/*if(flag==undefined||flag==null){
+		flag==false;
+	}*/
 	var postId = $("#postId").val();
 	var num = 10;
 	var url = `PostLogical?functionName=getScrollAds&postId=${postId}&num=${num}&money=0`;
 	var ul_html = '';
 	$.get(url,function(data){
-	
 		for(var i = 0;i<data.length;i++){  
-		    console.log(data[i]);
 			var li_html = `<li><a href="#"><img src="${data[i]}"></a></li>`;
 			ul_html += li_html;
 		}
-		console.log(ul_html);
+		console.log(data.length);
+		if(data.length<num){
+			var n = num-data.length;
+			for(var j=0;j<n;j++){
+				var li_html_ = `<li><a href="#"><img src="${data[j]}"></a></li>`;
+				ul_html += li_html_;
+			}
+		}
+		ul_obj.innerHTML = ul_html;
+		if(flag==true){
+			scroll_start(obj);
+		}
 	});
-	return ul_html;
 }
 
 function scroll_step(obj,timer,ul_wid,li_wid){
@@ -63,12 +77,12 @@ function scroll_step(obj,timer,ul_wid,li_wid){
 	if(obj.scrollLeft>= ul_wid){
 		ul_1.innerHTML = ul_2.innerHTML;
 		obj.scrollLeft = 0;
-		ul_2.innerHTML = getScrollAds(); 
+		getScrollAds(obj,ul_2); 
 	}
 	if(obj.scrollLeft % li_wid == 0){
 		clearInterval(timer);
 		setTimeout(function(){
-			scroll(obj);
+			scroll_start(obj);
 		},1000);
 	}
 	obj.scrollLeft ++;

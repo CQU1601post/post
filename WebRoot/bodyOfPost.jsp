@@ -214,7 +214,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <div class="scroll_feild" id="scroll_feild">
         <div class="wrapper" id="col_1">
             <ul class="scroll_first">
-                <li><a href="#"><img src="images/1.jpg"></a></li>
+               <!--  <li><a href="#"><img src="images/1.jpg"></a></li>
                 <li><a href="#"><img src="images/2.jpg"></a></li>
                 <li><a href="#"><img src="images/3.jpg"></a></li>
                 <li><a href="#"><img src="images/4.jpg"></a></li>
@@ -223,7 +223,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 <li><a href="#"><img src="images/7.jpg"></a></li>
                 <li><a href="#"><img src="images/8.jpg"></a></li>
                 <li><a href="#"><img src="images/9.jpg"></a></li>
-                <li><a href="#"><img src="images/10.jpg"></a></li>
+                <li><a href="#"><img src="images/10.jpg"></a></li> -->
             </ul>
             <ul>
             </ul>
