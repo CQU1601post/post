@@ -33,12 +33,12 @@ Administrator administrator=(Administrator)request.getSession().getAttribute("ad
     adList=new OperationData().query_adType(scopeList); 
 
 
-if(isAuditMark=="1"&&new OperationData().getAuditMarkState(scopeList)){
+/* if(isAuditMark=="1"&&new OperationData().getAuditMarkState(scopeList)){
      int confirm=JOptionPane.showConfirmDialog(null,"是否要把你所审核范围的广告置为初始状态?","提示", JOptionPane.YES_NO_OPTION);
      if(confirm==JOptionPane.YES_OPTION){ 
          new OperationData().setAuditMarkState(scopeList);
      }
- }
+ } */
 String img="img";
 
 %>
@@ -77,23 +77,25 @@ String img="img";
    
     <script type="text/javascript">
     
-  <%--    $( function(){
+   $( function(){
             var flag='<%=new OperationData().getAuditMarkState(scopeList)%>';
             var isAuditMark='<%=isAuditMark%>';
-            alert(isAuditMark);
               if(flag=== 'true'&&isAuditMark==1){    
                  
                       if (confirm("是否要把你所审核范围的广告置为初始状态?")) {
-                          <%if(isAuditMark=="1"&&new OperationData().getAuditMarkState(scopeList)){
-                              new OperationData().setAuditMarkState(scopeList);
-                          }
-                          %>
+                          $.ajax({
+                              type:"get",
+                              url : "AdminManagerLogical?info=AuditMarkState",          
+                               success:function(data){
+                                  alert("重置成功");
+                                   }
+                          });
                               
                                   }
                         }
       
                });
-     --%>
+     
       
       function adopt(adId,picid){
    

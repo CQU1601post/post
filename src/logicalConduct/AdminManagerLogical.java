@@ -30,6 +30,7 @@ import jdbc.UserOperation;
 
 import allClasses.AdType;
 import allClasses.Administrator;
+import allClasses.Cost;
 import allClasses.Pic;
 import allClasses.Post;
 import allClasses.TypeGroup;
@@ -137,6 +138,16 @@ public class AdminManagerLogical extends HttpServlet {
             this.TimingProcess(request, response);
         } else if (info.equals("delAuditBatchInfo")) {
             this.delAuditBatchInfo(request, response);
+        }else if (info.equals("AuditMarkState")) {
+            this.AuditMarkState(request, response);
+        }else if(info.equals("CostManager")){
+            this.CostManager(request, response);
+        } else if(info.equals("addCostManager")){//添加支付级别
+            this.addCostManager(request, response);
+        }else if(info.equals("updateCostManager")){//修改支付级别
+            this.updateCostManager(request, response);
+        }else if(info.equals("deleteCostManager")){//删除支付级别
+            this.deleteCostManager(request, response);
         }
 
     }
@@ -727,19 +738,17 @@ public class AdminManagerLogical extends HttpServlet {
         Administrator administrator = (Administrator) request.getSession()
                 .getAttribute("adminInfo");
         List<String> scopeList = new ArrayList<String>();
-        List<String> postList = new ArrayList<String>();
+        List<Post> postList = new ArrayList<Post>();
         try {
-            if (administrator.getLevel() == 1) {
+          
                 String[] scopes = administrator.getScope().split("\\|");
                 for (int i = 0; i < scopes.length; i++) {
                     scopeList.add(scopes[i]);
                 }
-                postList = new OperationData().postTypes(scopeList);
+                postList = new OperationData().getPosts(scopeList);
 
-            }
-            if (administrator.getLevel() == 0) {
-                postList = new OperationData().postTypes();
-            }
+            
+          
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -1637,5 +1646,75 @@ public class AdminManagerLogical extends HttpServlet {
         if (on_off == 0)
             thread.interrupt();
     }
-
+    
+    public void AuditMarkState(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException {
+     
+        OperationData operationData=new OperationData();  
+        Administrator administrator = (Administrator) request.getSession()
+                .getAttribute("adminInfo");
+        List<String> scopeList = new ArrayList<String>();
+        List<Post> postList = new ArrayList<Post>();
+        String[] scopes = administrator.getScope().split("\\|");
+        for (int i = 0; i < scopes.length; i++) {
+            scopeList.add(scopes[i]);
+        }
+        operationData.setAuditMarkState(scopeList);
+        
+    }
+    public void CostManager(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html;charset=utf-8");
+        request.setCharacterEncoding("UTF-8");
+        List<Cost> costs=new OperationData().getCosts();
+        request.setAttribute("costs", costs);
+        request.getRequestDispatcher("costManager.jsp")
+                .forward(request, response);
+    }
+    
+    public void addCostManager(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html;charset=utf-8");
+        request.setCharacterEncoding("UTF-8");
+        PrintWriter outPrintWriter= response.getWriter();
+        int grade=Integer.parseInt(request.getParameter("grade"));
+        int money=Integer.parseInt(request.getParameter("money"));
+        int time=Integer.parseInt(request.getParameter("time"));
+        String sql="select * from cost where grade='"+grade+"'";
+        data=new AdminLogic();
+        if(data.checkRepeat(sql)){
+            if(data.addCostManager(grade, money, time))
+            outPrintWriter.write("1");
+        }
+      
+        
+    }
+    
+    public void updateCostManager(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html;charset=utf-8");
+        request.setCharacterEncoding("UTF-8");
+        PrintWriter outPrintWriter= response.getWriter();
+        int costId=Integer.parseInt(request.getParameter("costId"));
+        int grade=Integer.parseInt(request.getParameter("grade"));
+        int money=Integer.parseInt(request.getParameter("money"));
+        int time=Integer.parseInt(request.getParameter("time"));
+        data=new AdminLogic();
+        String sql="select * from cost where grade='"+grade+"'";    
+        if(data.checkRepeat(sql)){
+            if(data.updateCostManager(costId,grade, money, time))
+            outPrintWriter.write("1");
+        }
+        
+    }
+    
+    public void deleteCostManager(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html;charset=utf-8");
+        request.setCharacterEncoding("UTF-8");
+        int costId=Integer.parseInt(request.getParameter("costId"));
+        data=new AdminLogic();
+        data.deleteCostManager(costId);
+    }
+    
 }

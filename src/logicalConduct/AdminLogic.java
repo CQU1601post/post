@@ -1546,6 +1546,30 @@ public class AdminLogic {
          return flag;
     }
     
+    public boolean addCostManager(int grade,int money,int time){
+        sql="insert into cost (grade,money,time) values('" + grade+ "','"+money+"','"+
+                + time + "')";
+        connection=new ConnectDB();
+        boolean flag=connection.executeUpdate(sql);
+        connection.close();
+        return flag; 
+    }
+    public boolean updateCostManager(int costId,int grade,int money,int time){
+        sql="update cost set grade='" + grade+ "',money='" + money+ "',time='" + time+  "'where costId='"+costId+"'" ;
+        connection=new ConnectDB();
+        boolean flag=connection.executeUpdate(sql);
+        System.out.println(flag);
+        connection.close();
+        return flag;
+    }
+    public boolean deleteCostManager(int costId){
+        sql="delete from cost where costId='"+costId+"'";
+        connection=new ConnectDB();
+        boolean flag=connection.executeUpdate(sql);
+        System.out.println(flag);
+        connection.close();
+        return flag;
+    }
     
     
     //根据sql语句查询结果判定是否有重复项

@@ -51,6 +51,7 @@ body{
      <td width="120"  rowspan="2"><div align="center"><a href="AdminManagerLogical?info=typeGroupShow" class="top-a">类别管理</a></div></td> 
      <td width="150" rowspan="2"><div align="center"><a href="AdminManagerLogical?info=pasteTypeShow" class="top-a">单位所属类别管理</a></div></td>       
      <td width="150" rowspan="2"><div align="center"><a href="AdminManagerLogical?info=adminManager" class="top-a">审核账号管理</a></div></td> 
+       <td width="150" rowspan="2"><div align="center"><a href="AdminManagerLogical?info=CostManager" class="top-a">支付管理</a></div></td> 
      </c:if>
      <c:if  test="${!empty sessionScope.adminInfo }">
      <td width="180" rowspan="2"></td>
