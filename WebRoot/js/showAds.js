@@ -42,9 +42,6 @@ function scroll_start(obj){
 }
 
 function getScrollAds(obj,ul_obj,flag=false){
-	/*if(flag==undefined||flag==null){
-		flag==false;
-	}*/
 	var postId = $("#postId").val();
 	var num = 10;
 	var url = `PostLogical?functionName=getScrollAds&postId=${postId}&num=${num}&money=0`;
