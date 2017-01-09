@@ -144,9 +144,26 @@ public class FunctionsForPostLogical {
 		    String visitorip=null;
 
 		    visitorip=getVisitorIp(request, response);
-			int adTypeId=Integer.parseInt(request.getParameter("adTypeId")); 
-			int postId=Integer.parseInt(request.getParameter("postId"));
-			int unitTypeId=Integer.parseInt(request.getParameter("unitTypeId"));
+		    int adTypeId=-1;
+		    int postId=-1;
+		    int unitTypeId=-1;
+		    if(request.getParameter("adTypeId")!=null){
+		        adTypeId=Integer.parseInt(request.getParameter("adTypeId")); 
+		    }else{
+		        response.sendRedirect("index.jsp");
+		    }
+		    if(request.getParameter("postId")!=null){
+		       postId=Integer.parseInt(request.getParameter("postId"));
+            }else{
+                response.sendRedirect("index.jsp");
+            }
+		    if(request.getParameter("unitTypeId")!=null){
+		        unitTypeId=Integer.parseInt(request.getParameter("unitTypeId"));
+	            }else{
+	                response.sendRedirect("index.jsp");
+	            }
+	
+			
 			searchFromDB.updateVisitors(postId);//进入之前先更新访问人数，加1
 			Post post=searchFromDB.postOfId(postId);//获取粘贴栏信息
 		    Unit unit=searchFromDB.unitOfId(post.getUnitId());//获取粘贴栏对应单位信息
@@ -228,11 +245,32 @@ public class FunctionsForPostLogical {
 			System.out.println("您尚未选择任何粘贴栏"); 
 			response.sendRedirect("index.jsp");
 		}
-		else{				
-			int adTypeId=Integer.parseInt(request.getParameter("adTypeId"));
-			int postId=Integer.parseInt(request.getParameter("postId"));
-			int begin=Integer.parseInt(request.getParameter("begin"));//从begin开始加载
-			int number=Integer.parseInt(request.getParameter("number"));//加载广告个数
+		else{		
+		    int adTypeId=-1;
+		    int postId=-1;
+		    int begin=-1;
+		    int number=-1;
+		    if(request.getParameter("adTypeId")!=null){
+                adTypeId=Integer.parseInt(request.getParameter("adTypeId"));
+            }else{
+                response.sendRedirect("index.jsp");
+            }
+		    if(request.getParameter("postId")!=null){
+		       postId=Integer.parseInt(request.getParameter("postId"));
+            }else{
+                response.sendRedirect("index.jsp");
+            }
+		    if(request.getParameter("begin")!=null){
+		        begin=Integer.parseInt(request.getParameter("begin"));
+	            }else{
+	                response.sendRedirect("index.jsp");
+	        }		
+		    if(request.getParameter("number")!=null){
+		        number=Integer.parseInt(request.getParameter("number"));//加载广告个数
+                }else{
+                    response.sendRedirect("index.jsp");
+            }       
+		
 			//System.out.println(adTypeId+"-"+postId+"-"+begin+"-"+number);
 			//查找粘贴栏下的所有类别
 			List<Ad> ads=new ArrayList<Ad>();
@@ -911,6 +949,7 @@ public class FunctionsForPostLogical {
 			for (Iterator iterator = ads.iterator(); iterator.hasNext();) {
                 Ad ad = (Ad) iterator.next();
                 fristPicList.add(ad.getFirstPicAddr());     
+                System.out.println(ad.getFirstPicAddr());
             }
 			 JSONArray jsonArray=JSONArray.fromObject( fristPicList);
 		    //  response.getWriter().print(jsonArray);

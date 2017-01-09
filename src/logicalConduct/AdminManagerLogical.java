@@ -404,9 +404,8 @@ public class AdminManagerLogical extends HttpServlet {
         String adType = request.getParameter("adType");
 
         String pasteName = request.getParameter("pasteType");
-        String adTime = request.getParameter("adTime");
-
-        pasteName = new String(pasteName.getBytes("iso-8859-1"), "UTF-8");
+        String adTime = request.getParameter("adTime");   
+        pasteName = new String(pasteName.getBytes("iso-8859-1"), "UTF-8");    
         adTime = new String(adTime.getBytes("iso-8859-1"), "UTF-8");
         // pasteName=URLDecoder.decode(pasteName, "utf-8");
         // adTime=URLDecoder.decode(adTime, "utf-8");
@@ -644,6 +643,7 @@ public class AdminManagerLogical extends HttpServlet {
             auditlist = new judgeTime().adjustTime(adTime, auditlist);
             for (Iterator iterator = auditlist.iterator(); iterator.hasNext();) {
                 Pic pic = (Pic) iterator.next();
+                adIdSet.add(pic.getAdId());
                 // AdminLogic adminLogic=new AdminLogic();
                 // adminLogic.setAdAuditMark( pic.getAdId());
             }
@@ -1681,7 +1681,8 @@ public class AdminManagerLogical extends HttpServlet {
             scopeList.add(scopes[i]);
         }
         operationData.setAuditMarkState(scopeList);
-
+        request.getRequestDispatcher("adminManager1.jsp").forward(request,
+                response);
     }
 
     public void CostManager(HttpServletRequest request,

@@ -411,7 +411,10 @@ String img="img";
 
     </table>
 <c:if test="${nextPage==1 }">
+<div class="nextPageAndMark">
+  <a  class="recoveryMark" href="AdminManagerLogical?info=AuditMarkState">恢复状态</a>
        <a class="nextPage" href="AdminManagerLogical?info=auditInfo1&audit=<%=auditInfoHelp.getAudit() %>&adType=<%=auditInfoHelp.getAdType()%>&pasteType=<%=auditInfoHelp.getPasteName()%>&adTime=<%=auditInfoHelp.getAdTime()%>">下一页</a>
+</div>
     </c:if>
     <script type="text/javascript">
                     //alert(window.screen.width  );

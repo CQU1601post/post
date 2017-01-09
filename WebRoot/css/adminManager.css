@@ -124,10 +124,19 @@ body{
     padding:0;
     margin:0;
 }
+.nextPageAndMark{
+    text-align:center;
+}
 .nextPage{
-    float: right;
+    color:red;
+}
+.recoveryMark{
+     color:red;
 }
 
+.adminManager_table_a_insert{
+    color:red;
+}
 
 .dele{
     width: 25px;
