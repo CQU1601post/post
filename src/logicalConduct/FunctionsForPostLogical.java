@@ -264,7 +264,7 @@ public class FunctionsForPostLogical {
 		else{				
 			int adId=Integer.parseInt(request.getParameter("adId")); 
 			int postId=Integer.parseInt(request.getParameter("postId"));//获取PostId
-			
+			String costMark="";
 			   VisitorLog vl=new VisitorLog();
 			   OperationData od=new OperationData();
 	            //vl.setVisitorid();
@@ -286,6 +286,7 @@ public class FunctionsForPostLogical {
 				pics=searchFromDB.picsOfPrivateAd(adId);
 				String sql="update privatead set click=click+1 where adId="+ adId;
 				searchFromDB.updateClick(sql);
+				costMark="1";
 			}
 			//System.out.println("ad:"+adId);
 			//如果不是专栏	
@@ -293,8 +294,10 @@ public class FunctionsForPostLogical {
 				pics=searchFromDB.picsOfAd(adId);
 				String sql="update ad set click=click+1 where adId="+ adId;
                 searchFromDB.updateClick(sql);
+                costMark="0";
 			}
 			request.setAttribute("pics",pics);
+			request.setAttribute("costMark", costMark);
  			//System.out.println("pics.size():"+pics.size());
  			request.getRequestDispatcher("picsOfAd.jsp").forward(request,response);	
 		}	

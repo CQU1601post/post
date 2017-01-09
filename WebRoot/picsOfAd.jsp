@@ -7,6 +7,7 @@
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 List pics=(List)request.getAttribute("pics");
+Object costMark=request.getAttribute("costMark");
 System.out.println("pics:"+pics.size());
 %>
 
@@ -49,6 +50,11 @@ System.out.println("pics:"+pics.size());
                 </a> 
               </li> 
             </c:forEach>   
+            
+            <c:if test="${costMark=="1"} ">//专栏
+            </c:if>
+            <c:if test="${costMark=="0"} ">//非专栏
+            </c:if>
           </ul>
         </div>
       </div>
