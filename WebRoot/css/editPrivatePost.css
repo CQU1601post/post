@@ -4,12 +4,31 @@ h1{
 	margin: 10px;
 }
 
+.clearfix:before{
+	visibility: hidden;
+     display: block;
+     font-size: 0;
+     content: " ";
+     clear: both;
+     height: 0;
+}
+.clearfix{
+	display: inline-block;
+}
+.clearfix:after{
+	visibility: hidden;
+     display: block;
+     font-size: 0;
+     content: " ";
+     clear: both;
+     height: 0;
+}
 .gbin1-list {
 	list-style: none;
 	padding:0;
 	margin:0;
+	overflow: hidden;
 }
-
 .gbin1-list li {
 	line-height: 80px;
 	float: left;
@@ -21,9 +40,6 @@ h1{
 	font-family: arial;
 	background: #707070;
 	color: #FFF;
-	
-	border-radius: 5px;
-	padding: 0px;
 }
 
 #msg{
