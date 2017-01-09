@@ -160,8 +160,12 @@ public class FunctionsForPostLogical {
 			vl.setTime(getTimestamp());
 			vl.setAdId(0);
 			OperationData od=new OperationData();
-			System.out.println("addVisitorLog......");
-			od.addVisitorLog(vl);
+			String sql="select * from visitorlog where visitorIP='"+vl.getVisitorip()+"'and postId='"+vl.getPostId()+"'";
+			if(od.selectVisitorLog(vl, sql)){
+			    System.out.println("addVisitorLog......");
+	            od.addVisitorLog(vl);
+			}
+			
 			System.out.println(postId+" ");
 			//查找粘贴栏下的所有类别
 			if(post.getUserId()<=0){//如果不是专栏
@@ -268,11 +272,13 @@ public class FunctionsForPostLogical {
 	            vl.setVisitorpostname(od.getPostName(postId));
 	            vl.setPostId(postId);
 	            vl.setTime(getTimestamp());
-	            vl.setAdId(adId);	    
-	            System.out.println("addVisitorLog......");
-	            od.addVisitorLog(vl);
-			
-			
+	            vl.setAdId(adId);	 
+	            String sql1="select * from visitorlog where visitorIP='"+vl.getVisitorip()+"'and postId='"+vl.getPostId()+"'and adID='"+vl.getAdId()+"'";
+	            if(od.selectVisitorLog(vl, sql1)){
+	                System.out.println("addVisitorLog......");
+	                od.addVisitorLog(vl);
+	            }
+           	
 			Post post=searchFromDB.postOfId(postId);
 			List pics=new ArrayList();
 			//返回指定ID下所有图片 	

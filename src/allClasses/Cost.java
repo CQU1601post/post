@@ -7,16 +7,18 @@ public class Cost {
     private int costId;
     private int grade;
     private int money;
+    private int time;
     
     public Cost() {
       
     }
     
-    public Cost(int costId, int grade, int money) {
+    public Cost(int costId, int grade, int money,int time) {
         super();
         this.costId = costId;
         this.grade = grade;
         this.money = money;
+        this.time=time;
     }
     
     public int getCostId() {
@@ -36,6 +38,14 @@ public class Cost {
     }
     public void setMoney(int money) {
         this.money = money;
+    }
+
+    public int getTime() {
+        return time;
+    }
+
+    public void setTime(int time) {
+        this.time = time;
     }
     
     

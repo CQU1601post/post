@@ -2,6 +2,7 @@ package jdbc;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -16,6 +17,7 @@ import tool.ChangeResultSetToArray;
 
 import allClasses.Ad;
 import allClasses.AdType;
+import allClasses.Cost;
 import allClasses.Pic;
 import allClasses.Post;
 import allClasses.PrivateAd;
@@ -827,6 +829,38 @@ public class OperationData {
         return 1;
     }
 
+    public boolean selectVisitorLog(VisitorLog vl,String sql1){
+       
+        connection = new ConnectDB();
+        ResultSet rs = connection.executeQuery(sql1);
+        Timestamp time =null;
+        boolean flag=true;
+        try {
+            while (rs.next()) {
+                time = rs.getTimestamp("time");
+                if(comperaTime(vl.getTime(), time)){
+                    flag=false;
+                }        
+            }
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+        } finally {
+            connection.close();
+        }
+        return flag;
+    }
+    
+    public boolean comperaTime(Timestamp sourceTimestamp,Timestamp targetTimestamp){
+      long time1=  sourceTimestamp.getTime();
+      long time2=targetTimestamp.getTime();
+      boolean flag=false;
+      if(Math.abs(time1-time2)<60000){
+          flag=true;         
+      }
+     return flag;   
+    }
+    
     public String getPostName(int postid) {
         sql = "select postName from post where postId='" + postid + "'";
         connection = new ConnectDB();
@@ -925,5 +959,28 @@ public class OperationData {
             return unitTypeName;
         }
 
+    }
+    
+    public List<Cost> getCosts(){
+        connection = new ConnectDB();
+        sql = "select * from cost ";
+        ResultSet result = connection.executeQuery(sql);
+        List<Cost> costs = new ArrayList<Cost>();
+        try {
+            while (result.next()) {
+                Cost cost = new Cost();
+               cost.setCostId(result.getInt(1));
+               cost.setGrade(result.getInt(2));
+               cost.setMoney(result.getInt(3));
+               cost.setTime(result.getInt(4));
+               costs.add(cost);
+            }
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+        } finally {
+            connection.close();
+        }
+        return costs;
     }
 }

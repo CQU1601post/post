@@ -21,6 +21,7 @@ import allClasses.TypeGroup;
 import allClasses.Unit;
 import allClasses.UnitType;
 import allClasses.User;
+import allClasses.VisitorLog;
 
 import jdbc.ConnectDB;
 import jdbc.SearchAboutPost;
@@ -138,6 +139,13 @@ public class AdminLogic {
         connection.close();
     }
     
+    public void updateAdminManager(String scope){
+        sql="update administrator set scope='" + scope+ "'where id=1'" ;
+        connection=new ConnectDB();
+        boolean flag=connection.executeUpdate(sql);
+        System.out.println(flag);
+        connection.close();
+    }
     // 返回所有未通过审核的图片的信息
     public List getAuditInfo(int checked) {
         List list = new ArrayList();
@@ -1546,6 +1554,61 @@ public class AdminLogic {
          return flag;
     }
     
+    public boolean addCostManager(int grade,int money,int time){
+        sql="insert into cost (grade,money,time) values('" + grade+ "','"+money+"','"+
+                + time + "')";
+        connection=new ConnectDB();
+        boolean flag=connection.executeUpdate(sql);
+        connection.close();
+        return flag; 
+    }
+    public boolean updateCostManager(int costId,int grade,int money,int time){
+        sql="update cost set grade='" + grade+ "',money='" + money+ "',time='" + time+  "'where costId='"+costId+"'" ;
+        connection=new ConnectDB();
+        boolean flag=connection.executeUpdate(sql);
+        System.out.println(flag);
+        connection.close();
+        return flag;
+    }
+    public boolean deleteCostManager(int costId){
+        sql="delete from cost where costId='"+costId+"'";
+        connection=new ConnectDB();
+        boolean flag=connection.executeUpdate(sql);
+        System.out.println(flag);
+        connection.close();
+        return flag;
+    }
+    
+    public List<VisitorLog> selectVisitorLogs(String sqlString){
+        connection=new ConnectDB();
+        ResultSet rSet=connection.executeQuery(sqlString);
+        List<VisitorLog> visitorLogs=new ArrayList<VisitorLog>();
+        try {
+            while(rSet.next()){
+                VisitorLog visitorLog=new VisitorLog();
+                visitorLog.setAdId(rSet.getInt("adID"));
+                visitorLog.setPostId(rSet.getInt("postId"));
+                visitorLog.setVisitorid(rSet.getInt("visitorID"));
+                visitorLog.setTime(rSet.getTimestamp("time"));
+                visitorLog.setVisitorip(rSet.getString("visitorIP"));
+                visitorLog.setVisitorpostname(rSet.getString("visitorPostName"));
+                visitorLogs.add(visitorLog);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally{
+            connection.close();
+        }
+        return visitorLogs;
+    }
+    
+    public boolean deleteLogManager(String sqlString){ 
+        connection=new ConnectDB();
+        boolean flag=connection.executeUpdate(sqlString);
+        System.out.println(flag);
+        connection.close();
+        return flag;
+    }
     
     
     //根据sql语句查询结果判定是否有重复项
