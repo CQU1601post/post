@@ -44,11 +44,41 @@
 		$('#save').attr('href','UserLogical?functionName=saveOrderOfAds&adId='+adIds);
 	}
 </script>
+<style type="text/css">
+	ul li{
+		opacity: 1;
+		border: 2px solid white !important;
+	}
+	.checked{
+		opacity: 0.5;
+		border: 2px solid red !important;
+	}
+	.warn{
+		color: #4682B4;
+	}
+	.upload_button{
+	width: 100px;
+	height: 50px;
+	line-height: 50px;
+	text-align: center;
+	margin: 20px 50px 0 50px;
+	font-size: 18px;
+	border-radius: 5px;
+	overflow: hidden; 
+	background: -webkit-linear-gradient(#7cb8f3, #2d52ae); /* Safari 5.1 - 6.0 */
+	background: -o-linear-gradient(#7cb8f3, #2d52ae); /* Opera 11.1 - 12.0 */
+	background: -moz-linear-gradient(#7cb8f3, #2d52ae); /* Firefox 3.6 - 15 */
+	background: linear-gradient(#7cb8f3, #2d52ae); /* 标准的语法 */ 
+	color: white;
+	-moz-user-select:none;
+	-webkit-user-select:none;
+	user-select:none;  
+}
+</style>
 </head>
 <body>
-<a href='' id='save'><input type='button' value='保存' onclick='saveOrder()'></a>
  <section>
-	<ul class="gbin1-list">
+	<ul class="gbin1-list clearfix" id="gbin1-list">
 		<c:forEach items='<%=ads%>' var='ad'>
 			<li><input type='image'  src="${ad.firstPicAddr}"  value='${ad.adId}' name='image'/></li>
 		</c:forEach>		
@@ -56,13 +86,48 @@
 	
 	<div style="clear:both" id="msg"></div>
  </section>
- 
-<script>
+ <div>
+ 	 <a href='' id='save'><input class="upload_button" type='button' value='保存' onclick='saveOrder()'></a><span class="warn">左键点击选择图片，右键点击更换顺序</span>
+ </div>
+
+	
+</body>
+<script type="text/javascript">
 //提示广告已经改变位置
     $('.gbin1-list').sortable().bind('sortupdate', function() {
 		$('#msg').html('position changed').fadeIn(200).delay(1000).fadeOut(200);
 	});
-</script>
+
+	document.oncontextmenu = function(event){  /*取消浏览器默认右键行为*/
+		console.log(event.target.nodeName);
+		if(event.target.nodeName=='INPUT'){
+			return false;
+		}else{
+			return true;
+		}
+	}
+
+	var lis = document.getElementById('gbin1-list').querySelectorAll('li');
+	for(var li of lis){
+		li.addEventListener('mousedown',function(){
+			var this_ = this;
+          	handleClick(this_,event);
+		},false);
+	}
+
+	function handleClick(el,event){
+		if(event.button == 0){		/*左键*/
+			el.classList.add('checked');
+		}else if(event.button == 2){		/*右键*/
+			var parent = el.parentNode;
+			var lis = parent.querySelectorAll('.checked');
+
+			for(var li of lis){
+				parent.insertBefore(li,el);
+				li.classList.remove('checked');
+			}
+		}
+	}
 	
-</body>
+</script>
 </html>
