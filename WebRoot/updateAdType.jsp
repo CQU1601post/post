@@ -169,10 +169,10 @@ $(document).ready(function() {
 </head>
 <body>
 
-    <div class="step">
-        <!-- 显示第几步 -->
+    <!-- <div class="step">
+        显示第几步
         <div class="current_step">修改上传广告的分类</div>
-    </div>
+    </div> -->
 
     <div id="CategoryTitle">
         <!-- 各个不同类别头部显示 -->
@@ -257,7 +257,7 @@ $(document).ready(function() {
                     }
 			    });
 			    $('#cancel').click(function(){
-                    window.parent.location.reload();
+                   /*  window.parent.location.reload(); */
                     var index = parent.layer.getFrameIndex(window.name);
                     window.parent.layer.close(index);
                 });

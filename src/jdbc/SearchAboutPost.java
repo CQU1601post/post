@@ -187,8 +187,9 @@ public class SearchAboutPost {
 
 		ConnectDB connect = new ConnectDB();
 		// 返回通过审核的广告并且按时间排序
-		String sql = "select * from pic where  pic.adId in(select ad.adId from ad where exist=1) and pic.adId='" + adId
-				+ "'and checked=1 ";
+		/*String sql = "select * from pic where  pic.adId in(select ad.adId from ad where exist=1) and pic.adId='" + adId
+				+ "'and checked=1 "*/;
+		String sql = "select * from pic where  adId='" + adId + "'";
 		ResultSet result = connect.executeQuery(sql);
 		// System.out.println("result:" + result);
 		List<Pic> pics = changeResultSetToArray.picsArray(result);

@@ -5,8 +5,8 @@
 <jsp:directive.page import="jdbc.*" />
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>   
 <%
-	String path = request.getContextPath();
-	String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+    String path = request.getContextPath();
+    String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
  
 %>
 
@@ -14,23 +14,23 @@
 
 <html>
 <head>
-	<meta http-equiv="pragma" content="no-cache">
-	<meta http-equiv="cache-control" content="no-cache">
-	<meta http-equiv="expires" content="0">    
-	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
-	<meta http-equiv="description" content="This is my page">
-	<link rel="stylesheet" href="css/upload.css" type="text/css">
-	<title>upLoad ads</title>
-	<script type='text/javascript'>
-		function goBack(){
-			history.go(-2);
-		}
-	</script>
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="expires" content="0">    
+    <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+    <meta http-equiv="description" content="This is my page">
+    <link rel="stylesheet" href="css/upload.css" type="text/css">
+    <title>upLoad ads</title>
+    <script type='text/javascript'>
+        function goBack(){
+            history.go(-2);
+        }
+    </script>
 </head>
 <body>
 <script src="js/jquery-1.8.2.js"></script> 
 <script src="layer/layer.js"></script>  
-<script type='text/javascript'>
+<!-- <script type='text/javascript'>
      function getUrlParam(name) {
           var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
           var r = window.location.search.substr(1).match(reg);  //匹配目标参数
@@ -68,7 +68,7 @@
         }
         
     });  
-    </script>
+    </script> -->
 <div class="step">
 <!-- <div class="not_current">
 第一步：选择上传广告的分类

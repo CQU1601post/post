@@ -8,30 +8,30 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%
     String path = request.getContextPath();
-	String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
-	List<AdType> adTypes=new SearchAboutPost().adTypes();//所有的广告类别
-	List<UnitType> unitTypes=new SearchAboutPost().unitTypes();//所有的单位类别
+    String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+    List<AdType> adTypes=new SearchAboutPost().adTypes();//所有的广告类别
+    List<UnitType> unitTypes=new SearchAboutPost().unitTypes();//所有的单位类别
 %>
 <%
-    int adTypeId =0;//获取session存放的id	
-	System.out.print("adTypeId:"+ adTypeId);
-	String adTypeName = "";
-	String postName="";
-	int postId =0;
-	//给上传粘贴栏与上传类别赋予默认值，由于本页面只能上传到公共粘贴栏，如果是专栏则不会给上传赋予默认值
-	if (null!=session.getAttribute("post")&&((Post)session.getAttribute("post")).getUserId()<0){
-		Post post=(Post)session.getAttribute("post");
-		adTypeId =(Integer)session.getAttribute("adTypeId");
-		if (adTypeId == 0) {//如果adTypeId等于0，则直接改为1
-			adTypeId = 1;
-		}
-		AdType adType = (AdType) new SearchAboutPost()
-				.adTypeOfId(adTypeId);//根据id获取广告类别
-		adTypeName = adType.getAdTypeName();				
-		postId =post.getPostId();
-		postName =post.getPostName();
-	}
-	System.out.print("adTypeName:" + adTypeName);
+    int adTypeId =0;//获取session存放的id    
+    System.out.print("adTypeId:"+ adTypeId);
+    String adTypeName = "";
+    String postName="";
+    int postId =0;
+    //给上传粘贴栏与上传类别赋予默认值，由于本页面只能上传到公共粘贴栏，如果是专栏则不会给上传赋予默认值
+    if (null!=session.getAttribute("post")&&((Post)session.getAttribute("post")).getUserId()<0){
+        Post post=(Post)session.getAttribute("post");
+        adTypeId =(Integer)session.getAttribute("adTypeId");
+        if (adTypeId == 0) {//如果adTypeId等于0，则直接改为1
+            adTypeId = 1;
+        }
+        AdType adType = (AdType) new SearchAboutPost()
+                .adTypeOfId(adTypeId);//根据id获取广告类别
+        adTypeName = adType.getAdTypeName();                
+        postId =post.getPostId();
+        postName =post.getPostName();
+    }
+    System.out.print("adTypeName:" + adTypeName);
 %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -234,9 +234,7 @@ $(document).ready(function() {
             </li>
             <!--用隐藏域显示选中的粘贴栏id -->
             <div class="but_upload1">
-                <input type="submit" value="下一步"
-                    class="button"
-                />
+                <input type="submit" value="下一步" class="button"/>
             </div>
         </ul>
     </form>

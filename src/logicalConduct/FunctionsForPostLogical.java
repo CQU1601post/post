@@ -295,6 +295,7 @@ public class FunctionsForPostLogical {
 	public void picsOfAd(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{		 	 
 		request.setCharacterEncoding("utf-8");
 		response.setCharacterEncoding("utf-8");
+		Ad ad=new Ad();
 		if(null==request.getParameter("adId")||null==request.getParameter("postId")){
 			System.out.println("您尚未选择任何图片"); 
 			response.sendRedirect("index.jsp");
@@ -302,7 +303,7 @@ public class FunctionsForPostLogical {
 		else{				
 			int adId=Integer.parseInt(request.getParameter("adId")); 
 			int postId=Integer.parseInt(request.getParameter("postId"));//获取PostId
-			String costMark="";
+			String privateColumn="";
 			   VisitorLog vl=new VisitorLog();
 			   OperationData od=new OperationData();
 	            //vl.setVisitorid();
@@ -324,18 +325,21 @@ public class FunctionsForPostLogical {
 				pics=searchFromDB.picsOfPrivateAd(adId);
 				String sql="update privatead set click=click+1 where adId="+ adId;
 				searchFromDB.updateClick(sql);
-				costMark="1";
+				privateColumn="1";
 			}
 			//System.out.println("ad:"+adId);
 			//如果不是专栏	
 			else{
 				pics=searchFromDB.picsOfAd(adId);
+				ad=searchFromDB.adOfId(adId);
+			
 				String sql="update ad set click=click+1 where adId="+ adId;
                 searchFromDB.updateClick(sql);
-                costMark="0";
+                privateColumn="0";
 			}
+			request.setAttribute("costMark",ad.getMoney());
 			request.setAttribute("pics",pics);
-			request.setAttribute("costMark", costMark);
+			request.setAttribute("privateColumn", privateColumn);
  			//System.out.println("pics.size():"+pics.size());
  			request.getRequestDispatcher("picsOfAd.jsp").forward(request,response);	
 		}	
@@ -499,7 +503,7 @@ public class FunctionsForPostLogical {
 		String[] postIds=null;// 可能一次上传多个粘贴栏
 		int adTypeId=0;
 		String remark="";//备注
-		String payment="";//是否滚屏显示
+		
 		boolean isPrivateAd=false;//标示是否为专栏广告
 		// 每个表单域中数据会封装到一个对应的FileItem对象上
 		try {
@@ -531,9 +535,7 @@ public class FunctionsForPostLogical {
 					if ("privatePost".equals(fileName)) {
 						isPrivateAd = new Boolean(value);//标志是否为专栏广告
 					}
-					if("payment".equals(fileName)){
-                        payment = value;
-                    }
+				
 
 				} else {// 文件域
 					if (item.getSize() > fileMax) {// 如果文件过大则返回上传页面，提示过大
@@ -570,7 +572,7 @@ public class FunctionsForPostLogical {
 				}
 				//存储广告到对应的粘贴栏、类别
 				else{
-					saveAds1(postIds,adTypeId,remark,isPrivateAd,fileItems,request,response,payment);
+					saveAds1(postIds,adTypeId,remark,isPrivateAd,fileItems,request,response);
 				}				
 			}	
 			
@@ -582,7 +584,7 @@ public class FunctionsForPostLogical {
 
 	//广告存储
     public void saveAds1(String[] postIds,int adTypeId,String remark,boolean isPrivateAd,List<FileItem> fileItems,HttpServletRequest request,
-            HttpServletResponse response,String payment)throws ServletException, IOException{ 
+            HttpServletResponse response)throws ServletException, IOException{ 
         request.setCharacterEncoding("utf-8");
         response.setCharacterEncoding("utf-8");
         File file=null;
@@ -775,7 +777,7 @@ public class FunctionsForPostLogical {
             }
                     
         }   
-        response.sendRedirect("upLoad3.jsp?payment="+payment);//成功则跳转到成功页面               
+        response.sendRedirect("upLoad3.jsp");//成功则跳转到成功页面               
     }
 	
 	//广告存储

@@ -34,8 +34,41 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<!--
 	<link rel="stylesheet" type="text/css" href="styles.css">
 	-->
-    <link rel="stylesheet"  type="text/css"  href="css/bodyOfPost.css">
-
+    <!-- <link rel="stylesheet"  type="text/css"  href="css/bodyOfPost.css"> -->
+    <style type="text/css">
+    table{
+        font-size:1.2em;
+        font-family:Microsoft YaHei;
+    }
+    tr{
+    border: solid 5px white;
+    }
+    td.other{
+        width:250px;
+        height:50px;
+        background-color:#F2F2F2;
+        color:black; 
+        border: solid 4px white; 
+    }
+    .other a:hover,#del a:hover{
+        color:white;
+        background-color:black;
+    }
+    #top_del:hover{
+        color:#EE1289;
+        background-color:gray;
+    }
+    #top_del{
+    color:white;
+    }
+    .top{
+        width:1150px;
+        height:50px;
+        line-height:50px;
+        background-color:black;
+        opacity:0.8;
+    }
+    </style>
   </head>
   
   <body>  
@@ -45,17 +78,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <c:set var="picsInOneRow" value="<%=picsInOneRow%>"></c:set> <!--picsInOneRow为每行显示图片张数-->
     <br/><br/><br/>
     
-    <table id="ads" align="center" width=80%>
+    <!-- <table id="ads" align="center" width=80%> -->
       <c:if test="${ads.size()>0}"> 
-        <p><a href='UserLogical?functionName=deleteMyAds'>全部删除</a></p>
+        <p class="top"><a id="top_del" href='UserLogical?functionName=deleteMyAds' style="font-size:1.8em;font-family:Microsoft YaHei;">全部删除</a></p>
         <br/> <br/>
-       <tr> 
+<!--        <tr>  -->
          <c:set var="picsInOneRow" value="${picsInOneRow}"> </c:set><!-- 每行显示的图片个数 -->
     	 <c:forEach var="ad" items="${ads}" varStatus="status">
-    		<td>
+<!--     		<td> -->
     		  <table id='ad' align='center'>
     		 	<tr align='center'>
-    		 		<td> <a href="PostLogical?functionName=picsOfAd&adId=${ad.adId}&postId=${ad.postId}" target="_blank"><input type="image" class="img" alt="点击查看"  src="${ad['firstPicAddr']}" id="${ad['adId']}"></a></td>
+    		 		<td > 
+    		 		   <a href="PostLogical?functionName=picsOfAd&adId=${ad.adId}&postId=${ad.postId}" target="_blank"><input type="image" class="img" alt="点击查看"  src="${ad['firstPicAddr']}" id="${ad['adId']}" style="margin-right:50px;width:80px;height:80px;"></a>
+    		 		
+    		 		</td>
     		 		<c:set var='postId' value="${ad.postId}"></c:set>
     		 		<!-- 获取postId对应的postName -->
     		 		<%
@@ -64,16 +100,25 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     		 			String postName=post.getPostName();
     		 			System.out.println("postName:"+postName);
     		 		 %>
-    		 		<td style='valign:middle;align:center'>    		 			
-	    		 		<p id='upLoadTime'>上传时间：${ad.upLoadTime} 
-						<p id='postName'>广告所在粘贴栏： <a href="PostLogical?functionName=enterPost&adTypeId=0&postId=${postId}" target="_blank"><%=postName%></a>
-	    		 		<p><a href="UserLogical?functionName=deleteMyAds&adId=${ad['adId']}">删除</a>    		 			
+    		 		
+    		 	    <td class="other">
+    		 	        <p id='postName'>广告所在粘贴栏： <a href="PostLogical?functionName=enterPost&adTypeId=0&postId=${postId}" target="_blank"><%=postName%></a>
     		 	    </td>
+    		 	    
+    		 	    <td class="other">                       
+                        <p id='upLoadTime'>上传时间：${ad.upLoadTime} 
+                    </td>
+                     <td id="del" class="other" style="width:100px;">
+                        <p><c:if test="${ad.checked=='1'}">审核通过</c:if>
+                        <c:if test="${ad.checked=='0'}">未审核</c:if>  </p> 
+                    </td>
+                    <td id="del" class="other">
+                        <p><a href="UserLogical?functionName=deleteMyAds&adId=${ad['adId']}">删除</a> 
+                    </td>
     		 	    </tr>
-    		 	    <tr></tr>
     		  </table>
     		  
-    		</td>	
+<!--     		</td>	 -->
     		    		 	 
     		<c:if test="${status.count%picsInOneRow==0}"><!-- 如果每行达到指定个数则转行-->    			 
     			 <c:out value="</tr><tr>" escapeXml="false"></c:out>
@@ -81,10 +126,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     	 </c:forEach>
       </c:if>
       <c:if test="${ads.size()<=0 }">	
-      	 <tr align="center"><td> 您尚未发布广告</td></tr>
+      	 <p style="font-size:1.2em;font-family:Microsoft YaHei;"> 您尚未发布广告</p>
       </c:if>
-    </table>    
-     <div id="returnTop" class="returnTop" onclick="returnTop() ">返回顶部</div><!-- 返回顶部的小链接 -->
+    <!-- </table>     -->
+ <!--     <div id="returnTop" class="returnTop" onclick="returnTop() ">返回顶部</div>返回顶部的小链接 -->
     <div style="height:1000" ></div>
     </center>
   </body>

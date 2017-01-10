@@ -161,10 +161,11 @@ function changeType(){
                  $('#adType').on('click', function(){
                   layer.open({
                   type: 2,
-                  title: '修改上传广告类别',
+                  title: '修改广告类别',
                  /*  maxmin: true, */
+                  skin: 'layui-layer-rim', //加上边框
                   shadeClose: true, //点击遮罩关闭层
-                  area : ['800px' , '650px'],
+                  area : ['800px' , '550px'],
                   content: 'updateAdType.jsp',
                   });
                 });
@@ -172,7 +173,7 @@ function changeType(){
 		</div>
 			<!-- 图片展示区域 -->		
 		<!-- 将关于图片上传的信息都用form提交给服务器 -->
-		<form action="PostLogical?functionName=upLoad" method="post" enctype="multipart/form-data" onSubmit="return checkPayment();">
+		<form action="PostLogical?functionName=upLoad" method="post" enctype="multipart/form-data" onSubmit="return checkImageNum();">
 			
 				<!-- 图片上传类别、粘贴栏、时间信息 -->
 			<input type='text' value='${param.adTypeId}' name='adTypeId' id='adTypeId' style='display:none'> 
@@ -196,12 +197,12 @@ function changeType(){
 				
 			</div>
 			<div class='but'>
-			&nbsp;&nbsp;
+			<!-- &nbsp;&nbsp;
 			<label>是否滚屏显示：</label>
                  <input type="radio" class="radio" name="payment" value="yes">是</input>
                  <input type="radio" class="radio" name="payment" value="no">否</input>
-                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            	<input type="submit" value="完成" class="button">
+                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
+            	<input type="submit" value="完成" class="button" style="float:right">
             </div>		
 		</form>
 	</div>

@@ -36,10 +36,10 @@ overflow: hidden;
     color: #8c96a0;
     text-shadow:1px 1px 1px #fff;
     border:1px solid #dce1e6;
-	box-shadow: 0 1px 2px #fff inset,0 -1px 0 #a8abae inset;
-	background: -webkit-linear-gradient(top,#f2f3f7,#e4e8ec);
-	background: -moz-linear-gradient(top,#f2f3f7,#e4e8ec);
-	background: linear-gradient(top,#f2f3f7,#e4e8ec);
+    box-shadow: 0 1px 2px #fff inset,0 -1px 0 #a8abae inset;
+    background: -webkit-linear-gradient(top,#f2f3f7,#e4e8ec);
+    background: -moz-linear-gradient(top,#f2f3f7,#e4e8ec);
+    background: linear-gradient(top,#f2f3f7,#e4e8ec);
 }
 .gray:hover{
     background: -webkit-linear-gradient(top,#fefefe,#ebeced);
@@ -53,14 +53,14 @@ overflow: hidden;
 <body >
 <div style="color:white;background-color:#666666;height:60px;line-height:60px;;font-size:1.3em;font-family:Microsoft YaHei;font-size:1.5em;">
 <table>
-	<tr>
-	   <td width="150px"><img src="images/logo02.png" width="60" height="55" float="left"/><div float="left" width="200px"></td>
-	   <td>滚屏显示支付页面</td>
-	</tr>
+    <tr>
+       <td width="150px"><img src="images/logo02.png" width="60" height="55" float="left"/><div float="left" width="200px"></td>
+       <td>滚屏显示支付页面</td>
+    </tr>
 </table>
 </div>
 
-<div style="height:80px;font-size:1.2em;font-family:Microsoft YaHei;margin-top:30px;">
+<div style="height:50px;font-size:1.2em;font-family:Microsoft YaHei;margin-top:30px;">
 &nbsp;&nbsp;&nbsp;滚屏等级：
  <%
  
@@ -69,7 +69,7 @@ overflow: hidden;
                            Cost cost = (Cost) iterator.next();       
                                 
                         %>
-                        &nbsp;<input type="radio" name="pay_level" value="<%=cost.getGrade() %>" ><%=cost.getMoney() %></input>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="pay_level" value="<%=cost.getGrade() %>" ><%=cost.getMoney() %></input>
                         
                         <%
                             }
@@ -78,18 +78,19 @@ overflow: hidden;
     &nbsp;&nbsp;<input type="radio" name="pay_level" value="second">二等100￥</input>
     &nbsp;&nbsp;<input type="radio" name="pay_level" value="third">三等50￥</input><br> -->
 <br>
+<br>
 <div style="background-color:#F0F0F0;opacity:0.8;margin:0 auto;border-bottom:1px solid #D6D6D6; border-top:1px solid #D6D6D6;height:10px;">
 </div>
 <div style="font-family:Microsoft YaHei;margin-top:20px;font-size:1em;">
 &nbsp;&nbsp;&nbsp;支付方式：<br><br>
 <center>
 <table>
-	<tr>
-	    <td width="60px"><img src="css/images/payment_1.png" width="50px" height="40px"</img></td>
-	    <td width="200px">支付宝支付</td>
-	    <td><input type="radio" name="pay_type" value="1" style="line-height: 50px;"></input></td>
-	<tr>
-	 <tr>
+    <tr>
+        <td width="60px"><img src="css/images/payment_1.png" width="50px" height="40px"</img></td>
+        <td width="200px">支付宝支付</td>
+        <td><input type="radio" name="pay_type" value="1" style="line-height: 50px;"></input></td>
+    <tr>
+     <tr>
         <td width="60px"><img src="css/images/wechat.jpg" width="50px" height="40px"</img></td>
          <td width="200px">微信支付</td>
         <td><input type="radio" name="pay_type" value="2"></input></td>
@@ -142,7 +143,7 @@ overflow: hidden;
                     }
                 });
                 $('#cancel').click(function(){
-                        window.parent.location.href = "upLoad3.jsp?payment=no";
+                      /*   window.parent.location.reload(); */
                         var index = parent.layer.getFrameIndex(window.name);
                         window.parent.layer.close(index);
                 });

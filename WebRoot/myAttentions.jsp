@@ -27,25 +27,42 @@ System.out.println("userName:"+userName);
 	<!--
 	<link rel="stylesheet" type="text/css" href="styles.css">
 	-->
-
+<style>
+#attention{color:white;}
+#attention:hover{color:#76EE00;}
+</style>
   </head>
   
   <body>
-     ${sessionScope.user.userName},您所关注的粘贴栏为：
+  <br><br><br>
+  <center>
+     <p style="background-color:black;width:500px;hight:50px;line-height:50px;color:white;opacity:0.8;font-family:Microsoft YaHei;font-size:1.5em;">${sessionScope.user.userName}，您所关注的粘贴栏为：</p>
+     <div style="background-color:#FF8247;width:500px;color:white;opacity:0.5;font-family:Microsoft YaHei;font-size:1.5em;">
+     
      <c:if test='${posts.size()>0}'><!-- 如果有粘贴栏信息，则显示--> 
        <c:forEach var='post' items='${posts}'>
        	<c:set var='unitId' value='${post.unitId}'></c:set>
+       	<br>
        	<%
        		int unitId=(Integer)pageContext.getAttribute("unitId");
        		Unit unit=(Unit)new SearchAboutPost().unitOfId(unitId);
        		String unitName=unit.getUnitName();
        	%>
-        <p><%=unitName%>-><a href='PostLogical?functionName=enterPost&adTypeId=0&postId=${post.postId}'>${post.postName}</a>  
-         <a href='UserLogical?functionName=deleteMyAttention&postId=${post.postId}'>删除</a>       
+        <p><%=unitName%>-><a id="attention" href='PostLogical?functionName=enterPost&adTypeId=0&postId=${post.postId}'>${post.postName}</a>  
+         <a id="attention" href='UserLogical?functionName=deleteMyAttention&postId=${post.postId}'>删除</a>       
+
+        <br>
+        <hr>
        </c:forEach>
      </c:if>
      <c:if test='${posts.size()<=0}'>
-             <p>您尚未关注任何粘贴栏,u haven't take attention to any posts
+     <br>
+             <p>您尚未关注任何粘贴栏</p>
+             <br>
+             <br>
      </c:if>
+     
+     </div>
+  </center>
   </body>
 </html>

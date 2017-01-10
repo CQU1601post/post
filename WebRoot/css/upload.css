@@ -201,7 +201,13 @@ filter:alpha(opacity=0);/* ����IE */
 	color: red;
 }
 .but_upload1{
-	width: 180px;
+	width: 150px;
+    float: right;
+    text-align:center;
+    margin-top:-5px;
+}
+.but_upload2{
+    width: 180px;
     float: right;
     text-align:center;
     margin-top:-5px;
@@ -288,7 +294,7 @@ filter:alpha(opacity=0);/* ����IE */
 }
 .upload_type_info li span{
 	display: inline-block;
-	width: 120px;
+	width: 100px;
 	text-align: right;
 }
 .upload_type_info li input{
@@ -306,6 +312,7 @@ filter:alpha(opacity=0);/* ����IE */
 .updateType{
 	margin:0 auto;
 	width:780px;
+	margin-top:20px;
 }
 .but_upload{
 	width: 180px;
