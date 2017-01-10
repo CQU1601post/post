@@ -45,25 +45,26 @@
 	}
 </script>
 <style type="text/css">
-	ul li{
-		opacity: 1;
-		border: 2px solid white !important;
-	}
-	.checked{
-		opacity: 0.5;
-		border: 2px solid red !important;
-	}
-	.warn{
-		color: #4682B4;
-	}
-	.upload_button{
+#gbin1-list li{
+	opacity: 1;
+	border: 2px solid white !important;
+}
+#gbin1-list .checked{
+	opacity: 0.5;
+	border: 2px solid red !important;
+}
+#commit .warn{
+	color: #4682B4;
+	font-weight: bold;
+}
+#commit .upload_button{
 	width: 100px;
 	height: 50px;
 	line-height: 50px;
 	text-align: center;
 	margin: 20px 50px 0 50px;
 	font-size: 18px;
-	border-radius: 5px;
+	border-radius: 10px;
 	overflow: hidden; 
 	background: -webkit-linear-gradient(#7cb8f3, #2d52ae); /* Safari 5.1 - 6.0 */
 	background: -o-linear-gradient(#7cb8f3, #2d52ae); /* Opera 11.1 - 12.0 */
@@ -72,7 +73,9 @@
 	color: white;
 	-moz-user-select:none;
 	-webkit-user-select:none;
-	user-select:none;  
+	user-select:none;
+	font-family: 'yahei';
+	border: none;  
 }
 </style>
 </head>
@@ -86,7 +89,7 @@
 	
 	<div style="clear:both" id="msg"></div>
  </section>
- <div>
+ <div id="commit">
  	 <a href='' id='save'><input class="upload_button" type='button' value='保存' onclick='saveOrder()'></a><span class="warn">左键点击选择图片，右键点击更换顺序</span>
  </div>
 
@@ -108,12 +111,13 @@
 	}
 
 	var lis = document.getElementById('gbin1-list').querySelectorAll('li');
-	for(var li of lis){
-		li.addEventListener('mousedown',function(){
+	
+	[].forEach.call(lis,function(li){
+		li.addEventListener('mousedown',function(event){
 			var this_ = this;
           	handleClick(this_,event);
 		},false);
-	}
+	})
 
 	function handleClick(el,event){
 		if(event.button == 0){		/*左键*/
@@ -122,10 +126,10 @@
 			var parent = el.parentNode;
 			var lis = parent.querySelectorAll('.checked');
 
-			for(var li of lis){
+			[].forEach.call(lis,function(li){
 				parent.insertBefore(li,el);
 				li.classList.remove('checked');
-			}
+			})
 		}
 	}
 	
