@@ -97,6 +97,7 @@ public class UserOperation {
 		// 删除指定的广告
 		String sql = "delete from ad where adId='"+adId+"'";
 		boolean delete=connect.executeUpdate(sql); 
+	    connect.close();
 		return delete;
 	}
  
@@ -106,6 +107,7 @@ public class UserOperation {
 		// 删除指定的广告
 		String sql = "delete from privatead where adId='" + adId + "'";
 		boolean delete = connect.executeUpdate(sql);
+		connect.close();
 		return delete;
 	}
 	
