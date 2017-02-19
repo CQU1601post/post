@@ -181,7 +181,8 @@ public class FunctionsForUserLogical {
 			System.out.println("删除成功");
 			//myAds(request,response);//跳转到显示我的广告页面
 			//out.println("<script type='text/javascript'>alert('success')</script>");
-			out.println("<script type='text/javascript'>location.replace(document.referrer);opener.location.reload();</script>");
+			  request.getRequestDispatcher("myAds.jsp").forward(request,
+		                response);
 		}
 		
 	}

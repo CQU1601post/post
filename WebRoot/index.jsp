@@ -84,6 +84,10 @@ $(document).ready(function () {
 				return false;
 			} 	 
 		}
+		function checkAction(){
+			document.searchForm.action="PostLogical?functionName=searchAds";
+			document.searchForm.submit();
+		}
 		//location.reload(); 
 	</script>
 	
@@ -140,9 +144,10 @@ $(document).ready(function () {
 
 	    <div class="search">
 			 <!-- 搜索 -->
-			<form action="PostLogical?functionName=searchPosts" method="post" onsubmit='return checkText();'>
+			<form action="PostLogical?functionName=searchPosts" method="post" name="searchForm" onsubmit='return checkText();'>
 				<input type="text" id="searchText" name="searchText" class="sinput" placeholder="请输入搜索内容">
 				<input type="submit" value="搜索" class="sbtn">
+				<input type="submit" value="搜索广告" class="sbtn" onclick="checkAction()">
 			</form>
 		</div>
 			

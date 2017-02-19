@@ -9,6 +9,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 List pics=(List)request.getAttribute("pics");
 System.out.println("pics:"+pics.size());
 Object privateColumn=request.getAttribute("privateColumn");
+System.out.print(privateColumn);
 Object costMark=request.getAttribute("costMark");
 %>
 
@@ -68,17 +69,10 @@ Object costMark=request.getAttribute("costMark");
         <table align="center"><tr align="center" > 您所选择的广告为空</tr></table>        
 </c:if>
 
-<c:if test="${pics.size()>0}">
-<c:if test="${pics[0].checked>0}">
-
-
-</c:if>
-</c:if>
-
-<c:if test="${privateColumn=='0'} }">
-
-</c:if>
-<c:if test="${costMark=='0'}">
+<c:if test="${pics.size()>0}"><!-- 要存在图片 -->
+<c:if test="${pics[0].checked>0}"><!-- 已审核 -->
+<c:if test="${privateColumn=='0'}"><!-- 判断是否是专栏-->
+<c:if test="${costMark=='0'}"><!-- 判断是否收费-->
 <center>
 
 <div style="margin-top:50px;width:850px;hight:30px;float:right">
@@ -100,5 +94,12 @@ Object costMark=request.getAttribute("costMark");
             </script>
 </center>
 </c:if>
+</c:if>
+
+</c:if>
+</c:if>
+
+
+
 </body>
 </html>

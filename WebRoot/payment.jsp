@@ -86,17 +86,17 @@ overflow: hidden;
 <center>
 <table>
     <tr>
-        <td width="60px"><img src="css/images/payment_1.png" width="50px" height="40px"</img></td>
+        <td width="60px"><img src="css/images/payment_1.png" width="50px" height="40px"></img></td>
         <td width="200px">支付宝支付</td>
         <td><input type="radio" name="pay_type" value="1" style="line-height: 50px;"></input></td>
     <tr>
      <tr>
-        <td width="60px"><img src="css/images/wechat.jpg" width="50px" height="40px"</img></td>
+        <td width="60px"><img src="css/images/wechat.jpg" width="50px" height="40px"></img></td>
          <td width="200px">微信支付</td>
         <td><input type="radio" name="pay_type" value="2"></input></td>
     <tr>
     <tr>
-        <td width="60px"><img src="css/images/payment_2.png" width="50px" height="40px"</img></td>
+        <td width="60px"><img src="css/images/payment_2.png" width="50px" height="40px"></img></td>
         <td width="200px">银联支付</td>
         <td><input type="radio" name="pay_type" value="2"></input></td>
     <tr>

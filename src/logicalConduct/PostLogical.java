@@ -45,6 +45,9 @@ public class PostLogical extends HttpServlet {
 		else if("searchPosts".equals(functionName)){ 
 			functions.searchPosts(request,response);
 		}
+		else if("searchAds".equals(functionName)){
+			functions.searchAds(request,response);
+		}
 		//根据查找字段寻找包含此字段的所有粘贴栏
 		else if("enterUnit".equals(functionName)){ 
 			functions.enterUnit(request,response);

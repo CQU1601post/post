@@ -14,7 +14,6 @@ import java.util.TreeMap;
 import com.sun.org.apache.regexp.internal.recompile;
 
 import tool.ChangeResultSetToArray;
-
 import allClasses.Ad;
 import allClasses.AdType;
 import allClasses.Cost;
@@ -510,6 +509,26 @@ public class OperationData {
 
     }
 
+    
+    public List<Ad> getAds(String selectedAdTypeValue)throws SQLException{
+    	connection=new ConnectDB();
+    	List<Ad> ads=new ArrayList<Ad>();
+    	int postId=Integer.parseInt(selectedAdTypeValue);
+    	sql="select * from ad where postId='"+postId+"'";
+    	ResultSet result=connection.executeQuery(sql);
+    	while(result.next()){
+    		Ad ad = new Ad(result.getInt(1), result.getInt(2),
+					result.getString(3), result.getInt(4),result.getInt(5), result.getString(6),result.getInt(7),result.getLong(8),result.getInt(9),result.getString(10),result.getInt(11),result.getInt(12),result.getInt(13),result.getInt(14),result.getInt(15));//通过审核的广告checked属性必为1
+			
+			ads.add(ad);
+    	}
+    	result.close();
+    	connection.close();
+    	return ads;
+    }
+    
+    
+    
     public List<Post> getPosts(List<String> scopeList) throws SQLException {
         String sqlString = "";
         connection = new ConnectDB();
@@ -982,5 +1001,46 @@ public class OperationData {
             connection.close();
         }
         return costs;
+    }
+    
+    /**
+     * 通过广告ID获得图片路径
+     */
+    public String getPic(int adId){
+    	connection=new ConnectDB();
+    	String fristPic="";
+    	sql="select firstPicAddr from ad where adId='"+adId+"'";
+    	ResultSet resultSet=connection.executeQuery(sql);
+    	try {
+    		while(resultSet.next()){
+        		fristPic=resultSet.getString("firstPicAddr");
+        	}
+		} catch (SQLException e) {
+			// TODO: handle exception
+		}
+    	
+    	return fristPic;
+    }
+    
+    /**
+     * 通过unitid获取unittypeid
+     */
+    public int getUnitTypeId(String unitid){
+    	connection=new ConnectDB();
+    	System.out.println(unitid);
+    	
+    	sql="select * from unit where unitid='"+unitid+"'";
+    	ResultSet resultSet=connection.executeQuery(sql);
+    	int unitTypeId=0;
+    	try {
+			while(resultSet.next()){
+				unitTypeId=resultSet.getInt(3);
+				
+			}
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+    	return unitTypeId;
     }
 }

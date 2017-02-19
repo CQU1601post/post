@@ -1,13 +1,21 @@
+<%@page import="java.util.Iterator"%>
+<%@page import="java.util.Map"%>
+<%@page import="java.util.List"%>
+<%@page import="java.util.*"%>
 <%@page import="jdbc.OperationData"%>
 <%@ page pageEncoding="utf-8" %>
 <%@ page contentType="text/html; charset=UTF-8" language="java" import="java.sql.*"%> 
+<jsp:directive.page import="java.util.List" />
+<jsp:directive.page import="allClasses.*" />
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 String searchText=request.getParameter("searchText");
 System.out.println("页面内searchText："+searchText);
 searchText=new String(searchText.getBytes("iso-8859-1"),"utf-8");
+List<Map<String, List<Post>>> unitsAndPosts=(List<Map<String, List<Post>>>)request.getAttribute("unitsAndPosts");
 OperationData operationData=new OperationData();
+
 %>
 <jsp:include page="top.jsp" flush="true" />
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>  
@@ -34,42 +42,53 @@ OperationData operationData=new OperationData();
 	搜索字段为：<%=searchText %> 搜索结果为：
 	<!-- 如果有包含搜索字段的单位或粘贴栏则循环 -->
 	<c:if test="${unitsAndPosts.size()>0}">
-		<c:forEach var="Map" items="${unitsAndPosts}" >
-		<c:forEach items="${Map}" var="entry" varStatus="status">
-			<!-- 显示单位名 -->		
-			<div class='unit_post'>	 	 
+	<%
+	for(int i = 0; i < unitsAndPosts.size(); i++){
+		
+	Map<String, List<Post>> map = (Map<String, List<Post>>)unitsAndPosts.get(i);
+		for (Map.Entry<String, List<Post>> entry : map
+					 .entrySet()) {
+					
+	 %>
+	 <div class='unit_post'>	 	 
 			<table align="center" class="post_title">
-				<tr align="left">
-				  <c:set var='unitId' value="${entry.key.split('_')[0]}"></c:set>
-				  <c:set var='unitName' value="${entry.key.split('_')[1]}"></c:set>
-					<td>${unitName}</td>
+				<tr align="left">  
+					<td><%=entry.getKey().split("_")[1] %></td>
 				</tr>
 			</table>
-			<hr />	
+	 <hr />	
 			<table align="center" class="post_name">
 				<!-- 如果该单位下有粘贴栏，则循环遍历 -->
 				<tr>
-				<c:if test="${entry.value.size()>0}">
+				<%if(entry.getValue().size()>0){ %>
 					<div class='post'>
-					<!-- <td><a href="PostLogical?functionName=enterUnit&adTypeId=0&unitInfo=${entry.key}">所有</a>
-						</td>  -->	
-						<c:forEach var='post' items='${entry.value}'>
-							<a href="PostLogical?functionName=enterPost&adTypeId=0&postId=${post.postId}" target="_blank">${post.postName}</a>
-						</c:forEach>
-						</div>
+					<%for(Iterator iterator2 = entry.getValue()
+					 .iterator(); iterator2.hasNext();) { 
+					 Post post2 = (Post) iterator2.next();
+					 
+					 %>
 					
-				</c:if>
+					<a href="PostLogical?functionName=enterPost&adTypeId=0&postId=<%=post2.getPostId() %>&unitTypeId=<%=entry.getKey().split("_")[0] %>" target="_blank"><%=post2.getPostName() %></a>	
+					
+					
+				<%}%></div>
+				<%}%>
 				</tr>
 				<tr>
 				<!-- 如果单位下没有粘贴栏则输出提示字段 -->
-			   	<c:if test="${entry.value.size()<=0}">
+			   	<%if(entry.getValue().size()<0){ %>
 			    	<div class="post_info"><a>该单位下没有粘贴栏</a></div>	    	 
-			    </c:if>
+			    <%} %>
 			    </tr>
 			</table>
 			</div>
-		</c:forEach>
-		</c:forEach>
+				
+				
+					
+	 
+	 <%
+	 } }%>
+		
 	</c:if>
 	<c:if test="${unitsAndPosts.size()<=0}">
 		<div class="post_info"><a>没有包含该字段的单位或粘贴栏</a></div>
