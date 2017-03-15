@@ -122,13 +122,17 @@ function changeGroupID(id,oldGroupId){
 	function change(id,name){		
 		var newName=null;
 		newName=prompt("请输入粘贴栏名",name);
-		while(newName==null || newName==" "){
+		/* while(newName==null || newName==" "){
 			alert('输入的粘贴栏名不能为空');
 			newName=prompt("请输入粘贴栏名",name);   		
-		}		
-		
+		} */		
+		if(newName==null || newName==" "){
+		    alert('输入的粘贴栏名不能为空');
+		}else{
 		var cn=document.getElementById(id);
 		cn.href="AdminManagerLogical?info=updatePaste&newName="+newName+"&id="+id;  
+		}
+		
 	}
 	
 	   
@@ -136,23 +140,28 @@ function changeGroupID(id,oldGroupId){
 		var unit_name=null;
 		var newType=null;
 		var paste_name=prompt("请输入粘贴栏名称","");
-		while(paste_name==null||paste_name==" "||paste_name==""){
+	/* 	while(paste_name==null||paste_name==" "||paste_name==""){
 			alert('输入的名字不能为空');
      		paste_name=prompt("请输入粘贴栏名称",name);     		
-		}
+		} */
 		var unitName=prompt("请输入所属单位名称","");
-		while(unitName==null ||unitName==" "||unitName==""){
+	/* 	while(unitName==null ||unitName==" "||unitName==""){
 			alert('输入的类别名不能为空');
      		unitName=prompt("请输入所属单位名称","");     		
-		}
+		} */
 		var userName=prompt("请输入用户名：","");
-		while(userName==null ||userName==" "||userName==""){
+	/* 	while(userName==null ||userName==" "||userName==""){
 			alert('输入的类别名不能为空');
      		userName=prompt("请输入用户Id：","");     		
-		}
-		//alert("333");
+		} */
+		if(paste_name==null||paste_name==" "||paste_name==""||unitName==null ||unitName==" "||unitName==""||userName==null ||userName==" "||userName==""){
+		    alert('输入的信息不全');
+		}else{
 		var cn=document.getElementById("add");
 		cn.href="AdminManagerLogical?info=insertPaste&unitName="+unitName+"&paste_name="+paste_name+"&userName="+userName;  		
+		    
+		}
+		//alert("333");
 	}
 </script>
   </head>
@@ -166,7 +175,7 @@ function changeGroupID(id,oldGroupId){
  </table>
  <br>
       <p align="center" class="operation"> 
-        <a href=""  onclick="insert()"id="add" style="background-color:black;border-radius:3px 3px;display:block;width:100px;height:20px;color:white;opacity:0.7">添加粘贴栏</a>
+        <a href="javascript:void()"  onclick="insert()"id="add" style="background-color:black;border-radius:3px 3px;display:block;width:100px;height:20px;color:white;opacity:0.7">添加粘贴栏</a>
      </p>
 <br>
  

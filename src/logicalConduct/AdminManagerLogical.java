@@ -1220,7 +1220,7 @@ public class AdminManagerLogical extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");
 		PrintWriter out = response.getWriter();
 		String paste_name = request.getParameter("paste_name");
-		// paste_name=new String(paste_name.getBytes("iso-8859-1"),"UTF-8");
+		paste_name=new String(paste_name.getBytes("iso-8859-1"),"UTF-8");
 		paste_name = URLDecoder.decode(paste_name, "utf-8");
 		if (paste_name.equals(null) || paste_name.equals("")) {// 如果没填粘贴栏名
 			out.print("<script language=javascript>alert('粘贴栏名不能为空')</script>");
@@ -1233,7 +1233,7 @@ public class AdminManagerLogical extends HttpServlet {
 
 			} else {// 粘贴栏名不存在
 				String userName = request.getParameter("userName");
-				// userName=new String(userName.getBytes("iso-8859-1"),"UTF-8");
+				 userName=new String(userName.getBytes("iso-8859-1"),"UTF-8");
 				userName = URLDecoder.decode(userName, "utf-8");
 				if (userName == null) {
 					userName = "xjp";
@@ -1244,7 +1244,7 @@ public class AdminManagerLogical extends HttpServlet {
 
 				System.out.println("userName" + userName + "userId" + userId);
 				String unitName = request.getParameter("unitName");
-				// unitName=new String(unitName.getBytes("iso-8859-1"),"UTF-8");
+				 unitName=new String(unitName.getBytes("iso-8859-1"),"UTF-8");
 				unitName = URLDecoder.decode(unitName, "utf-8");
 				int unitId = new OperationData().unitId(unitName);
 				System.out.println("unitName:" + unitName + "unitId:" + unitId);
@@ -1356,11 +1356,12 @@ public class AdminManagerLogical extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");
 		PrintWriter out = response.getWriter();
 		String unit_name = request.getParameter("unit_name");
-		// unit_name=new String(unit_name.getBytes("iso-8859-1"),"UTF-8");
+		 unit_name=new String(unit_name.getBytes("iso-8859-1"),"UTF-8");
 		unit_name = URLDecoder.decode(unit_name, "utf-8");
 		System.out.println("执行insertUnit,unit_name:" + unit_name);
 		String paste_type = request.getParameter("paste_type");
-		// paste_type=new String(paste_type.getBytes("iso-8859-1"),"UTF-8");
+		int paste_type2=Integer.parseInt(paste_type);
+		paste_type=new String(paste_type.getBytes("iso-8859-1"),"UTF-8");
 		paste_type = URLDecoder.decode(paste_type, "utf-8");
 		int pasteType = new OperationData().pasteType_id(paste_type);// 类别id
 		if (unit_name.equals(null) || unit_name.equals("")) {// 如果没填单位名
@@ -1377,7 +1378,8 @@ public class AdminManagerLogical extends HttpServlet {
 				Unit u = new Unit();
 				u.setUnitId(unitId);
 				u.setUnitName(unit_name);
-				u.setUnitTypeId(pasteType);
+				
+				u.setUnitTypeId(paste_type2);
 				// u.setPostType(pasteType);
 				data.saveUnit(u);
 				unitShow(request, response);
@@ -1392,7 +1394,7 @@ public class AdminManagerLogical extends HttpServlet {
 		response.setContentType("text/html;charset=UTF-8");
 		request.setCharacterEncoding("UTF-8");
 		String unit_name = request.getParameter("newName");
-		// unit_name=new String(unit_name.getBytes("iso-8859-1"),"UTF-8");
+		unit_name=new String(unit_name.getBytes("iso-8859-1"),"UTF-8");
 		unit_name = URLDecoder.decode(unit_name, "utf-8");
 		String unit_id = request.getParameter("id");
 		String newType = request.getParameter("newType");
@@ -1648,7 +1650,7 @@ public class AdminManagerLogical extends HttpServlet {
 		String typeid = request.getParameter("typeId");
 		int typeId = Integer.parseInt(typeid);
 		String typeName = request.getParameter("typeName");
-		// typeName=new String(typeName.getBytes("iso-8859-1"),"UTF-8");
+		 typeName=new String(typeName.getBytes("iso-8859-1"),"UTF-8");
 		typeName = URLDecoder.decode(typeName, "utf-8");
 		data.updatePasteType(typeId, typeName);
 		pasteTypeShow(request, response);
@@ -1898,7 +1900,15 @@ public class AdminManagerLogical extends HttpServlet {
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
-		request.setAttribute("logNum", visitorLogs.size());
+		int logNumPaste=0;
+		for (Iterator iterator = visitorLogs.iterator(); iterator.hasNext();) {
+            VisitorLog visitorLog = (VisitorLog) iterator.next();
+            if(visitorLog.getAdId()==0){
+                logNumPaste++;
+            }
+        }
+		request.setAttribute("logNum", visitorLogs.size()-logNumPaste);
+		request.setAttribute("logNumPaste", logNumPaste);
 		request.setAttribute("visitorLogs", visitorLogs);
 		request.getRequestDispatcher("logManager.jsp").forward(request,
 				response);

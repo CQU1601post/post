@@ -98,11 +98,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     		 			int postId=(Integer)pageContext.getAttribute("postId");
     		 			Post post=(Post)new SearchAboutPost().postOfId(postId);
     		 			String postName=post.getPostName();
-    		 			System.out.println("postName:"+postName);
+    		 			Unit unit=(Unit)new SearchAboutPost().unitOfId(post.getUnitId());
+    		            UnitType unitType=(UnitType)new SearchAboutPost().unitTypeOfUnitId(unit.getUnitTypeId());
+    		            int unitTypeId=unitType.getUnitTypeId();
     		 		 %>
     		 		
     		 	    <td class="other">
-    		 	        <p id='postName'>广告所在粘贴栏： <a href="PostLogical?functionName=enterPost&adTypeId=0&postId=${postId}" target="_blank"><%=postName%></a>
+    		 	        <p id='postName'>广告所在粘贴栏： <a href="PostLogical?functionName=enterPost&adTypeId=0&postId=${postId}&unitTypeId=<%=unitTypeId %>" target="_blank"><%=postName%></a>
     		 	    </td>
     		 	    
     		 	    <td class="other">                       

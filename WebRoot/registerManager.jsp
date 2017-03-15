@@ -31,12 +31,17 @@ List list=(List)request.getAttribute("list");
     function change(id,name){
         var newType=null;       
         newType=prompt("请输入你要修改的用户等级",name);
-        while(newType==null ||newType==" "||newType==""){
+      /*   while(newType==null ||newType==" "||newType==""){
             alert('输入的类别名不能为空');
             newType=prompt("请输入你要修改的用户等级",name);            
-        }
+        } */
+        if(newType==null ||newType==" "||newType==""){
+            alert('输入的类别名不能为空');
+        }else{
         var cn=document.getElementById(id);
         cn.href="AdminManagerLogical?info=changeUser&userType="+newType+"&userId="+id;  
+            
+        }
     }
     
 </script>
@@ -83,7 +88,7 @@ List list=(List)request.getAttribute("list");
             <td bgcolor="#D1EEEE" align="center">
                 <table width="120">  
                 <tr align="center" >            
-                    <td width="60" align="center"><a href=" " onclick="change('<%=t.getUserId()%>','<%=t.getUserType() %>')"  id="<%=t.getUserId()%>" >修改</a></td>
+                    <td width="60" align="center"><a href=" javascript:void()" onclick="change('<%=t.getUserId()%>','<%=t.getUserType() %>')"  id="<%=t.getUserId()%>" >修改</a></td>
                             
                     <td width="60" align="center"><a href="AdminManagerLogical?info=delUser&userId=<%=t.getUserId() %>">删除 </a></td>
                 

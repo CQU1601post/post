@@ -1,3 +1,4 @@
+<%@page import="allClasses.UnitType"%>
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ page contentType="text/html; charset=UTF-8" language="java" import="java.sql.*"%> 
 <jsp:directive.page import="allClasses.Unit" /> 
@@ -47,8 +48,10 @@ System.out.println("userName:"+userName);
        		int unitId=(Integer)pageContext.getAttribute("unitId");
        		Unit unit=(Unit)new SearchAboutPost().unitOfId(unitId);
        		String unitName=unit.getUnitName();
+            UnitType unitType=(UnitType)new SearchAboutPost().unitTypeOfUnitId(unit.getUnitTypeId());
+            int unitTypeId=unitType.getUnitTypeId();
        	%>
-        <p><%=unitName%>-><a id="attention" href='PostLogical?functionName=enterPost&adTypeId=0&postId=${post.postId}'>${post.postName}</a>  
+        <p><%=unitName%>-><a id="attention" href='PostLogical?functionName=enterPost&adTypeId=0&postId=${post.postId}&unitTypeId=<%=unitTypeId %>'>${post.postName}</a>  
          <a id="attention" href='UserLogical?functionName=deleteMyAttention&postId=${post.postId}'>删除</a>       
 
         <br>

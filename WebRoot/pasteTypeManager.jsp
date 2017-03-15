@@ -27,22 +27,32 @@ List list=(List)request.getAttribute("list");
     function change(id,name){
         var newType=null;       
         newType=prompt("请输入你要修改的类别",name);
-        while(newType==null ||newType==" "||newType==""){
+        /* while(newType==null ||newType==" "||newType==""){
             alert('输入的类别名不能为空');
             newType=prompt("请输入你要修改的类别",name);          
-        }
+        } */
+        if(newType==null ||newType==" "||newType==""){
+            alert('输入的类别名不能为空');
+        }else{
         var cn=document.getElementById(id);
         cn.href="AdminManagerLogical?info=updatePasteType&typeName="+newType+"&typeId="+id;  
+            
+        }
     }
     function add(){
         var newType=null;       
         newType=prompt("请输入类别名"," ");
-        while(newType==null ||newType==" "){
+      /*   while(newType==null ||newType==" "){
             alert('输入的类别不能为空');
             newType=prompt("请输入类别名"," ");           
+        } */
+        if(newType==null ||newType==" "){
+            alert('输入的类别不能为空');
+        }else{
+            var cn=document.getElementById("add");
+            cn.href="AdminManagerLogical?info=insertPasteType&typeName="+newType;  
         }
-        var cn=document.getElementById("add");
-        cn.href="AdminManagerLogical?info=insertPasteType&typeName="+newType;  
+       
     }
 </script>
   </head>
@@ -56,7 +66,7 @@ List list=(List)request.getAttribute("list");
    </table>
  
   <p align="center" class="operation">
-      <a href=" " id="add" onclick="add()">添加</a>
+      <a href="javascript:void()" id="add" onclick="add()">添加</a>
     </p>
   <br>
    <table  class="table_content" >
@@ -76,7 +86,7 @@ List list=(List)request.getAttribute("list");
             <td bgcolor="#D1EEEE" align="center">
                 <table width="200" >  
                 <tr align="center">         
-                    <td width="100" align="center"><a href=" " onclick="change('<%=t.getUnitTypeId()%>','<%=t.getUnitTypeName() %>')"  id="<%=t.getUnitTypeId()%>" >修改</a></td>
+                    <td width="100" align="center"><a href="javascript:void()" onclick="change('<%=t.getUnitTypeId()%>','<%=t.getUnitTypeName() %>')"  id="<%=t.getUnitTypeId()%>" >修改</a></td>
                             
                     <td width="100" align="center"><a href="AdminManagerLogical?info=delPasteType&typeId=<%=t.getUnitTypeId() %>">删除 </a></td>
                 </tr>

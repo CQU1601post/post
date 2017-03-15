@@ -8,6 +8,7 @@
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
 %>
+<jsp:include page="top.jsp" flush="true" />
 <head>
 <base href="<%=basePath%>">
 

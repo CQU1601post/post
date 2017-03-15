@@ -35,14 +35,21 @@ for(int i=0;i<pasteTypes.length;i++){
         var newName=null;
         var newType=null;
         newName=prompt("请输入你要修改的名字",name);
-        while(newName==null||newName==" "||newName==""){
+        newType=prompt("请输入你要修改的类别  "+pasteType,type);
+        /* while(newName==null||newName==" "||newName==""){
             alert('输入的名字不能为空');
             newName=prompt("请输入你要修改的单位名",name);             
         }
-        newType=prompt("请输入你要修改的类别  "+pasteType,type);
+     
         while(newType==null ||newType==" "||newType==""){
             alert('输入的类别名不能为空');
             newType=prompt("请输入你要修改的类别",type);          
+        } */
+        if(newName==null||newName==" "||newName==""||newType==null ||newType==" "||newType==""){
+            alert('输入信息不全');
+        }else{
+            var cn=document.getElementById(id);
+            cn.href="AdminManagerLogical?info=updateUnit&newName="+newName+"&id="+id+"&newType="+newType;  
         }
     /*  //判断输入的类别newType是否出界
         var flag=0;
@@ -60,8 +67,7 @@ for(int i=0;i<pasteTypes.length;i++){
         }
         else{
         */
-            var cn=document.getElementById(id);
-            cn.href="AdminManagerLogical?info=updateUnit&newName="+newName+"&id="+id+"&newType="+newType;  
+            
     //  }       
         
     }
@@ -71,20 +77,26 @@ for(int i=0;i<pasteTypes.length;i++){
         var newType=null;
         //var paste_type = null;
         var unit_name=prompt("请输入单位名称","");
-        while(unit_name==null||unit_name==" "||unit_name==""){
+     /*    while(unit_name==null||unit_name==" "||unit_name==""){
             alert('输入的名字不能为空');
             unit_name=prompt("请输入单位名称",name);           
-        }
+        } */
         //alert("1111");
         var paste_type=prompt("请输入单位类别"+pasteType,"");
         //alert("222");
-        while(paste_type==null ||paste_type==" "||paste_type==""){
+       /*  while(paste_type==null ||paste_type==" "||paste_type==""){
             alert('输入的类别名不能为空');
             paste_type=prompt("请输入你要修改的类别"+pasteType,type);             
-        }
-        ///alert("333");
+        } */
+        if(paste_type==null ||paste_type==" "||paste_type==""||unit_name==null||unit_name==" "||unit_name==""){
+            alert('输入信息不全');
+        }else{
         var cn=document.getElementById("addUnit");
         cn.href="AdminManagerLogical?info=insertUnit&unit_name="+unit_name+"&paste_type="+paste_type;       
+            
+        }
+        
+        ///alert("333");
     }
     
     
@@ -100,7 +112,7 @@ for(int i=0;i<pasteTypes.length;i++){
   </tr>
    </table>
   <p align="center" class="operation">
-      <a href=""  onclick="insert('<%=pasteType%>')"  id="addUnit">添加新单位</a>
+      <a href="javascript:void(0)"  onclick="insert('<%=pasteType%>')"  id="addUnit">添加新单位</a>
      </p>
    <table  class="table_content" >
     <tr class="tr_one">    
@@ -124,7 +136,7 @@ for(int i=0;i<pasteTypes.length;i++){
             <td bgcolor="#D1EEEE" align="center">
                 <table width="200" >  
                 <tr align="center">         
-                    <td width="100" align="center"><a href="" onclick="change('<%=u.getUnitId()%>','<%=u.getUnitName() %>','<%=u.getUnitTypeId()%>','<%=pasteType%>')"  id="<%=u.getUnitId()%>" >修改</a></td>
+                    <td width="100" align="center"><a href="javascript:void(0)" onclick="change('<%=u.getUnitId()%>','<%=u.getUnitName() %>','<%=u.getUnitTypeId()%>','<%=pasteType%>')"  id="<%=u.getUnitId()%>" >修改</a></td>
                             
                     <td width="100" align="center"><a href="AdminManagerLogical?info=delUnit&unitId=<%=u.getUnitId() %>">删除 </a></td>
                 </tr>

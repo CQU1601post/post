@@ -23,6 +23,7 @@
     adList=new OperationData().query_adType(scopeList); 
     List<VisitorLog> visitorLogs=(List<VisitorLog>)request.getAttribute("visitorLogs");
     Object logNum=request.getAttribute("logNum");
+    Object logNumPaste=request.getAttribute("logNumPaste");
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -263,8 +264,9 @@
 			<td width="150" align="center">粘贴栏</td>
 			<td width="150" align="center">广告ID</td>
 			<td width="150" align="center">浏览时间</td>
-			<td width="200" align="center">操作</td>
-			<td width="150" align="center">总数</td>
+			<td width="150" align="center">操作</td>
+			<td width="100" align="center">访问粘贴栏总数</td>
+             <td width="100" align="center">访问广告总数</td>
 		</tr>
 		<c:if test="${visitorLogs!=null }">
 			<%
@@ -278,7 +280,7 @@
 				<td width="150" align="center"><%=v.getTime()%></td>
 
 				<td bgcolor="#D1EEEE" align="center">
-					<table width="200">
+					<table width="150">
 						<tr align="center">
 							<td width="100" align="center"><a href=" javascript:void(0)"
 								onclick="deleteModel('<%=v.getVisitorid()%>')"
@@ -289,7 +291,8 @@
 				<%
 					if (j == 0) {
 				%>
-				<td width="150" align="center"><%=logNum%></td>
+				<td width="100" align="center"><%=logNumPaste%></td>
+                <td width="100" align="center"><%=logNum%></td>
 				<%
 					}
 				%>

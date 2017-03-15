@@ -61,10 +61,10 @@ public class APIServlet  extends HttpServlet{
 	    System.out.println("unitname:"+unitname);
 
 	    unitname=URLDecoder.decode(unitname, "utf-8");
-	    //unitname=new String(unitname.getBytes("iso-8859-1"),"UTF-8");
+	    unitname=new String(unitname.getBytes("iso-8859-1"),"UTF-8");
 	    pastename= request.getParameter("paste");
 	    pastename=URLDecoder.decode(unitname, "utf-8");
-	   // pastename=new String(pastename.getBytes("iso-8859-1"),"UTF-8");
+	    pastename=new String(pastename.getBytes("iso-8859-1"),"UTF-8");
  	    System.out.println("pastename---->"+pastename);
 	    
 	    requestcode= request.getParameter("requestcode");
@@ -220,16 +220,16 @@ public class APIServlet  extends HttpServlet{
 		request.setCharacterEncoding("utf-8");
 	    unitname= request.getParameter("unit");
 	    unitname=URLDecoder.decode(unitname, "utf-8");
-	 //  unitname=new String(unitname.getBytes("iso-8859-1"),"UTF-8"); 
+	   unitname=new String(unitname.getBytes("iso-8859-1"),"UTF-8"); 
 	    pastename= request.getParameter("paste");
 	    pastename=URLDecoder.decode(pastename, "utf-8");
-	    //pastename=new String(pastename.getBytes("iso-8859-1"),"UTF-8");
+	    pastename=new String(pastename.getBytes("iso-8859-1"),"UTF-8");
 	     
 	     ////////////
 	    requestcode= request.getParameter("requestcode");
 	    type= request.getParameter("type");
 	    System.out.println("---->type:"+type);
-	   // type=new String(type.getBytes("iso-8859-1"),"UTF-8");
+	    type=new String(type.getBytes("iso-8859-1"),"UTF-8");
 	    if(type != null){
 	     type=URLDecoder.decode(type, "utf-8");
 	    }

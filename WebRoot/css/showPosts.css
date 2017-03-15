@@ -1,12 +1,75 @@
 /* CSS Document */
 
+.button_Control_img{
+      float:right;
+}
+.SearchedPost_mui-switch {
+  width: 52px;
+  height: 31px;
+  position: relative;
+  border: 1px solid #dfdfdf;
+  background-color: #fdfdfd;
+  box-shadow: #dfdfdf 0 0 0 0 inset;
+  border-radius: 20px;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  background-clip: content-box;
+  display: inline-block;
+  -webkit-appearance: none;
+  user-select: none;
+  outline: none;
+
+}
+.SearchedPost_mui-switch:before {
+    content: '';
+    width: 29px;
+    height: 29px;
+    position: absolute;
+    top: 0px;
+    left: 0;
+    border-radius: 20px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    background-color: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4); 
+    }
+  .SearchedPost_mui-switchh:checked {
+    border-color: #FAA07D;;
+    box-shadow: #FAA07D; 0 0 0 16px inset;
+    background-color: #FAA07D;
+    
+    }
+    .SearchedPost_mui-switch:checked:before {
+      left: 21px; 
+   }
+      
+      .SearchedPost_mui-switch.mui-switch-animbg {
+    transition: background-color ease 0.4s; 
+    }
+    .SearchedPost_mui-switch.mui-switch-animbg:before {
+      transition: left 0.3s; 
+      }
+    .SearchedPost_mui-switch.mui-switch-animbg:checked {
+      box-shadow: #dfdfdf 0 0 0 0 inset;
+      background-color: #FAA07D;
+      transition: border-color 0.4s, background-color ease 0.4s; 
+      }
+      .SearchedPost_mui-switch.mui-switch-animbg:checked:before {
+        transition: left 0.3s; 
+     }
+
+
 body{font-size:14px;font-family:Tahoma;font-family:Arial, Hel,Microsoft YaHei;}
 
 
 hr{width:60%;}
 
 tr{text-align:left;}
-
+.img{width:150px;height:150px;float: left;margin-right:50px;}
 .post_title{ margin-top:30px; color:#FFAA8C; font-size:25px; width:60%;}
 
 
@@ -15,7 +78,7 @@ tr{text-align:left;}
 .unit_post a:hover{color:#FF9900;}
 
 .post_title{margin-left:20%;}
-.post{width:60%; margin-left:20%;}
-.post a{width:auto; margin-right:20px;}
+.post{width:60%; margin-left:20%;float: left;margin-bottom:50px;}
+.post_a{width:auto; float:left;margin-right:50px;}
 
 .post_info {margin-left:20%;}

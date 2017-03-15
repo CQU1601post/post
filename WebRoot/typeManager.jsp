@@ -58,25 +58,34 @@ function delete1(id){
 	function change(id,name){
 		var newType=null;		
 		newType=prompt("请输入你要修改的类别",name);
-		while(newType==null ||newType==" "||newType==""){
+		/* while(newType==null ||newType==" "||newType==""){
 			alert('输入的类别名不能为空');
      		newType=prompt("请输入你要修改的类别",name);     		
-		}
+		} */
+		if(newType==null ||newType==" "||newType==""){
+		    alert('输入的类别名不能为空');
+		}else{
 		var cn=document.getElementById(id);
 		cn.href="AdminManagerLogical?info=updateType&typeName="+newType+"&typeId="+id;  
+		}
 	}
 
 	function add(){
 		var newType=null;		
 		newType=prompt("请输入类别名"," ");
-		while(newType==null ||newType==" "){
+		/* while(newType==null ||newType==" "){
 			alert('输入的类别不能为空');
      		newType=prompt("请输入类别名"," ");     		
-		}
+		} */
+		if(newType==null ||newType==" "){
+		    alert('输入的类别不能为空');
+		}else{
 		var cn=document.getElementById("add");
 		var GroupId=document.getElementById("HiddenGroupId").value;
-		
 		cn.href="AdminManagerLogical?info=insertType&typeName="+newType+"&GroupId="+GroupId;  
+		    
+		}
+		
 	}
 
 </script>

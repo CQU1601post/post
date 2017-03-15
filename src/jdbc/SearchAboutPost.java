@@ -402,41 +402,13 @@ public class SearchAboutPost {
 				
 				int postId = result.getInt(5);// 获取单位Id
 				String remark = result.getString(10);// 获取单位名
-				if (remark.contains(text)) {// 如果单位中包含该字符串，则返回此单位和单位下所有粘贴栏
+				if (remark.contains(text)) {// 如果广告中包含该字符串，则返回此广告粘贴栏
 					System.out.println("postId" + postId);
 					judgeExist=false;
 					judgeRepeat = false;
 					sql = "select * from post where postId='" + postId + "'";
 					Post post = postOfSql(sql);
-					// for (int i = 0; i < posts.size(); i++) {
-					// Map<String, List<Post>> map = (Map<String, List<Post>>)
-					// posts
-					// .get(i);
-					// for (Map.Entry<String, List<Post>> entry : map
-					// .entrySet()) {
-					// for (Iterator iterator2 = entry.getValue()
-					// .iterator(); iterator2.hasNext();) {
-					// Post post2 = (Post) iterator2.next();
-					// if (post.getUnitId() == post2.getUnitId()) {
-					// recordMapKey = entry.getKey();
-					// recordMapValueList.addAll(entry.getValue());
-					// recordMapValueList.add(post);
-					//
-					// judgeRepeat = true;
-					// judgeExist=true;
-					// System.out.println(1);
-					//
-					// }
-					// }
-					// }
-					// if (judgeRepeat) {
-					// posts.get(i).put(recordMapKey, recordMapValueList);
-					// //recordMapValueList.clear();
-					// judgeRepeat = false;
-					// System.out.println(2);
-					// i=posts.size()-1;
-					// }
-					// }
+					
 
 					int j=0;
 					List<Post> postList = new ArrayList<Post>();
@@ -544,6 +516,111 @@ public class SearchAboutPost {
 		System.out.println("posts.size()" + posts.size());
 		return posts;
 	}
+    public List<Map<String, Map<Integer,List<Ad>>>> adsContaintText1(String text) {
+        // System.out.println("执行src/jdbc/SearchFromDB/adsOfPost(),传入的postId为："+postId);
+        ConnectDB connect = new ConnectDB();
+        List<Map<String,Map<Integer,List<Ad>>>> posts = new ArrayList<Map<String, Map<Integer,List<Ad>>>>();
+        String sql = "select * from ad where checked=1 and exist=1";// 查找所有的广告
+        ResultSet result = connect.executeQuery(sql);
+        String recordMapKey = "";
+        System.out.println("text" + text);
+        Map<Integer,List<Ad>> recordMapValueMap= new HashMap<Integer, List<Ad>>();
+        List<Ad>ads=new ArrayList<Ad>();
+        boolean judgeRepeat = false, judgeExist = false , judgeAd=false;
+        try {
+            while (result.next()) {
+                Ad ad = new Ad(result.getInt(1), result.getInt(2),
+                        result.getString(3), result.getInt(4),result.getInt(5), result.getString(6),result.getInt(7),result.getLong(8),result.getInt(9),result.getString(10),result.getInt(11),result.getInt(12),result.getInt(13),result.getInt(14),result.getInt(15));//通过审核的广告checked属性必为1
+                int postId = result.getInt(5);// 获取单位Id
+                String remark = result.getString(10);// 获取单位名
+                if (remark.contains(text)) {// 如果广告中包含该字符串，则返回此广告粘贴栏
+                    System.out.println("postId" + postId);
+                    judgeExist=false;
+                    judgeRepeat = false;
+                    judgeAd=false;
+                    sql = "select * from post where postId='" + postId + "'";
+                    Post post = postOfSql(sql);
+                
+                    int j=0;
+                    List<Post> postList = new ArrayList<Post>();
+                    postList.add(post);
+                    sql = "select * from unit where unitId='"
+                            + post.getUnitId() + "'";
+                    Unit unit = unitOfSql(sql);
+                    String unitString = unit.getUnitId() + "_"
+                            + unit.getUnitName();
+                    
+                    for (int i = 0; i < posts.size(); i++) {
+                        Map<String, Map<Integer,List<Ad>>>  map = (Map<String, Map<Integer,List<Ad>>> ) posts
+                                .get(i);
+                        for (Map.Entry<String, Map<Integer,List<Ad>>> entry : map
+                                .entrySet()) {
+                            
+                            if (entry.getKey().equals(unitString)) {
+                                judgeRepeat = true;
+                                judgeExist=true;
+                                
+                                
+                                if(entry.getValue().containsKey(post.getPostId())){
+                                    judgeAd=true;
+                                    ads=entry.getValue().get(post.getPostId());
+                                }
+                      
+                                j=i;
+                                recordMapKey=entry.getKey();
+                                System.out.println(recordMapKey);
+                               
+                                System.out.println(1);
+                            }
+                        }
+                        
+
+                    }
+                    if(judgeRepeat){
+                        Map<Integer,List<Ad>> recordMapValueMap2= new HashMap<Integer, List<Ad>>();//必须要重新new 不然地址是相同的。
+                        List<Ad> ads2=new ArrayList<Ad>();
+                        if(judgeAd){
+                            ads2.addAll(ads);
+                            ads2.add(ad);
+                            recordMapValueMap2=posts.get(j).get(recordMapKey);
+                            recordMapValueMap2.put(ad.getPostId(),ads2);
+                            posts.get(j).put(recordMapKey,recordMapValueMap2);
+                             //List<Map<String,Map<Integer,List<Ad>>>>
+                        }else {
+                            ads2.add(ad);
+                            recordMapValueMap2=posts.get(j).get(recordMapKey);
+                            recordMapValueMap2.put(ad.getPostId(), ads2);
+                            posts.get(j).put(recordMapKey,recordMapValueMap2);
+                        }
+                        recordMapKey="";
+                    }
+                    if(!judgeExist){
+                        System.out.println(3);
+                        List<Ad> ads3=new ArrayList<Ad>();
+                        ads3.add(ad);
+                        Map<Integer,List<Ad>> recordMapValueMap3= new HashMap<Integer, List<Ad>>();
+                        recordMapValueMap3.put(ad.getPostId(), ads3);
+                        Map<String, Map<Integer,List<Ad>>> unitsAndPost = new HashMap<String, Map<Integer,List<Ad>>>();
+                        unitsAndPost.put(unitString,  recordMapValueMap3);// 将单位跟粘贴栏放在Map中
+                        posts.add(unitsAndPost);// 将map添加到list
+                        
+                    }
+                    
+
+                }
+            }
+        } catch (SQLException e) {
+            System.out
+                    .println("false in:src/jdbc/SearchFromDB/postsContaintText");
+            e.printStackTrace();
+        }
+        
+       
+        connect.close();
+        
+        System.out.println("posts.size()" + posts.size());
+        return posts;
+    }
 
 	// 查找用户所拥有的的粘贴栏
 	public List<Post> postsOfUser(int userId) {
@@ -659,6 +736,21 @@ public class SearchAboutPost {
 		return unit;
 	}
 
+	public UnitType unitTypeOfUnitId(int unitTypeId){
+	    ConnectDB connect = new ConnectDB();
+        String sql = "select * from unittype where unitTypeId='" + unitTypeId + "'";
+        ResultSet result = connect.executeQuery(sql);
+        List<UnitType> unitTypes = changeResultSetToArray.unitTypeArrays(result);;
+        UnitType unitType = new UnitType();
+        if (unitTypes.size() > 1) {// 如果根据postId查出的单位栏超过一个，则出现错误
+            System.out
+                    .println("false in:SearchAboutPost/postId,一个postId对应的粘贴栏不可能为多个");
+        } else {
+            unitType = unitTypes.get(0);// 只有一个则获取第一个
+            connect.close();
+        }
+        return unitType;
+	}
 	// 返回当前的最大广告id
 	public int maxAdId() {
 		ConnectDB connect = new ConnectDB();
