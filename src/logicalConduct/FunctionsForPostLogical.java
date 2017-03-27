@@ -276,26 +276,11 @@ public class FunctionsForPostLogical {
 			int postId = -1;
 			int begin = -1;
 			int number = -1;
-			if (request.getParameter("adTypeId") != null) {
-				adTypeId = Integer.parseInt(request.getParameter("adTypeId"));
-			} else {
-				response.sendRedirect("index.jsp");
-			}
-			if (request.getParameter("postId") != null) {
-				postId = Integer.parseInt(request.getParameter("postId"));
-			} else {
-				response.sendRedirect("index.jsp");
-			}
-			if (request.getParameter("begin") != null) {
-				begin = Integer.parseInt(request.getParameter("begin"));
-			} else {
-				response.sendRedirect("index.jsp");
-			}
-			if (request.getParameter("number") != null) {
-				number = Integer.parseInt(request.getParameter("number"));// 加载广告个数
-			} else {
-				response.sendRedirect("index.jsp");
-			}
+			adTypeId = Integer.parseInt(request.getParameter("adTypeId"));
+			 postId = Integer.parseInt(request.getParameter("postId"));
+			    begin = Integer.parseInt(request.getParameter("begin"));
+			    number = Integer.parseInt(request.getParameter("number"));// 加载广告个数
+			
 
 			// System.out.println(adTypeId+"-"+postId+"-"+begin+"-"+number);
 			// 查找粘贴栏下的所有类别
