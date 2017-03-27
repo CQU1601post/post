@@ -8,19 +8,19 @@ import java.util.List;
 import configurations.*;
 
 public class ConnectDB {
-    private String dbDriver = Configuration.DBDriver;
-    private String url = Configuration.URL;
-    private String userName = Configuration.USERName;
-    private String password = Configuration.PASSWORD;
+//    private String dbDriver = Configuration.DBDriver;
+//    private String url = Configuration.URL;
+//    private String userName = Configuration.USERName;
+//    private String password = Configuration.PASSWORD;
     private Connection con = null;
    
     // 建立连接
     public ConnectDB() {
         try {
-            Class.forName(dbDriver).newInstance();
-            con = DriverManager.getConnection(url, userName, password);
-            con.setAutoCommit(true);
-           
+//            Class.forName(dbDriver).newInstance();
+//            con = DriverManager.getConnection(url, userName, password);
+//            con.setAutoCommit(true);
+            con=ConnectionUtil.getCon();
           
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
