@@ -147,7 +147,7 @@ public class FunctionsForPostLogical {
 		String page="";
 		HttpSession session = request.getSession();
 		if (null == request.getParameter("postId")
-				|| null == request.getParameter("adTypeId")) {
+				|| null == request.getParameter("adTypeId")||null==request.getParameter("unitTypeId")) {
 			System.out.println("您尚未选择任何粘贴栏");
 			response.sendRedirect("index.jsp");
 		} else {
@@ -157,22 +157,11 @@ public class FunctionsForPostLogical {
 			int adTypeId = -1;
 			int postId = -1;
 			int unitTypeId = -1;
-			if (request.getParameter("adTypeId") != null) {
-				adTypeId = Integer.parseInt(request.getParameter("adTypeId"));
-			} else {
-				response.sendRedirect("index.jsp");
-			}
-			if (request.getParameter("postId") != null) {
-				postId = Integer.parseInt(request.getParameter("postId"));
-			} else {
-				response.sendRedirect("index.jsp");
-			}
-			if (request.getParameter("unitTypeId") != null) {
-				unitTypeId = Integer.parseInt(request
-						.getParameter("unitTypeId"));
-			} else {
-				response.sendRedirect("index.jsp");
-			}
+			adTypeId = Integer.parseInt(request.getParameter("adTypeId"));
+			postId = Integer.parseInt(request.getParameter("postId"));
+			 unitTypeId = Integer.parseInt(request
+                     .getParameter("unitTypeId"));
+			
 
 			searchFromDB.updateVisitors(postId);// 进入之前先更新访问人数，加1
 			Post post = searchFromDB.postOfId(postId);// 获取粘贴栏信息
