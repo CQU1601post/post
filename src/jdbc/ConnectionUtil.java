@@ -31,6 +31,7 @@ public class ConnectionUtil {
             basicDataSourceFactory=new BasicDataSourceFactory();
           
            DataSource=basicDataSourceFactory.createDataSource( dbProperties);
+        
            System.out.println("DataSource初始化");
         } catch (Exception e) {
           

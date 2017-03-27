@@ -31,7 +31,7 @@
 <head>
 <base href="<%=basePath%>">
 
-<title>支付管理</title>
+<title>日志管理</title>
 
 <meta http-equiv="pragma" content="no-cache">
 <meta http-equiv="cache-control" content="no-cache">
@@ -45,9 +45,11 @@
 <link rel="stylesheet" href="css/bootstrap.css" media="screen">
 <link rel="stylesheet" href="css/bootstrap-datetimepicker.css"
 	media="screen">
+<link rel="stylesheet" type="text/css" href="css/select2.css">
 <script type="text/javascript" src='js/bootstrap.min.js'></script>
 <script type="text/javascript" src='js/bootstrap-datetimepicker.js'></script>
 <script type="text/javascript" src="js/validation.js"></script>
+<script type="text/javascript" src="js/select2.full.js"></script>
 
 <!--
 	<link rel="stylesheet" type="text/css" href="styles.css">
@@ -182,6 +184,9 @@
 	-o-transition: opacity 0.3s linear, top 0.3s ease-out;
 	transition: opacity 0.3s linear, top 0.3s ease-out;
 }
+.js-example-basic-multiple{
+	width:160px;
+}
 </style>
 </head>
 
@@ -202,7 +207,7 @@
 			id="logForm">
 
 			<div class="form-group ">
-				<label for="pasteType">类别</label> <select name="pasteType"
+				<label for="pasteType">类别</label> <select name="pasteType"  class="js-example-basic-multiple"
 					id="pasteType" onChange="selectChange()">
 					<option value="所有类别">所有类别</option>
 					<%
@@ -218,7 +223,7 @@
 				</select>
 			</div>
 			<div class="form-group">
-				<label for="adType">粘贴栏</label> <select name="adType" id="adType"
+				<label for="adType">粘贴栏</label> <select name="adType" id="adType" class="js-example-basic-multiple"
 					onChange="selectChangeAd()">
 					<option value="所有粘贴栏">所有粘贴栏</option>
 					<%
@@ -235,7 +240,7 @@
 				</select>
 			</div>
 			<div class="form-group ">
-				<label for="advertisement">广告</label> <select name="advertisement"
+				<label for="advertisement">广告</label> <select name="advertisement"  class="js-example-basic-multiple"
 					id="advertisement">
 					<option value="所有广告">所有广告</option>
 				</select>
@@ -307,4 +312,9 @@
 
 
 </body>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$(".js-example-basic-multiple").select2();
+	});
+</script>
 </html>
