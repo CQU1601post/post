@@ -45,9 +45,9 @@ SearchAboutPost searchAboutPost=new SearchAboutPost();
   $(function(){
       $(".SearchedPost_mui-switch").click(function(){      //需要这页面没有其他checkbox
           if($(" input[type='checkbox']").is(':checked')){
-             $(".ControlDisplay").hide();
+             $(".ControlDisplay2").hide();
           }else{
-              $(".ControlDisplay").show();
+              $(".ControlDisplay2").show();
           }
           
       });
@@ -99,11 +99,13 @@ SearchAboutPost searchAboutPost=new SearchAboutPost();
                                    List<Pic> pics=searchAboutPost.picsOfAd(ad.getAdId());
                                    Pic pic=pics.get(0);
                                    %>
+                                    <div class='ControlDisplay2'>
                                  <a href="PostLogical?functionName=picsOfAd&adId=<%=ad.getAdId() %>&postId=<%=ad.getPostId() %>" target="_blank">
                                       <img  class="img" alt="点击查看" src="<%=pic.getPicAddr()%>"
                                       id="${ad['adId']}"/>
                                       
                                  </a> 
+                                 </div>
                        <%} %>
                        </div>
                       

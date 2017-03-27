@@ -8,18 +8,20 @@ import java.util.List;
 import configurations.*;
 
 public class ConnectDB {
-    private String dbDriver = Configuration.DBDriver;
-    private String url = Configuration.URL;
-    private String userName = Configuration.USERName;
-    private String password = Configuration.PASSWORD;
+//    private String dbDriver = Configuration.DBDriver;
+//    private String url = Configuration.URL;
+//    private String userName = Configuration.USERName;
+//    private String password = Configuration.PASSWORD;
     private Connection con = null;
    
     // 建立连接
     public ConnectDB() {
         try {
-            Class.forName(dbDriver).newInstance();
-            con = DriverManager.getConnection(url, userName, password);
-            con.setAutoCommit(true);
+//            Class.forName(dbDriver).newInstance();
+//            con = DriverManager.getConnection(url, userName, password);
+//            con.setAutoCommit(true);
+            con=ConnectionUtil.getCon();
+          
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
             System.out
@@ -31,14 +33,23 @@ public class ConnectDB {
     // 执行更新语句，更新了返回true,未更新返回false
     public boolean executeUpdate(String sql) {
         // System.out.println("执行src/jdbc/ConnectDB/executeUpdate()");
+        Statement stmt=null;
         try {
-            Statement stmt = con.createStatement();
+            stmt = con.createStatement();
             stmt.executeUpdate(sql);
             return true;
         } catch (SQLException e) {
             System.out.println("false in :src/jdbc/ConnectDB/executeUpdate()");
             System.out.println("   错误信息：" + e);
             return false;
+        }finally{
+            try {
+                if(stmt!=null)
+                stmt.close();
+            } catch (SQLException e) {
+             
+                e.printStackTrace();
+            }
         }
     }
 

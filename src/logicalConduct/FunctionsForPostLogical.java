@@ -191,7 +191,7 @@ public class FunctionsForPostLogical {
 				List<AdType> adTypes = searchFromDB.adTypesOfPost(postId);// 返回所有普通粘贴栏类别
 				System.out.println("adTypes.size()" + adTypes.size());
 				request.setAttribute("adTypes", adTypes);
-				session.setAttribute("unitTypeId", unitTypeId);
+				request.setAttribute("unitTypeId", unitTypeId);
 				List<Ad> ads = new ArrayList<Ad>();
 				if (adTypeId == 0) {// adTypeId==0则返回所有广告
 					// 根据粘贴栏id返回 广告信息,每次取Configuration中指定的picNumOfEveryLoading
@@ -217,7 +217,8 @@ public class FunctionsForPostLogical {
 			} else {// 如果是专栏
 				List<PrivateAdType> adTypes = searchFromDB
 						.privateAdTypes(postId);// 返回专栏对应广告类别
-				request.setAttribute("adTypes", adTypes);
+			
+		        request.setAttribute("unitTypeId", unitTypeId);
 				List<PrivateAd> ads = new ArrayList<PrivateAd>();
 				if (adTypeId == 0) {// adTypeId==0则返回所有广告
 					// 根据粘贴栏id返回 广告信息,每次取Configuration中指定的picNumOfEveryLoading
@@ -829,7 +830,8 @@ public class FunctionsForPostLogical {
 			}
 
 		}
-		response.sendRedirect("upLoad3.jsp");// 成功则跳转到成功页面
+		request.getRequestDispatcher("upLoad3.jsp").forward(request, response);
+		//response.sendRedirect("upLoad3.jsp");// 成功则跳转到成功页面
 	}
 
 	// 广告存储

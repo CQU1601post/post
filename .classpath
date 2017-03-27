@@ -12,6 +12,9 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/ezmorph-1.0.6.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/json-lib-2.1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/morph-1.1.1.zip"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons-dbcp-1.4.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons-pool-1.6.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/mysql-connector-java-5.1.26-bin.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
@@ -24,7 +27,6 @@
 			<attribute name="owner.project.facets" value="jst.web.jstl"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="F:/lib/mysql-connector-java-5.1.26/mysql-connector-java-5.1.26-bin.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>

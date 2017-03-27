@@ -51,6 +51,10 @@ public class AdminLogic {
     } catch (SQLException e) {
         // TODO Auto-generated catch block
         e.printStackTrace();
+    }finally{
+        if(connection!=null){
+            connection.close();
+        }
     }
     return false;    
     }
@@ -95,7 +99,10 @@ public class AdminLogic {
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
+        }finally{
+            connection.close();
         }
+      
         return administrators;
     }
     
@@ -477,6 +484,8 @@ public class AdminLogic {
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+        }finally{
+            connection.close();
         }
         return true;
     }
@@ -682,6 +691,7 @@ public class AdminLogic {
         String sqlDeleteSon = "delete from pic where adId=?";
         connection.executeBatch(sqlDeleteSon, listTransformationInt(adList));// 删除pic中与这个用户相关联的pic
         connection.executeBatch(sql, listTransformationInt(adList));// 删除ad中与这个用户相关联的ad
+        connection.close();
     }
 
     // 把list 转化为数组。
@@ -1551,6 +1561,7 @@ public class AdminLogic {
         sql="update administrator set scope='"+scopes+"'where id=1";
         connection=new ConnectDB();
          boolean flag =  connection.executeUpdate(sql);
+         connection.close();
          return flag;
     }
     
@@ -1626,6 +1637,7 @@ public class AdminLogic {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        connection.close();
         return flag;
     }
 }

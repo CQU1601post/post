@@ -22,6 +22,7 @@ public class UserOperation {
 		//查找是否已经存在用户用户名、密码为给定值，如果都相同则表示已存在该用户，注册失败
 		if(null!=user(user.getUserName(),user.getPassword())){
 			System.out.println("jdbc/UserOperation/register，已存在该用户名、密码，注册失败 ");
+			connect.close();
 			return false;
 		}
 		else{
@@ -31,7 +32,9 @@ public class UserOperation {
 			System.out.println("UserOperation/register 注册成功");
 			connect.close();
 			return true;			
-		}	
+		}
+	
+		 
 	}
 	//修改用户信息
 	public boolean alterUserInformation(User user) {
@@ -40,6 +43,7 @@ public class UserOperation {
 		// 查找是否已经存在用户用户名、密码为给定值，如果都相同且不是该用户自身则表示已存在其他用户信息跟输入值一样，更新失败
 		if (null != user(user.getUserName(), user.getPassword())&& user.getUserId()!=user(user.getUserName(), user.getPassword()).getUserId()) {
 			System.out.println("jdbc/UserOperation/alterUserInformation，已存在该用户名、密码，更新失败 ");
+			connect.close();
 			return false;
 		} else {
 			// 更新用户信息
@@ -69,6 +73,9 @@ public class UserOperation {
 		else{
 			System.out.println("jdbc/UserOperation/user，没有该用户名和密码");
 		}
+		 if(connect!=null){
+             connect.close();
+         }
 		return user;
 	}
 	
@@ -80,6 +87,9 @@ public class UserOperation {
 		ResultSet result=connect.executeQuery(sql);
 		List<Ad> myAds=changeResultSetToArray.adsArray(result);	
 		System.out.println(myAds.size());
+		 if(connect!=null){
+             connect.close();
+         }
 		return myAds;
 	}
 	
@@ -89,6 +99,9 @@ public class UserOperation {
 		//删除用户对应所有广告
 		String sql = "delete from ad where userId='"+userId+"'";
 		boolean delete=connect.executeUpdate(sql); 
+		 if(connect!=null){
+             connect.close();
+         }
 		return delete;
 	}
 	// 删除某个广告
@@ -117,6 +130,9 @@ public class UserOperation {
 		// 删除指定的广告
 		String sql = "delete from privatead where adTypeId='" + adTypeId+ "'";
 		boolean delete = connect.executeUpdate(sql);
+		 if(connect!=null){
+             connect.close();
+         }
 		return delete;
 	}
 	
@@ -152,6 +168,9 @@ public class UserOperation {
 		String sql = "delete from attention where userId='"+userId+"'and postId='"+postId+"'";
 		boolean delete = connect.executeUpdate(sql);
 		System.out.println("删除："+delete);
+		 if(connect!=null){
+             connect.close();
+         }
 		return delete;
 	}
 	
@@ -162,6 +181,9 @@ public class UserOperation {
 		String sql = "delete from privateAdType where typeId='"+adTypeId+"'and postId='"+postId+"'";
 		boolean delete = connect.executeUpdate(sql);
 		System.out.println("删除："+delete);
+		 if(connect!=null){
+             connect.close();
+         }
 		return delete;
 	}
 	
@@ -172,6 +194,9 @@ public class UserOperation {
 		String sql = "insert into privateAdType(typeName,postId) values('"+adTypeName+"','"+postId+"')";
 		boolean delete = connect.executeUpdate(sql);
 		System.out.println("添加：" + delete);
+		 if(connect!=null){
+             connect.close();
+         }
 		return delete;
 	}
 

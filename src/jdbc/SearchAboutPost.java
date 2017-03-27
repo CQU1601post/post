@@ -382,6 +382,11 @@ public class SearchAboutPost {
 					.println("false in:src/jdbc/SearchFromDB/postsContaintText");
 			e.printStackTrace();
 		}
+		finally{
+	        if(connect!=null){
+	            connect.close();
+	        }
+	    }
 		System.out.println("posts.size()" + posts.size());
 		return posts;
 	}
@@ -645,8 +650,9 @@ public class SearchAboutPost {
 					.println("false in:SearchAboutPost/postId,一个postId对应的粘贴栏不可能为多个");
 		} else {
 			post = posts.get(0);// 只有一个则获取第一个
-			connect.close();
+			
 		}
+		connect.close();
 		return post;
 	}
 
@@ -714,6 +720,7 @@ public class SearchAboutPost {
 		String sql = "update post set visitorsOfToday=visitorsOfToday+1,allVisitors=allVisitors+1 where postId='"
 				+ postId + "'";
 		boolean isUpdate = connect.executeUpdate(sql);
+		connect.close();
 		System.out.println("isUpdate:" + isUpdate);
 		return isUpdate;
 
@@ -766,6 +773,7 @@ public class SearchAboutPost {
 			e.printStackTrace();
 		}
 		System.out.println("maxAdId:" + maxAdId);
+		connect.close();
 		return maxAdId;
 	}
 
@@ -784,6 +792,7 @@ public class SearchAboutPost {
 			e.printStackTrace();
 		}
 		System.out.println("maxAdId:" + maxAdId);
+		connect.close();
 		return maxAdId;
 	}
 
@@ -825,6 +834,7 @@ public class SearchAboutPost {
 
 		boolean isSave = connect.executeUpdate(sql);
 		System.out.println("isSave:" + isSave);
+		connect.close();
 		return isSave;
 	}
 
@@ -834,6 +844,7 @@ public class SearchAboutPost {
 		String sql = "update ad set money='" + money + "'where adId='" + adId
 				+ "'";
 		boolean flag = connectDB.executeUpdate(sql);
+		connectDB.close();
 		return flag;
 	}
 
@@ -869,6 +880,7 @@ public class SearchAboutPost {
 				+ pic.getAdId() + "')";
 		boolean isSave = connect.executeUpdate(sql);
 		System.out.println("isSave:" + isSave);
+		connect.close();
 		return isSave;
 	}
 
@@ -881,6 +893,7 @@ public class SearchAboutPost {
 				+ "','" + pic.getHeight() + "','" + pic.getAdId() + "')";
 		boolean isSave = connect.executeUpdate(sql);
 		System.out.println("isSave:" + isSave);
+		connect.close();
 		return isSave;
 	}
 
@@ -919,6 +932,7 @@ public class SearchAboutPost {
 
 		boolean isSave = connect.executeUpdate(sql);
 		System.out.println("isSave:" + isSave);
+		connect.close();
 		return isSave;
 	}
 
@@ -950,6 +964,9 @@ public class SearchAboutPost {
 			ad = ads.get(0);// 只有一个则获取第一个
 			connect.close();
 		}
+		if(connect!=null){
+		    connect.close();
+		}
 		return ad;
 	}
 
@@ -969,6 +986,9 @@ public class SearchAboutPost {
 			connect.close();
 		}
 		System.out.println("adTypeName:" + adType.getAdTypeName());
+		  if(connect!=null){
+	            connect.close();
+	        }
 		return adType;
 	}
 
@@ -987,6 +1007,9 @@ public class SearchAboutPost {
 			adType = adTypes.get(0);// 只有一个则获取第一个
 			connect.close();
 		}
+		  if(connect!=null){
+	            connect.close();
+	        }
 		System.out.println("adTypeName:" + adType.getAdTypeName());
 		return adType;
 	}
@@ -1010,6 +1033,9 @@ public class SearchAboutPost {
 			adType = adTypes.get(0);// 只有一个则获取第一个
 			connect.close();
 		}
+		  if(connect!=null){
+	            connect.close();
+	        }
 		System.out.println("adTypeName:" + adType.getAdTypeName());
 		return adType;
 	}
@@ -1021,6 +1047,9 @@ public class SearchAboutPost {
 				+ "' where adId='" + adId + "'";
 		boolean isUpdate = connect.executeUpdate(sql);
 		System.out.println("isUpdate:" + isUpdate);
+		  if(connect!=null){
+	            connect.close();
+	        }
 		return isUpdate;
 
 	}

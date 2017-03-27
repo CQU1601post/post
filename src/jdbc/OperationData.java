@@ -817,6 +817,10 @@ public class OperationData {
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+        }finally{
+            if(connection!=null){
+                connection.close();
+            }
         }
         return uploadtime;
 
@@ -974,6 +978,10 @@ public class OperationData {
                 }
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
+            }finally{
+                if(connection!=null){
+                    connection.close();
+                }
             }
             return unitTypeName;
         }
@@ -1018,7 +1026,9 @@ public class OperationData {
 		} catch (SQLException e) {
 			// TODO: handle exception
 		}
-    	
+    	 if(connection!=null){
+             connection.close();
+         }
     	return fristPic;
     }
     
@@ -1041,6 +1051,9 @@ public class OperationData {
 			
 			e.printStackTrace();
 		}
+    	 if(connection!=null){
+             connection.close();
+         }
     	return unitTypeId;
     }
 }

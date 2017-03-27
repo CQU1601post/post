@@ -13,7 +13,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 %>
 <%
     List<Ad> ads=(List<Ad>)request.getAttribute("ads");
-  Object unitTypeId=request.getAttribute("unitTypeId");
+String unitTypeId=request.getParameter("unitTypeId");
   System.out.print("unitTypeID"+unitTypeId);
  Configuration configuration=new Configuration();
  int picWidth=200;//  获取限定的每张图片高度与宽度
@@ -166,7 +166,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                     <a href="PostLogical?functionName=enterPost&postId=${post.postId}&adTypeId=${adTypeId}&unitTypeId=${unitTypeId}" id='${item.adTypeId}'>${item.adTypeName}</a>
                                 </c:if> 
                                 <c:if test="${param.functionName eq 'privatePost'}">
-                                    <a href="UserLogical?functionName=privatePost&adTypeId=${adTypeId}" id='${item.adTypeId}'>${item.adTypeName}</a>
+                                    <a href="UserLogical?functionName=privatePost&adTypeId=${adTypeId}&unitTypeId=${unitTypeId}" id='${item.adTypeId}'>${item.adTypeName}</a>
                                 </c:if>
                             </li>
                         </c:forEach>
@@ -180,11 +180,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     <ul>
                         <!-- 进入自己的专栏与浏览其他粘贴栏都是共用一个body，因此在点击类别的链接时应先判断是在哪一种情况-->
                         <c:if test="${param.functionName eq 'enterPost'}">
-                            <li id="all"><a href="PostLogical?functionName=enterPost&postId=${post.postId}&adTypeId=0" onclick='' id='0again'>所有广告</a>
+                            <li id="all"><a href="PostLogical?functionName=enterPost&postId=${post.postId}&adTypeId=0&unitTypeId=${unitTypeId}" onclick='' id='0again'>所有广告</a>
                             </li>
                         </c:if>
                         <c:if test="${param.functionName eq 'privatePost'}">
-                            <li id="all"><a href="UserLogical?functionName=privatePost&adTypeId=0" id='0again'>所有广告</a>
+                            <li id="all"><a href="UserLogical?functionName=privatePost&adTypeId=0&unitTypeId=${unitTypeId}" id='0again'>所有广告</a>
                             </li>
                         </c:if>
                         <c:if test="${fn:length(adTypes)>0}">
@@ -192,9 +192,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                             <c:forEach var="item" items="${adTypes}" varStatus="adType">
                                 <c:set var="adTypeId" value="${item.adTypeId}"></c:set>
                                 <li><c:if test="${param.functionName eq 'enterPost'}">
-                                        <a  href="PostLogical?functionName=enterPost&postId=${post.postId}&adTypeId=${adTypeId}" id='${adTypeId}again'>${item.adTypeName}</a>
+                                        <a  href="PostLogical?functionName=enterPost&postId=${post.postId}&adTypeId=${adTypeId}&unitTypeId=${unitTypeId}" id='${adTypeId}again'>${item.adTypeName}</a>
                                     </c:if> <c:if test="${param.functionName eq  'privatePost'}">
-                                        <a  href="UserLogical?functionName=privatePost&adTypeId=${adTypeId}" id='${adTypeId}again'>${item.adTypeName}</a>
+                                        <a  href="UserLogical?functionName=privatePost&adTypeId=${adTypeId}&unitTypeId=${unitTypeId}" id='${adTypeId}again'>${item.adTypeName}</a>
                                     </c:if>
                                 </li>
                             </c:forEach>
