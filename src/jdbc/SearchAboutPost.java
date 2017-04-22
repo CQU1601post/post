@@ -681,6 +681,30 @@ public class SearchAboutPost {
 		return ads;
 	}
 
+	public List<Ad> getAdByMoney(int money) {
+        ConnectDB connectDB = new ConnectDB();
+        String sql = "select * from ad where checked=1 and exist=1 and  money>'" + money + "'";
+        ResultSet result = connectDB.executeQuery(sql);
+        List<Ad> ads = new ArrayList<Ad>();
+        try {
+            while (result.next()) {
+                Ad ad = new Ad(result.getInt(1), result.getInt(2),
+                        result.getString(3), result.getInt(4),
+                        result.getInt(5), result.getString(6),
+                        result.getInt(7), result.getLong(8), result.getInt(9),
+                        result.getString(10), result.getInt(11),
+                        result.getInt(12), result.getInt(13),
+                        result.getInt(14), result.getInt(15));// 通过审核的广告checked属性必为1
+                ads.add(ad);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            connectDB.close();
+        }
+        return ads;
+    }
+	
 	// postId 代表post的id(上传的粘贴栏) ; num 表示要随机生成的图片数量；money 表示什么等级以上的图片随机滚动，现在一般取0
 	public List<Ad> getRandAd(int postId, int num, int money) {
 		List<Ad> ads2 = new ArrayList<Ad>();
@@ -688,7 +712,8 @@ public class SearchAboutPost {
 			System.out.println("等级小于0");
 			return null;
 		} else {
-			List<Ad> ads = getAd(postId, money);
+		//	List<Ad> ads = getAd(postId, money);//查找满足要求的某一个粘贴栏的广告
+		    List<Ad> ads=getAdByMoney(money);//查找所有的粘贴栏满足要求的广告
 			if (ads.size() <= num) {
 				return ads;
 			} else {

@@ -74,7 +74,7 @@ Object costMark=request.getAttribute("costMark");
 <c:if test="${privateColumn=='0'}"><!-- 判断是否是专栏-->
 <c:if test="${costMark=='0'}"><!-- 判断是否收费-->
 <center>
-
+<input  type="hidden" value="${pics[0].adId }" id="hiddenId"/>
 <div style="margin-top:50px;width:850px;hight:30px;float:right">
 <button class="button gray" id="payment">滚屏显示</button>
 </div>

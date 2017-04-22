@@ -122,9 +122,11 @@ overflow: hidden;
                         return;
                         }
                     else{
+                        var hiddenId=parent.$('#hiddenId').val();
+                  
                         $.ajax({
                             type:"get",
-                            url : "PostLogical?functionName=addMoney&money="+val1,
+                            url : "PostLogical?functionName=addMoney&money="+val1+"&hiddenId="+hiddenId,
                              success:function(data){
                                  if(data=="1"){
                                      var index = parent.layer.getFrameIndex(window.name);

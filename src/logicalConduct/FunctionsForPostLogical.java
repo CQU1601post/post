@@ -522,9 +522,10 @@ public class FunctionsForPostLogical {
 		request.setCharacterEncoding("utf-8");
 		response.setCharacterEncoding("utf-8");
 		String money = request.getParameter("money");
-		int adId = searchFromDB.maxAdId();
+		int hiddenId=Integer.parseInt(request.getParameter("hiddenId"));
+		//int adId = searchFromDB.maxAdId();
 		int money1 = Integer.parseInt(money);
-		boolean flag = searchFromDB.saveMoney(adId, money1);
+		boolean flag = searchFromDB.saveMoney(hiddenId, money1);
 		if (flag) {
 			response.getWriter().write("1");
 		} else {

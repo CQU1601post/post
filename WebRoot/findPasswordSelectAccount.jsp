@@ -1,15 +1,23 @@
 <%@ page  pageEncoding="UTF-8"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
   String path = request.getContextPath();
   String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";  
 %>
-
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <head>
+    <base href="<%=basePath%>">
+    
+    <title>找回密码</title>
+    
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="expires" content="0">    
+    <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+    <meta http-equiv="description" content="This is my page">
 <script type="text/javascript" src="js/jquery-1.8.2.js"></script>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
 <title>管理</title>
 <script type="text/javascript">
     function changeImg() {
@@ -66,28 +74,23 @@ a:active {
 
 <body>
 <p><br></p>
-<div style="margin:0 auto;width:550px;"><img src="images/logo02.png" width="252" height="180" /><span class="STYLE3">&nbsp;&nbsp;后台管理</span>
+<div style="margin:0 auto;width:550px;"><img src="images/logo02.png" width="252" height="180" /><span class="STYLE3">&nbsp;&nbsp;找回密码</span>
 </div>
 <hr width="1000px">
 <hr width="1100px">
 <hr width="1000px">
-<form action="AdminManagerLogical?info=adminlogin" method="post" >
+<form action="AdminManagerLogical?info=findPassword" method="post" >
 <table width="600" height="266" border="0" align="center" cellpadding="0" cellspacing="0">
   <tr><td>&nbsp;&nbsp;</td></tr>
   <tr>
-    <td width="200px" height="36" class="STYLE1"><div align="right" class="STYLE6">管理员：</div></td>
+    <td width="200px" height="36" class="STYLE1"><div align="right" class="STYLE6">请输入账号：</div></td>
+    <input type="hidden" value="${ userInformation }" name="userInformation"/>
     <td width="397">
       <div align="left">
-        <input name="name" type="text" class="STYLE1" size="20" />
+         <input name="name" type="text" class="STYLE1" size="20" />
       </div></td>
   </tr>
-  <tr>
-    <td class="STYLE1"><div align="right" class="STYLE5"><span class="STYLE6">密码</span>：</div></td>
-    <td>
-      <div align="left">
-        <input name="password" type="password" class="STYLE1" size="20" /> <a href="AdminManagerLogical?info=findPasswordSelectAccount" size="10" id="findPassword" >找回密码</a> 
-      </div></td>
-  </tr>
+ 
    <tr>
                 <td class="STYLE1"><div align="right"
                         class="STYLE5"
@@ -105,7 +108,7 @@ a:active {
             </tr>
   
   <tr>
-    <td height="65" colspan="2"><div align="center"><input type="submit" value="登录"></div></td>
+    <td height="65" colspan="2"><div align="center"><input type="submit" value="查询"></div></td>
   </tr>
 </table>
 </form>

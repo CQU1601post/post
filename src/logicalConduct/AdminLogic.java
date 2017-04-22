@@ -1,14 +1,14 @@
 package logicalConduct;
 
+import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-
-
 
 import sun.print.resources.serviceui;
 
@@ -35,41 +35,45 @@ public class AdminLogic {
     // private SearchAboutPost searchFromDB=new SearchAboutPost();
     // 返回所有管理员信息
 
-    public boolean judgeExistAdmin(String name,String password){
-       // int adPassword=Integer.parseInt(password);
-       sql="select * from administrator where administratorName='"+name+"'and password='"+password+"'";
-       connection =new ConnectDB();
-       ResultSet rs=connection.executeQuery(sql);
-       try {
-        if(rs.next()){
-              connection.close();
+    public boolean judgeExistAdmin(String name, String password) {
+        // int adPassword=Integer.parseInt(password);
+        // sql="select * from administrator where administratorName='"+name+"'and password='"+password+"'";
+        sql = "select * from administrator where administratorName=? and password=?";
+        connection = new ConnectDB();
+
+        ResultSet rs = connection.executeQuery(sql, name, password);
+        try {
+            if (rs.next()) {
+                connection.close();
                 return true;
-            }else {
+            } else {
                 connection.close();
                 return false;
             }
-    } catch (SQLException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-    }finally{
-        if(connection!=null){
-            connection.close();
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                connection.close();
+            }
         }
+        return false;
     }
-    return false;    
-    }
-    public Administrator getAdmin(String name,String password){
-        //int adPassword=Integer.parseInt(password);
-        sql="select * from administrator where administratorName='"+name+"'and password='"+password+"'";
-        connection =new ConnectDB();
+
+    public Administrator getAdmin(String name, String password) {
+        // int adPassword=Integer.parseInt(password);
+        sql = "select * from administrator where administratorName='" + name
+                + "'and password='" + password + "'";
+        connection = new ConnectDB();
         Administrator a = new Administrator();
-        ResultSet rs=connection.executeQuery(sql);
+        ResultSet rs = connection.executeQuery(sql);
         try {
-            while (rs.next()) {          
+            while (rs.next()) {
                 a.setAdministratorName(rs.getString("administratorName"));
                 a.setPassword(rs.getString("password"));
                 a.setLevel(rs.getInt("level"));
-                a.setScope(rs.getString("scope"));          
+                a.setScope(rs.getString("scope"));
             }
 
         } catch (SQLException e) {
@@ -79,19 +83,73 @@ public class AdminLogic {
             connection.close();
         }
         return a;
-     }
-    
-    
-    public List<Administrator> getAllAdmin(){
-        sql="select * from administrator ";
-        connection=new ConnectDB();
-        ResultSet rs=connection.executeQuery(sql);
-        List<Administrator> administrators=new ArrayList<Administrator>();
+    }
+
+    public Administrator getAdmin(int id) {
+        // int adPassword=Integer.parseInt(password);
+        sql = "select * from administrator where id='" + id + "'";
+        connection = new ConnectDB();
+        Administrator a = new Administrator();
+        ResultSet rs = connection.executeQuery(sql);
         try {
-            while(rs.next()){
-                Administrator administrator=new Administrator();
+            while (rs.next()) {
+                a.setAdministratorName(rs.getString("administratorName"));
+                a.setPassword(rs.getString("password"));
+                a.setLevel(rs.getInt("level"));
+                a.setScope(rs.getString("scope"));
+                a.setEmail(rs.getString("email"));
+                a.setVerification(rs.getString("verification"));
+                a.setVerificationDate(rs.getTimestamp("verificationDate"));
+            }
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+        } finally {
+            connection.close();
+        }
+        return a;
+    }
+
+    public Administrator getAdminByName(String name) {
+        // int adPassword=Integer.parseInt(password);
+        sql = "select * from administrator where administratorName=?";
+        connection = new ConnectDB();
+        Administrator a = new Administrator();
+        ResultSet rs = connection.executeQuery(sql, name);
+        try {
+            while (rs.next()) {
+                a.setId(rs.getInt("id"));
+                a.setAdministratorName(rs.getString("administratorName"));
+                a.setPassword(rs.getString("password"));
+                a.setLevel(rs.getInt("level"));
+                a.setScope(rs.getString("scope"));
+                a.setEmail(rs.getString("email"));
+                a.setVerification(rs.getString("verification"));
+                a.setVerificationDate(rs.getTimestamp("verificationDate"));
+                a.setEmailIsActive(rs.getInt("emailIsActive"));
+            }
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+        } finally {
+            connection.close();
+        }
+        return a;
+    }
+
+    public List<Administrator> getAllAdmin() {
+        sql = "select * from administrator ";
+        connection = new ConnectDB();
+        ResultSet rs = connection.executeQuery(sql);
+        List<Administrator> administrators = new ArrayList<Administrator>();
+        try {
+            while (rs.next()) {
+                Administrator administrator = new Administrator();
                 administrator.setId(rs.getInt("id"));
-                administrator.setAdministratorName(rs.getString("administratorName"));
+                administrator.setAdministratorName(rs
+                        .getString("administratorName"));
                 administrator.setLevel(rs.getInt("level"));
                 administrator.setPassword(rs.getString("password"));
                 administrator.setScope(rs.getString("scope"));
@@ -99,29 +157,46 @@ public class AdminLogic {
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
-        }finally{
+        } finally {
             connection.close();
         }
-      
+
         return administrators;
     }
-    
-    public void insertAdminManager(String name,String password,int level,String scope){
-        sql="insert into administrator (administratorName,password,level,scope) values('" + name+ "','"+password+"','"+
-                + level + "','" + scope + "')";
-        connection=new ConnectDB();
-        boolean flag=connection.executeUpdate(sql);
+
+    // public void insertAdminManager(String email,String verification,int
+    // id,Timestamp verificationDate){
+    // sql="insert into administrator (email,verification,verificationDate) values ('"+email+"','"+verification+"','"+verificationDate+"') where id='"+id+"'";
+    // connection=new ConnectDB();
+    // boolean flag=connection.executeUpdate(sql);
+    // connection.close();
+    // }
+    //
+    public void insertAdminManager(String name, String password, int level,
+            String scope) {
+        sql = "insert into administrator (administratorName,password,level,scope) values('"
+                + name
+                + "','"
+                + password
+                + "','"
+                + +level
+                + "','"
+                + scope
+                + "')";
+        connection = new ConnectDB();
+        boolean flag = connection.executeUpdate(sql);
         connection.close();
     }
-    
-    public boolean  selectAdminManager(String name){
-        boolean flag=true;
-        sql="select * from administrator   where administratorName='" + name+ "'";
-        connection=new ConnectDB();
-        ResultSet rs=connection.executeQuery(sql);
+
+    public boolean selectAdminManager(String name) {
+        boolean flag = true;
+        sql = "select * from administrator   where administratorName='" + name
+                + "'";
+        connection = new ConnectDB();
+        ResultSet rs = connection.executeQuery(sql);
         try {
-            if(rs.next()){
-                 flag=false;
+            if (rs.next()) {
+                flag = false;
             }
         } catch (SQLException e) {
             // TODO Auto-generated catch block
@@ -130,29 +205,92 @@ public class AdminLogic {
         connection.close();
         return flag;
     }
-   
-    public void deleteAdminManager(int id){
-        sql="delete from administrator where id='"+id+"'";
-        connection=new ConnectDB();
-        boolean flag=connection.executeUpdate(sql);
+
+    public Administrator selectAdminManager(int id) {
+        boolean flag = true;
+        sql = "select * from administrator   where id='" + id + "'";
+        connection = new ConnectDB();
+        ResultSet rs = connection.executeQuery(sql);
+        Administrator administrator = new Administrator();
+        try {
+            if (rs.next()) {
+                administrator = new Administrator(rs.getInt(1),
+                        rs.getString(2), rs.getString(3), rs.getInt(4),
+                        rs.getString(5), rs.getString(6), rs.getString(7),
+                        rs.getTimestamp(8), rs.getInt(9));
+            }
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        connection.close();
+        return administrator;
+    }
+
+    public void deleteAdminManager(int id) {
+        sql = "delete from administrator where id='" + id + "'";
+        connection = new ConnectDB();
+        boolean flag = connection.executeUpdate(sql);
         System.out.println(flag);
         connection.close();
     }
-    public void updateAdminManager(String name,String password,int level,String scope,int  updateModelID){
-        sql="update administrator set administratorName='" + name+ "',password='" + password+ "',level='" + level+ "',scope='" + scope+ "'where id='"+updateModelID+"'" ;
-        connection=new ConnectDB();
-        boolean flag=connection.executeUpdate(sql);
+
+    public void updateAdminManager(String name, String password, int level,
+            String scope, int updateModelID) {
+        sql = "update administrator set administratorName='" + name
+                + "',password='" + password + "',level='" + level + "',scope='"
+                + scope + "'where id='" + updateModelID + "'";
+        connection = new ConnectDB();
+        boolean flag = connection.executeUpdate(sql);
         System.out.println(flag);
         connection.close();
     }
-    
-    public void updateAdminManager(String scope){
-        sql="update administrator set scope='" + scope+ "'where id=1'" ;
-        connection=new ConnectDB();
-        boolean flag=connection.executeUpdate(sql);
+
+    public void updateAdminManager(String name, String password,
+            int updateModelID, int emailISActive) {
+        sql = "update administrator set administratorName='" + name
+                + "',password='" + password + "',emailIsActive='"
+                + emailISActive + "'where id='" + updateModelID + "'";
+        connection = new ConnectDB();
+        boolean flag = connection.executeUpdate(sql);
         System.out.println(flag);
         connection.close();
     }
+
+    public void updateAdminManager(String name, String password, int level,
+            String scope, int updateModelID, int emailISActive) {
+        sql = "update administrator set administratorName='" + name
+                + "',emailIsActive='" + emailISActive + "',password='"
+                + password + "',level='" + level + "',scope='" + scope
+                + "'where id='" + updateModelID + "'";
+        connection = new ConnectDB();
+        boolean flag = connection.executeUpdate(sql);
+        System.out.println(flag);
+        connection.close();
+    }
+
+    public void updateAdminManager(String email, String verification,
+            Timestamp verificationDate, int emailISActive, int updateModelID) {
+        sql = "update administrator set email='" + email + "',verification='"
+                + verification + "',verificationDate='" + verificationDate
+                + "',emailISActive='" + emailISActive + "'where id='"
+                + updateModelID + "'";
+        System.out.println(sql);
+        connection = new ConnectDB();
+        boolean flag = connection.executeUpdate(sql);
+        System.out.println(flag);
+        connection.close();
+    }
+
+    public void updateAdminManager(String scope) {
+        sql = "update administrator set scope='" + scope + "'where id=1";
+
+        connection = new ConnectDB();
+        boolean flag = connection.executeUpdate(sql);
+        System.out.println(flag);
+        connection.close();
+    }
+
     // 返回所有未通过审核的图片的信息
     public List getAuditInfo(int checked) {
         List list = new ArrayList();
@@ -183,11 +321,11 @@ public class AdminLogic {
     }
 
     // 返回所有未通过审核的图片的信息 且没有管理员在审核
-    public List getAuditInfo(int checked,int auditMark) {
+    public List getAuditInfo(int checked, int auditMark) {
         List list = new ArrayList();
         Pic p;
-        sql = "select *from pic where pic.adId in(select ad.adId from ad where exist=1 and ad.auditMark='"+auditMark+"') and checked='"
-                + checked + "'";
+        sql = "select *from pic where pic.adId in(select ad.adId from ad where exist=1 and ad.auditMark='"
+                + auditMark + "') and checked='" + checked + "'";
         connection = new ConnectDB();
         ResultSet rs = connection.executeQuery(sql);
         try {
@@ -211,16 +349,16 @@ public class AdminLogic {
         return list;
     }
 
-    
-    //查询未审核或者已审核的广告数
-    public int selectAuditOrNoAuditNum(int checked){
-        sql="select count(*) from ad where  exist=1 and checked='"+checked+"'";
-        connection=new ConnectDB();
-        ResultSet rs=connection.executeQuery(sql);
-        int num=0;
+    // 查询未审核或者已审核的广告数
+    public int selectAuditOrNoAuditNum(int checked) {
+        sql = "select count(*) from ad where  exist=1 and checked='" + checked
+                + "'";
+        connection = new ConnectDB();
+        ResultSet rs = connection.executeQuery(sql);
+        int num = 0;
         try {
             while (rs.next()) {
-                num= rs.getInt(1);
+                num = rs.getInt(1);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -229,15 +367,16 @@ public class AdminLogic {
         }
         return num;
     }
-    
-    public int selectAuditOrNoAuditNum(int checked,int postId){
-        sql="select count(*) from ad where  exist=1 and checked='"+checked+"'+postId='"+postId+"'";
-        connection=new ConnectDB();
-        ResultSet rs=connection.executeQuery(sql);
-        int num=0;
+
+    public int selectAuditOrNoAuditNum(int checked, int postId) {
+        sql = "select count(*) from ad where  exist=1 and checked='" + checked
+                + "'+postId='" + postId + "'";
+        connection = new ConnectDB();
+        ResultSet rs = connection.executeQuery(sql);
+        int num = 0;
         try {
             while (rs.next()) {
-                num= rs.getInt(1);
+                num = rs.getInt(1);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -246,20 +385,20 @@ public class AdminLogic {
         }
         return num;
     }
-      
-    
-    
-    
-    
-    public int getRandAd(int checked ,int auditMark) {
-      int adId=0;
-        sql ="SELECT * FROM  ad AS t1 JOIN (SELECT ROUND(RAND() * ((SELECT MAX(adId) FROM ad)-" +
-        		"(SELECT MIN(adId) FROM ad))+(SELECT MIN(adId) FROM ad)) AS adId) AS t2 WHERE t1.adId >= t2.adId and checked='"+checked+"' and auditMark='"+auditMark+"' ORDER BY t1.adId LIMIT 1";
+
+    public int getRandAd(int checked, int auditMark) {
+        int adId = 0;
+        sql = "SELECT * FROM  ad AS t1 JOIN (SELECT ROUND(RAND() * ((SELECT MAX(adId) FROM ad)-"
+                + "(SELECT MIN(adId) FROM ad))+(SELECT MIN(adId) FROM ad)) AS adId) AS t2 WHERE t1.adId >= t2.adId and checked='"
+                + checked
+                + "' and auditMark='"
+                + auditMark
+                + "' ORDER BY t1.adId LIMIT 1";
         connection = new ConnectDB();
         ResultSet rs = connection.executeQuery(sql);
         try {
-            while (rs.next()) {          
-            adId =  rs.getInt("adId");
+            while (rs.next()) {
+                adId = rs.getInt("adId");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -268,55 +407,55 @@ public class AdminLogic {
         }
         return adId;
     }
-    
-    public void setAdAuditMark(int adId){
+
+    public void setAdAuditMark(int adId) {
         connection = new ConnectDB();
-        sql="update ad set auditMark=1 where adId='"+adId+"'";
+        sql = "update ad set auditMark=1 where adId='" + adId + "'";
         boolean flag = connection.executeUpdate(sql);
-        System.out.println("setAdAuditMark"+flag);
+        System.out.println("setAdAuditMark" + flag);
         connection.close();
     }
-    public void setAdAuditMark1(List<Integer> temp){
+
+    public void setAdAuditMark1(List<Integer> temp) {
         connection = new ConnectDB();
         for (Iterator iterator = temp.iterator(); iterator.hasNext();) {
             int integer = (Integer) iterator.next();
-            sql="update ad set auditMark=1 where adId='"+integer+"'";
+            sql = "update ad set auditMark=1 where adId='" + integer + "'";
             boolean flag = connection.executeUpdate(sql);
-            sql="select adId from ad  where auditMark=1 and adId='"+integer+"'";
-            ResultSet rsResultSet=connection.executeQuery(sql);
+            sql = "select adId from ad  where auditMark=1 and adId='" + integer
+                    + "'";
+            ResultSet rsResultSet = connection.executeQuery(sql);
             try {
-                while(rsResultSet.next()){
+                while (rsResultSet.next()) {
                     System.out.println(rsResultSet.getInt(1));
                 }
             } catch (SQLException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-            System.out.println("setAdAuditMark1"+flag);
+            System.out.println("setAdAuditMark1" + flag);
         }
-       
+
         connection.close();
     }
-    
-    
-    public void recoveryAdAuditMark(int adId){
+
+    public void recoveryAdAuditMark(int adId) {
         connection = new ConnectDB();
-        sql="update ad set auditMark=0 where adId='"+adId+"'";
+        sql = "update ad set auditMark=0 where adId='" + adId + "'";
         boolean flag = connection.executeUpdate(sql);
-        System.out.println("recoveryAdAuditMark"+flag);
+        System.out.println("recoveryAdAuditMark" + flag);
         connection.close();
     }
-    
+
     public List<Pic> getAuditByAdId(List<Integer> adIdList) {
         List<Pic> list = new ArrayList<Pic>();
         Pic p;
         connection = new ConnectDB();
-        ResultSet rs=null;
+        ResultSet rs = null;
         for (Iterator iterator = adIdList.iterator(); iterator.hasNext();) {
             int adId = (Integer) iterator.next();
-            sql = "select *from pic where adId ='"
-                    + adId + "'";
-           rs = connection.executeQuery(sql);
+            sql = "select *from pic where adId ='" + adId + "'";
+            rs = connection.executeQuery(sql);
             try {
                 while (rs.next()) {
                     p = new Pic();
@@ -332,24 +471,24 @@ public class AdminLogic {
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
-            } 
+            }
         }
         connection.close();
         return list;
     }
-    
-    public List<Pic> getPicByAdId(int adId){
-        connection=new ConnectDB();
-        sql="select * from pic where adId='"+adId+"'";
+
+    public List<Pic> getPicByAdId(int adId) {
+        connection = new ConnectDB();
+        sql = "select * from pic where adId='" + adId + "'";
         ResultSet rs = connection.executeQuery(sql);
-        List<Pic> pics=new ArrayList<Pic>();
-      
+        List<Pic> pics = new ArrayList<Pic>();
+
         try {
             if (rs == null) {
                 System.out.println("rs为空");
             }
             while (rs.next()) {
-                Pic p=new Pic();
+                Pic p = new Pic();
                 p.setAdId(rs.getInt("adId"));
                 p.setPicAddr(rs.getString("picAddr"));
                 p.setWidth(rs.getInt("width"));
@@ -365,8 +504,7 @@ public class AdminLogic {
         }
         return pics;
     }
-    
-    
+
     // 将特定ID的图片状态改为通过
     public boolean changeState_pic(int adId) {
         connection = new ConnectDB();
@@ -383,7 +521,7 @@ public class AdminLogic {
         boolean flag = connection
                 .executeBatch(sql, listTransformationInt(List));
         for (Iterator iterator = List.iterator(); iterator.hasNext();) {
-          int integer = (Integer) iterator.next();
+            int integer = (Integer) iterator.next();
             recoveryAdAuditMark(integer);
         }
         System.out.println(flag);
@@ -432,12 +570,12 @@ public class AdminLogic {
 
     // 删除某个id广告下所有的图片
     public boolean del_pic_ad(int adId) {
-        connection = new ConnectDB();
+        ConnectDB connection1 = new ConnectDB();
         sql = "delete from pic where adId='" + adId + "'";
-        boolean flag = connection.executeUpdate(sql);
+        boolean flag = connection1.executeUpdate(sql);
         sql = "delete from ad where adId='" + adId + "'";
-        flag = connection.executeUpdate(sql);
-        connection.close();
+        flag = connection1.executeUpdate(sql);
+        connection1.close();
         return flag;
     }
 
@@ -450,6 +588,7 @@ public class AdminLogic {
     }
 
     public void delBatch_pic_ad(List<Integer> AdList) {
+       
         connection = new ConnectDB();
         sql = "delete from pic where adId=?";
         boolean flag = connection.executeBatch(sql,
@@ -459,6 +598,25 @@ public class AdminLogic {
         connection.close();
     }
 
+    public void deletePicFile(List<Integer> AdList,String path){
+        ConnectDB connectDB=new ConnectDB();
+        sql="select * from pic where adId=?";
+        int[] ads=new int[AdList.size()];
+        List<Pic> pics=new ArrayList<Pic>();
+        for(int i=0;i<AdList.size();i++){
+            ads[i]=AdList.get(i);
+        }
+      pics=connectDB.executeQueryBatchPic(sql,ads);
+        
+        for(int i=0;i<pics.size();i++){
+            String pathname=(path+"/"+pics.get(i).getPicAddr()).replace("/","\\");
+            File file=new File(pathname);
+            if(file.exists()){
+                file.delete();
+            }
+        }
+        
+    }
     public void newDelBatch_pic_ad(List<Integer> AdList) {
         connection = new ConnectDB();
         sql = "update ad set exist=0 where adId=?";
@@ -484,7 +642,7 @@ public class AdminLogic {
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        }finally{
+        } finally {
             connection.close();
         }
         return true;
@@ -517,6 +675,18 @@ public class AdminLogic {
         boolean flag = connection.executeUpdate(sql);
         connection.close();
         System.out.println("执行updateUser，flag=" + flag);
+        return flag;
+    }
+
+    public boolean updateUser(int userId, String email,
+            String verificationCode, Timestamp timestamp) {
+        connection = new ConnectDB();
+        sql = "update user set  email='" + email + "' ,verificationCode='"
+                + verificationCode + "' ,verificationDate='" + timestamp
+                + "' where userId='" + userId + "'";
+        boolean flag = connection.executeUpdate(sql);
+        connection.close();
+        System.out.println("执行updateUser verificationDate，flag=" + flag);
         return flag;
     }
 
@@ -764,34 +934,33 @@ public class AdminLogic {
         List list = new ArrayList();
         Post p;
         connection = new ConnectDB();
-        ResultSet rs =null;
+        ResultSet rs = null;
         for (Iterator iterator = units.iterator(); iterator.hasNext();) {
-           Unit unit=(Unit) iterator.next();
-           int unitId=unit.getUnitId();
-           sql = "select *from post where unitId='"+unitId+"'";
-           rs=connection.executeQuery(sql);
-           try {
-               while (rs.next()) {
-                   p = new Post();
-                   p.setPostId(rs.getInt("postId"));
-                   p.setPostName(rs.getString("postName"));
-                   p.setUnitId(rs.getInt("unitId"));
-                   p.setUserId(rs.getInt("userId"));
-                   p.setCreateTime(rs.getString("createtime"));
-                   p.setGroupId(rs.getInt("groupId"));
-                   list.add(p);
+            Unit unit = (Unit) iterator.next();
+            int unitId = unit.getUnitId();
+            sql = "select *from post where unitId='" + unitId + "'";
+            rs = connection.executeQuery(sql);
+            try {
+                while (rs.next()) {
+                    p = new Post();
+                    p.setPostId(rs.getInt("postId"));
+                    p.setPostName(rs.getString("postName"));
+                    p.setUnitId(rs.getInt("unitId"));
+                    p.setUserId(rs.getInt("userId"));
+                    p.setCreateTime(rs.getString("createtime"));
+                    p.setGroupId(rs.getInt("groupId"));
+                    list.add(p);
 
-               }
+                }
 
-           } catch (SQLException e) {
-               e.printStackTrace();
-           } 
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
-       connection.close();
+        connection.close();
         return list;
     }
-    
-    
+
     public List<Integer> getPasteGroup() {
         List<Integer> list = new ArrayList<Integer>();
         ConnectDB connectDB = new ConnectDB();
@@ -835,16 +1004,16 @@ public class AdminLogic {
         System.out.println("执行updatePaste，flag=" + flag);
         return flag;
     }
+
     public boolean updatePasteGroupId(int id, int groupid) {
         connection = new ConnectDB();
-        sql = "update post set  groupId='" + groupid + "' where postId='"
-                + id + "'";
+        sql = "update post set  groupId='" + groupid + "' where postId='" + id
+                + "'";
         boolean flag = connection.executeUpdate(sql);
         connection.close();
         System.out.println("执行updatePasteGroupId，flag=" + flag);
         return flag;
     }
-    
 
     // 返回当前最大的粘贴栏id
     public int maxPasteId() {
@@ -892,11 +1061,41 @@ public class AdminLogic {
 
     // 删除特定id粘贴栏信息
     public boolean delPaste(int pasteId) {
-        connection = new ConnectDB();
-        sql = "delete from post where postId='" + pasteId + "'";
-        boolean flag = connection.executeUpdate(sql);
+        ConnectDB connection1 = new ConnectDB();
+        boolean flag = false, adFlag = false;
+        List<Integer> adIdList = new ArrayList<Integer>();
+        sql = "select adId from ad where postId='" + pasteId + "'";
+        ResultSet rs = connection1.executeQuery(sql);
+        try {
+            while (rs.next()) {
+                adIdList.add(rs.getInt(1));
+                flag = true;
+            }
+        } catch (SQLException e) {
 
-        connection.close();
+            e.printStackTrace();
+        }
+        if (flag) {
+            for (int i = 0; i < adIdList.size(); i++) {
+                adFlag = del_pic_ad(adIdList.get(i));
+            }
+
+        }
+        if (flag) {
+            if (adFlag) {
+                sql = "delete from post where postId='" + pasteId + "'";
+                flag = connection1.executeUpdate(sql);
+
+            } else {
+                flag = false;
+            }
+        } else {
+            sql = "delete from post where postId='" + pasteId + "'";
+            flag = connection1.executeUpdate(sql);
+
+        }
+
+        connection1.close();
         return flag;
     }
 
@@ -925,38 +1124,37 @@ public class AdminLogic {
         }
         return list;
     }
-    
+
     // 通过单位所属类别获取所有单元信息
     public List get_unit(List<UnitType> unitTypes) {
         List list = new ArrayList();
         Unit u;
         connection = new ConnectDB();
-        ResultSet rs=null;
-        for (Iterator iterator =unitTypes.iterator(); iterator.hasNext();) {
-         UnitType unitType = (UnitType) iterator.next();
-         int unitTypeId = unitType.getUnitTypeId();
-         sql = "select * from unit where unitTypeId='"+unitTypeId+"'";
-         rs= connection.executeQuery(sql);
-         try {
-             while (rs.next()) {
-                 u = new Unit();
-                 u.setUnitId(rs.getInt("unitId"));
-                 u.setUnitName(rs.getString("unitName"));
-                 u.setUnitTypeId(rs.getInt("unitTypeId"));
-                 // u.setPasteType(rs.getInt("pasteType"));
-                 list.add(u);
+        ResultSet rs = null;
+        for (Iterator iterator = unitTypes.iterator(); iterator.hasNext();) {
+            UnitType unitType = (UnitType) iterator.next();
+            int unitTypeId = unitType.getUnitTypeId();
+            sql = "select * from unit where unitTypeId='" + unitTypeId + "'";
+            rs = connection.executeQuery(sql);
+            try {
+                while (rs.next()) {
+                    u = new Unit();
+                    u.setUnitId(rs.getInt("unitId"));
+                    u.setUnitName(rs.getString("unitName"));
+                    u.setUnitTypeId(rs.getInt("unitTypeId"));
+                    // u.setPasteType(rs.getInt("pasteType"));
+                    list.add(u);
 
-             }
+                }
 
-         } catch (SQLException e) {
-             e.printStackTrace();
-         } 
-         }  
-    connection.close();
-      
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        connection.close();
+
         return list;
     }
-
 
     // 保存单元信息
     public boolean saveUnit(Unit u) {
@@ -983,11 +1181,45 @@ public class AdminLogic {
 
     // 删除特定id单元信息
     public boolean delUnit(int unitId) {
-        connection = new ConnectDB();
-        sql = "delete from unit where unitId='" + unitId + "'";
-        boolean flag = connection.executeUpdate(sql);
+        ConnectDB connection1 = new ConnectDB();
+        List<Integer> postIdList = new ArrayList<Integer>();
+        boolean flag = false, postFlag = false;
 
-        connection.close();
+        sql = "select * from post where unitId='" + unitId + "'";
+        ResultSet rs = connection1.executeQuery(sql);
+        try {
+            while (rs.next()) {
+                postIdList.add(rs.getInt(1));
+                flag = true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        if (flag) {
+            for (int i = 0; i < postIdList.size(); i++) {
+                postFlag = delPaste(postIdList.get(i));
+                if (!postFlag) {
+                    break;
+                }
+            }
+
+        }
+        if (flag) {
+            if (postFlag) {
+                System.out.println(connection);
+                sql = "delete from unit where unitId=?";
+                flag = connection1.executeUpdate(sql, unitId);
+            } else {
+                flag = false;
+            }
+        } else {
+            System.out.println(unitId + "124546");
+            System.out.println(connection);
+            sql = "delete from unit where unitId=?";
+            flag = connection1.executeUpdate(sql, unitId);
+        }
+
+        connection1.close();
         return flag;
     }
 
@@ -1011,9 +1243,9 @@ public class AdminLogic {
         System.out.println("执行maxTypeGroupId，当前最大的typeGroupId为：" + max);
         return max;
     }
-    
+
     // 获取所有组类别信息
-    public List<TypeGroup> getTypeGroup(){
+    public List<TypeGroup> getTypeGroup() {
         sql = "select *  from typeGroup ";
         List<TypeGroup> list = new ArrayList<TypeGroup>();
         TypeGroup p;
@@ -1037,11 +1269,10 @@ public class AdminLogic {
         }
         return list;
     }
-    
-    
+
     // 通过掌火获取所有组类别信息
-    public List<TypeGroup> getTypeGroup(List posts){
-        Set<Integer> set=new HashSet<Integer>();
+    public List<TypeGroup> getTypeGroup(List posts) {
+        Set<Integer> set = new HashSet<Integer>();
         List<TypeGroup> list = new ArrayList<TypeGroup>();
         TypeGroup p;
         connection = new ConnectDB();
@@ -1052,8 +1283,8 @@ public class AdminLogic {
         }
         for (Iterator iterator = set.iterator(); iterator.hasNext();) {
             Integer integer = (Integer) iterator.next();
-            sql = "select *  from typeGroup where id='"+integer+"'";
-            rs=  connection.executeQuery(sql);
+            sql = "select *  from typeGroup where id='" + integer + "'";
+            rs = connection.executeQuery(sql);
             try {
                 while (rs.next()) {
                     p = new TypeGroup();
@@ -1066,7 +1297,7 @@ public class AdminLogic {
 
             } catch (SQLException e) {
                 e.printStackTrace();
-            } 
+            }
         }
 
         connection.close();
@@ -1081,7 +1312,7 @@ public class AdminLogic {
         connection.close();
         return flag;
     }
-    
+
     public boolean updateTypeGroup(int id, String typeGroupName) {
         connection = new ConnectDB();
         sql = "update typeGroup set GroupName='" + typeGroupName
@@ -1091,31 +1322,32 @@ public class AdminLogic {
         System.out.println("执行updateTypeGroup，flag=" + flag);
         return flag;
     }
-    
-    //删除组类别，并且删除组里面所有的成员，并且删除此类别下面的所有广告。
+
+    // 删除组类别，并且删除组里面所有的成员，并且删除此类别下面的所有广告。
     public boolean delTypeGroup(int id) {
-        
+
         connection = new ConnectDB();
-        sql="delete from adtype where groupId='"+id+"'";
-        boolean  flag=connection.executeUpdate(sql);
-        if(flag){
+        sql = "delete from adtype where groupId='" + id + "'";
+        boolean flag = connection.executeUpdate(sql);
+        if (flag) {
             sql = "delete from typeGroup where id='" + id + "'";
             flag = connection.executeUpdate(sql);
-        } 
+        }
         connection.close();
         return flag;
     }
-    
+
     public List<Integer> getAdtypeById(int id) {
         List<Integer> list = new ArrayList<Integer>();
-       
-        sql = "select * from adtype where GroupId='" + id + "'";;
-       ConnectDB connection1 = new ConnectDB();
-      
+
+        sql = "select * from adtype where GroupId='" + id + "'";
+        ;
+        ConnectDB connection1 = new ConnectDB();
+
         ResultSet rs = connection1.executeQuery(sql);
         System.out.println("rs=" + rs);
         try {
-            while (rs.next()) {     
+            while (rs.next()) {
                 list.add(rs.getInt(1));
             }
 
@@ -1127,7 +1359,7 @@ public class AdminLogic {
 
         return list;
     }
-    
+
     // 获取所有广告类别信息
     public List get_type() {
         List list = new ArrayList();
@@ -1142,7 +1374,7 @@ public class AdminLogic {
                 p.setAdTypeId(rs.getInt(1));
                 // p.setAdType(rs.getInt(1));
                 p.setAdTypeName(rs.getString(2));
-              
+
                 list.add(p);
 
             }
@@ -1155,10 +1387,11 @@ public class AdminLogic {
 
         return list;
     }
+
     public List get_typeById(int GroupId) {
         List list = new ArrayList();
         AdType p;
-        sql = "select *from adtype where GroupId='"+GroupId+"' ";
+        sql = "select *from adtype where GroupId='" + GroupId + "' ";
         connection = new ConnectDB();
         ResultSet rs = connection.executeQuery(sql);
         System.out.println("rs=" + rs);
@@ -1168,7 +1401,7 @@ public class AdminLogic {
                 p.setAdTypeId(rs.getInt(1));
                 // p.setAdType(rs.getInt(1));
                 p.setAdTypeName(rs.getString(2));
-              
+
                 list.add(p);
 
             }
@@ -1181,13 +1414,12 @@ public class AdminLogic {
 
         return list;
     }
-    
-    
+
     // 保存广告类别
     public boolean saveType(AdType p) {
         connection = new ConnectDB();
         sql = "insert into adtype values('" + p.getAdTypeId() + "','"
-                + p.getAdTypeName() +"','"+p.getGroupId()+    "')";
+                + p.getAdTypeName() + "','" + p.getGroupId() + "')";
         boolean flag = connection.executeUpdate(sql);
         connection.close();
         return flag;
@@ -1234,32 +1466,31 @@ public class AdminLogic {
         return flag;
     }
 
-    public List<Integer> getAdByAdTypeId(int id){
-        connection= new ConnectDB();
-        List<Integer> list=new ArrayList<Integer>();
-        sql ="select * from ad where adTypeId='" + id + "'";
-        ResultSet rs=connection.executeQuery(sql);
+    public List<Integer> getAdByAdTypeId(int id) {
+        connection = new ConnectDB();
+        List<Integer> list = new ArrayList<Integer>();
+        sql = "select * from ad where adTypeId='" + id + "'";
+        ResultSet rs = connection.executeQuery(sql);
         try {
-            while(rs.next()){
+            while (rs.next()) {
                 list.add(rs.getInt(1));
             }
         } catch (SQLException e) {
-          
+
             e.printStackTrace();
-        }
-        finally{
+        } finally {
             connection.close();
         }
         return list;
     }
-    
+
     // 获取所有单位类别信息
     public List get_pasteType() {
         List list = new ArrayList();
         UnitType p;
         sql = "select *from unittype  ";
-        connection = new ConnectDB();
-        ResultSet rs = connection.executeQuery(sql);
+        ConnectDB connection1 = new ConnectDB();
+        ResultSet rs = connection1.executeQuery(sql);
         System.out.println("rs=" + rs);
         try {
             while (rs.next()) {
@@ -1275,7 +1506,7 @@ public class AdminLogic {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            connection.close();
+            connection1.close();
         }
 
         return list;
@@ -1285,11 +1516,11 @@ public class AdminLogic {
         List<UnitType> list = new ArrayList<UnitType>();
         UnitType p;
         connection = new ConnectDB();
-        ResultSet rs =null;
+        ResultSet rs = null;
         for (Iterator iterator = scopeList.iterator(); iterator.hasNext();) {
-            int scope=Integer.parseInt((String) iterator.next());
-            sql = "select *from unittype where unitTypeId='"+scope+"' ";
-            rs= connection.executeQuery(sql);
+            int scope = Integer.parseInt((String) iterator.next());
+            sql = "select *from unittype where unitTypeId='" + scope + "' ";
+            rs = connection.executeQuery(sql);
             try {
                 while (rs.next()) {
                     p = new UnitType();
@@ -1306,13 +1537,11 @@ public class AdminLogic {
             }
 
         }
-            
-      connection.close();    
+
+        connection.close();
         return list;
     }
 
-    
-    
     // 保存单位类别
     public boolean savePasteType(UnitType p) {
         connection = new ConnectDB();
@@ -1355,10 +1584,47 @@ public class AdminLogic {
     }
 
     public boolean delPasteType(int id) {
-        connection = new ConnectDB();
-        sql = "delete from unittype where unitTypeId='" + id + "'";
-        boolean flag = connection.executeUpdate(sql);
-        connection.close();
+        ConnectDB connection1 = new ConnectDB();
+        boolean flag = false, unitFlag = false;
+        List<Integer> unitIdList = new ArrayList<Integer>();
+        sql = "select unitId from unit where unitTypeId='" + id + "'";
+        ResultSet rSet = connection1.executeQuery(sql);
+        try {
+            while (rSet.next()) {
+                flag = true;
+
+                unitIdList.add(rSet.getInt(1));
+            }
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        if (flag) {
+            for (int i = 0; i < unitIdList.size(); i++) {
+
+                unitFlag = delUnit(unitIdList.get(i));
+                if (!unitFlag) {
+                    break;
+                }
+            }
+        }
+        if (flag) {
+            if (unitFlag) {
+                sql = "delete from unittype where unitTypeId=?";
+
+                System.out.println(connection);
+                flag = connection1.executeUpdate(sql, id);
+            } else {
+                flag = false;
+            }
+        } else {
+
+            sql = "delete from unittype where unitTypeId=?";
+
+            flag = connection1.executeUpdate(sql, id);
+        }
+
+        connection1.close();
         return flag;
     }
 
@@ -1381,6 +1647,7 @@ public class AdminLogic {
         }
         return name;
     }
+
     // 根据单位类别id返回单位所属类别
     public String typeName(int id) {
         String name = null;
@@ -1553,85 +1820,114 @@ public class AdminLogic {
         }
         return pasteTypes;
     }
-    
-    public boolean updateSuperAdministrator(int unitTypeId){
-        Administrator administrator=getAdmin("xjp", "123");//超级管理员默认为此用户名和密码
-        String scopes=administrator.getScope();
-        scopes=scopes+"|"+unitTypeId;
-        sql="update administrator set scope='"+scopes+"'where id=1";
-        connection=new ConnectDB();
-         boolean flag =  connection.executeUpdate(sql);
-         connection.close();
-         return flag;
-    }
-    
-    public boolean addCostManager(int grade,int money,int time){
-        sql="insert into cost (grade,money,time) values('" + grade+ "','"+money+"','"+
-                + time + "')";
-        connection=new ConnectDB();
-        boolean flag=connection.executeUpdate(sql);
+
+    public boolean updateSuperAdministrator(int unitTypeId) {
+        Administrator administrator = getAdmin(1);// 超级管理员默认为此用户名和密码
+        String scopes = administrator.getScope();
+        scopes = scopes + "|" + unitTypeId;
+        sql = "update administrator set scope='" + scopes + "'where id=1";
+        connection = new ConnectDB();
+        boolean flag = connection.executeUpdate(sql);
         connection.close();
-        return flag; 
+        return flag;
     }
-    public boolean updateCostManager(int costId,int grade,int money,int time){
-        sql="update cost set grade='" + grade+ "',money='" + money+ "',time='" + time+  "'where costId='"+costId+"'" ;
-        connection=new ConnectDB();
-        boolean flag=connection.executeUpdate(sql);
+
+    public boolean addCostManager(int grade, int money, int time) {
+        sql = "insert into cost (grade,money,time) values('" + grade + "','"
+                + money + "','" + +time + "')";
+        connection = new ConnectDB();
+        boolean flag = connection.executeUpdate(sql);
+        connection.close();
+        return flag;
+    }
+
+    public boolean updateCostManager(int costId, int grade, int money, int time) {
+        sql = "update cost set grade='" + grade + "',money='" + money
+                + "',time='" + time + "'where costId='" + costId + "'";
+        connection = new ConnectDB();
+        boolean flag = connection.executeUpdate(sql);
         System.out.println(flag);
         connection.close();
         return flag;
     }
-    public boolean deleteCostManager(int costId){
-        sql="delete from cost where costId='"+costId+"'";
-        connection=new ConnectDB();
-        boolean flag=connection.executeUpdate(sql);
+
+    public boolean deleteCostManager(int costId) {
+        sql = "delete from cost where costId='" + costId + "'";
+        connection = new ConnectDB();
+        boolean flag = connection.executeUpdate(sql);
         System.out.println(flag);
         connection.close();
         return flag;
     }
-    
-    public List<VisitorLog> selectVisitorLogs(String sqlString){
-        connection=new ConnectDB();
-        ResultSet rSet=connection.executeQuery(sqlString);
-        List<VisitorLog> visitorLogs=new ArrayList<VisitorLog>();
+
+    public List<VisitorLog> selectVisitorLogs(String sqlString) {
+        connection = new ConnectDB();
+        ResultSet rSet = connection.executeQuery(sqlString);
+        List<VisitorLog> visitorLogs = new ArrayList<VisitorLog>();
         try {
-            while(rSet.next()){
-                VisitorLog visitorLog=new VisitorLog();
+            while (rSet.next()) {
+                VisitorLog visitorLog = new VisitorLog();
                 visitorLog.setAdId(rSet.getInt("adID"));
                 visitorLog.setPostId(rSet.getInt("postId"));
                 visitorLog.setVisitorid(rSet.getInt("visitorID"));
                 visitorLog.setTime(rSet.getTimestamp("time"));
                 visitorLog.setVisitorip(rSet.getString("visitorIP"));
-                visitorLog.setVisitorpostname(rSet.getString("visitorPostName"));
+                visitorLog
+                        .setVisitorpostname(rSet.getString("visitorPostName"));
                 visitorLogs.add(visitorLog);
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        }finally{
+        } finally {
             connection.close();
         }
         return visitorLogs;
     }
-    
-    public boolean deleteLogManager(String sqlString){ 
-        connection=new ConnectDB();
-        boolean flag=connection.executeUpdate(sqlString);
+
+    public boolean deleteLogManager(String sqlString) {
+        connection = new ConnectDB();
+        boolean flag = connection.executeUpdate(sqlString);
         System.out.println(flag);
         connection.close();
         return flag;
     }
-    
-    
-    //根据sql语句查询结果判定是否有重复项
-    public boolean checkRepeat(String sqlString){
-        connection=new ConnectDB();
-        ResultSet rSet=connection.executeQuery(sqlString);
-        System.out.println(sqlString);
-        boolean flag=false;
+
+    public void deleteAdManager(String sql,String path,String picPath) {
+        ConnectDB connection = new ConnectDB();
+        ResultSet resultSet = connection.executeQuery(sql);
+        List<Integer> list = new ArrayList<Integer>();
         try {
-           if(rSet.next()){
-               System.out.println("为真");
-                flag=true;            
+            while (resultSet.next()) {
+                list.add(resultSet.getInt("adId"));
+               String filePath=(path+"/" + resultSet.getString("firstPicAddr")).replace("/", "\\");
+               deleteFile(filePath);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        deletePicFile(list, picPath);
+        delBatch_pic_ad(list);
+        connection.close();
+
+    }
+
+    public void deleteFile(String path){
+        File file=new File(path);
+        if(file.exists()){
+            file.delete();
+        }
+    }
+    
+    // 根据sql语句查询结果判定是否有重复项
+    public boolean checkRepeat(String sqlString) {
+        connection = new ConnectDB();
+        ResultSet rSet = connection.executeQuery(sqlString);
+        System.out.println(sqlString);
+        boolean flag = false;
+        try {
+            if (rSet.next()) {
+                System.out.println("为真");
+                flag = true;
             }
         } catch (SQLException e) {
             // TODO Auto-generated catch block

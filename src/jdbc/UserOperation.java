@@ -7,6 +7,7 @@ import java.util.List;
 
 import tool.ChangeResultSetToArray;
 import allClasses.Ad;
+import allClasses.Administrator;
 import allClasses.Post;
 import allClasses.PrivateAdType;
 import allClasses.User;
@@ -27,8 +28,9 @@ public class UserOperation {
 		}
 		else{
 			//插入用户信息
-			String sql="insert into user(userName,password,email,phone,userType) values ('"+user.getUserName()+"','"+user.getPassword()+"','" +user.getEmail()+"','" +user.getPhone()+"','" +user.getUserType()+"')";
-			connect.executeUpdate(sql);
+			//String sql="insert into user(userName,password,email,phone,userType) values ('"+user.getUserName()+"','"+user.getPassword()+"','" +user.getEmail()+"','" +user.getPhone()+"','" +user.getUserType()+"')";
+		    String sql="insert into user(userName,password,email,phone,userType) values (?,?,?,?,?)";
+		    connect.executeUpdate(sql,user);
 			System.out.println("UserOperation/register 注册成功");
 			connect.close();
 			return true;			
@@ -59,8 +61,9 @@ public class UserOperation {
 	public User user(String userName,String Password){
 		ConnectDB connect = new ConnectDB();
 		//查找指定用户名密码的user
-		String sql="select * from user where userName='"+userName+"'and password='"+Password+"'";
-		ResultSet result=connect.executeQuery(sql);
+		//String sql="select * from user where userName='"+userName+"'and password='"+Password+"'";
+		String sql="select * from user where userName=? and password=?";
+		ResultSet result=connect.executeQuery(sql,userName,Password);
 		List<User> users=changeResultSetToArray.usersArray(result);
 		User user=null;
 		if(users.size()>1){//如果查到的不止一个用户则显示错误
@@ -250,6 +253,48 @@ public class UserOperation {
 		connect.close();
 		return privateAdTypes.get(0);
 	}
+	
+	public User getUserById(int id){
+	    ConnectDB connectDB=new ConnectDB();
+	    String sql="select * from user where userId='"+id+"'";
+	    ResultSet resultSet=connectDB.executeQuery(sql);
+	    List<User> users= changeResultSetToArray.usersArray(resultSet);
+	    User user=new User();
+	    if(users.size()>1){//如果查到的不止一个用户则显示错误
+            System.out.println("jdbc/UserOperation/user错误，不应该有多个用户名密码相同");
+        }
+        else if(users.size()==1){
+            //System.out.println("查找成功");           
+            user=users.get(0);
+        }
+        else{
+            System.out.println("jdbc/UserOperation/user，没有该用户名和密码");
+        }
+         if(connectDB!=null){
+             connectDB.close();
+         }
+         return user;
+	}
+	
+	 public User getUserByName(String name){
+	        //int adPassword=Integer.parseInt(password);
+	        String sql="select * from user where userName=?";
+	        ConnectDB connection =new ConnectDB();
+	        User a = new User();
+	        ResultSet rs=connection.executeQuery(sql,name);
+	       List<User> users= changeResultSetToArray.usersArray(rs);
+	        if(users.size()==0){
+	            a=null;
+	        }else if(users.size()==1){
+	            a=users.get(0);
+	        }else if(users.size()>1){
+	            a=null;
+	        }
+	        if(connection!=null){
+	            connection.close();
+	        }
+	        return a;
+	     }
 	
 	public static void main(String[] args) {
 		UserOperation user=new UserOperation();

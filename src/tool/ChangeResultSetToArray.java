@@ -193,7 +193,7 @@ public class ChangeResultSetToArray {
 			while (result.next()) {
 				User user = new User(result.getInt(1), result.getString(2),
 						result.getString(3), result.getString(4),
-						result.getString(5), result.getInt(6));// 通过审核的广告checked属性必为1
+						result.getString(5), result.getInt(6),result.getString(7),result.getTimestamp(8));// 通过审核的广告checked属性必为1
 				// System.out.println(ad.getAdId());
 				users.add(user);
 			}

@@ -1,11 +1,12 @@
+<%@ page contentType="text/html; charset=UTF-8" language="java"
+    import="java.sql.*" errorPage=""
+%>
 <%@page import="javax.swing.JOptionPane"%>
 <%@page import="tool.AuditInfoHelp"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="javax.enterprise.context.*"%>
 <%@ page pageEncoding="UTF-8"%>
-<%@ page contentType="text/html; charset=UTF-8" language="java"
-    import="java.sql.*" errorPage=""
-%>
+
 <jsp:directive.page import="java.util.List" />
 <jsp:directive.page import="jdbc.OperationData" />
 <jsp:directive.page import="allClasses.*" />

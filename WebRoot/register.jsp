@@ -51,7 +51,7 @@
                                     <input id="repassword" name="repassword" onBlur="checkpwagain()" required="required" type="password" placeholder="......"/>
                                     <span id="info3" style="color:#FF0000; display:inline;float:right"></span>
                                 </p>
-                                <p> 
+                            <!--     <p> 
                                     <label for="email" class="youmail" data-icon="e" >邮   箱&nbsp;</label>
                                     <input id="email" name="email" onblur="check_mail()" required="required" type="email" placeholder="mysupermail@mail.com"/> 
                                     <span id="info7" style="color:#FF0000; display:inline;float:right"></span>
@@ -60,7 +60,7 @@
                                     <label class="icon-phone">手机号</label>
                                     <input  id="phone" name="phone" onblur="check_num()" required="required" type="tel" placeholder="..........."/> 
                                     <span id="info6" style="color:#FF0000; display:inline;float:right"></span>
-                                </p>
+                                </p> -->
                                 <p class="signin button" style="margin-top:0px;"> 
                                     <input type="submit" value="注册" onClick="return check()"/> 
                                 </p>

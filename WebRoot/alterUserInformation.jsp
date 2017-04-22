@@ -1,5 +1,5 @@
 <%@ page pageEncoding="utf-8"%>
-<%@ page contentType="text/html;utf-8" language="java"
+<%@ page contentType="text/html; charset=utf-8" language="java"
 	import="java.sql.*"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>  
 <%
@@ -15,10 +15,32 @@
 <title>My JSP 'register.jsp' starting page</title>
 <script type="text/javascript" src="js/register.js"></script>
 <link rel="stylesheet" href="css/register.css" type="text/css"/> 
-
+<script type="text/javascript" src="js/jquery-1.8.2.js"></script>
 </head>
 
 <body>
+<script type="text/javascript">
+$( function(){
+    $("#verificationButton").click(function(){
+        verificationEmail=$("#email").val();
+        hiddenId=$("#hiddenId").val();
+     
+        $.ajax({
+            type:"get",
+            url : "AdminManagerLogical?info=findEmailVerificationCode&userInformation=user&email="+verificationEmail+"&hiddenId="+hiddenId,          
+            success:function(data){
+                if(data=="1"){
+                    alert("邮件已发送");
+                }else{
+                    alert("发送失败");
+                }
+                }
+               
+        });
+            
+    });
+});
+</script>
 <!-- 用户没登陆时不能修改信息  -->
   
 	<c:if test='${null==sessionScope.user}'>
@@ -42,6 +64,8 @@
 		  	<star>*</star><font_set>为必填信息</font_set>
 			<form action="UserLogical?functionName=alterUserInformation" method="post" onsubmit="return check()">
 				<table style="width:'50%'">
+                <input type="hidden" id="hiddenId" name="hiddenId" value="${sessionScope.user.userId }"/>
+                  <input type="hidden" id="hiddenUserType" name="userTypeId" value="${sessionScope.user.userType}"/>
 					<tr>
 						<td width="35%" align="right"><font_set>用户名</font_set> <star>*</star>
 						</td>
@@ -86,9 +110,25 @@
 						<td><div id="info3" style="color:#FF0000; display:inline;"></div>
 						</td>
 					</tr>
-					<tr height="10"></tr>
-
-					<tr>
+                        <c:if test="${sessionScope.user.userType==2}">
+                            <tr height="10"></tr>
+                          <tr>
+                        <td align="right"><font_set>电子邮件</font_set></td>
+                        <td><input type="text" name="email"
+                            id="email" onblur="check_mail()"  value="${sessionScope.user.email }"/>
+                        </td>
+                        <td><div id="info7" style="color:#FF0000; display:inline;"></div>
+                        </td>
+                    </tr>
+                    <tr height="10"></tr>
+                          <tr>
+                        <td align="right"><input type="button" value="获取验证码" id="verificationButton"/></td>
+                        <td><input type="text" name="verificationCode"
+                            id="verification" />
+                        </td>
+                    </tr>
+                        </c:if>
+				<!-- 	<tr>
 						<td align="right"><font_set>电子邮件</font_set></td>
 						<td><input type="text" name="email"
 							id="email" onblur="check_mail()" />
@@ -104,7 +144,7 @@
 						</td>
 						<td><div id="info6" style="color:#FF0000; display:inline;"></div>
 						</td>
-					</tr>
+					</tr> -->
 				</table>
 				<br />
 				<br /> <br />
@@ -118,6 +158,7 @@
 				-->
 				</div>
 			</form>
+            <p class="STYLE7" align="center">${requestScope.infomation}</p>
 		</div>
 	</c:if>
 

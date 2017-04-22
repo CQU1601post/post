@@ -2,6 +2,7 @@ package logicalConduct;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class FunctionsForUserLogical {
 		PrintWriter out=response.getWriter();
 		/*用error来表示错误信息，-1为必填信息中出现错误，0为全部正确，1为邮箱错误、将邮箱设置为null,2为手机号码错误、将手机号码设置为null,
 	       3为手机跟邮箱均要设置为null*/
-		int error=new CheckUserInformation().check(request,response);//检查输入的信息
+		int error=new CheckUserInformation().checkUser(request,response);//检查输入的信息
 		if(error==-1){//必填信息有错误，则直接跳转回重新注册页面
 			System.out.println("输入注册信息不正确");
 			response.sendRedirect("register.jsp");
@@ -225,58 +226,108 @@ public class FunctionsForUserLogical {
 			response.sendRedirect("login.jsp");
 		}
 		else{
-			int error=new CheckUserInformation().check(request,response);//检查输入的信息
+		    String information="";
+		    CheckUserInformation checkUserInformation=new CheckUserInformation();
+			int error=checkUserInformation.check(request,response);//检查输入的信息
 			if(error==-1){//必填信息有错误，则直接跳转回修改页面
 				System.out.println("输入注册信息不正确");
-				response.sendRedirect("alterMyInformation.jsp");
-			}
-			//原有的用户信息
-			User user=(User)request.getSession().getAttribute("user");
-			int userId=user.getUserId();
-			//新输入的用户信息
-			String userName=request.getParameter("userName");
-			userName=new String(userName.getBytes("iso-8859-1"),"utf-8");
-			String password=request.getParameter("password");
-			String email;
-			String phone;
-			int userTypeId;
-			if(error==1){//邮箱错，则不更新邮箱信息
-				email=user.getEmail();
-				phone=request.getParameter("phone");
-			}
-			else if(error==2){//手机号码错，则不更新手机号码信息
-				phone=user.getPhone();
-				email=request.getParameter("email");
-			}
-			else if(error==3){
-				phone=null;
-				email=null;
-			}
-			else{//如果所有信息都正确			
-				email=request.getParameter("email");
-				phone=request.getParameter("phone");
-			}
-			//userTypeId更新了则修改，未更新则保持
-			if(request.getParameter("userTypeId")==null){
-				userTypeId=user.getUserType();
-			}
-			else{
-				userTypeId=Integer.parseInt(request.getParameter("userTypeId"));
+				response.sendRedirect("alterUserInformation.jsp");
+			}else{
+			  //原有的用户信息
+	            User user=(User)request.getSession().getAttribute("user");
+	            int userId=user.getUserId();
+	            //新输入的用户信息
+	            String userName=request.getParameter("userName");
+	            userName=new String(userName.getBytes("iso-8859-1"),"utf-8");
+	            String password=request.getParameter("password");
+	            String email=null;
+	            String phone=null;
+	            int userTypeId;
+//	            if(error==1){//邮箱错，则不更新邮箱信息
+//	                email=user.getEmail();
+//	                phone=request.getParameter("phone");
+//	            }
+//	            else if(error==2){//手机号码错，则不更新手机号码信息
+//	                phone=user.getPhone();
+//	                email=request.getParameter("email");
+//	            }
+//	            else if(error==3){
+//	                phone=null;
+//	                email=null;
+//	            }
+//	            else{//如果所有信息都正确            
+//	                email=request.getParameter("email");
+//	                phone=request.getParameter("phone");
+//	            }
+	            //userTypeId更新了则修改，未更新则保持
+	            if(request.getParameter("userTypeId")==null){
+	                userTypeId=user.getUserType();
+	            }
+	            else{
+	                userTypeId=Integer.parseInt(request.getParameter("userTypeId"));
+	            }
+	            if(userTypeId==2){
+	                String rerificationCode=request.getParameter("verificationCode");
+	                email=request.getParameter("email");
+	                User user2=jdbc.getUserById(userId);
+	                if(checkUserInformation.checkEmail(email)&&email.equals(user2.getEmail())){
+	                    if(rerificationCode.equals(user2.getVerificationCode())){
+	                        if (user.getVerificationDate().after(
+	                                new Timestamp(System.currentTimeMillis() - 10800000))) {
+	                            User newUserInfo = new User(userId,userName, password, email,phone,userTypeId);
+	                            if (jdbc.alterUserInformation(newUserInfo)) {//修改用户信息
+	                                System.out.println("修改信息成功");
+	                                request.getSession().setAttribute("user",newUserInfo);//更新存在session中的信息
+	                                out.println("<script type='text/javascript'>alert('success')</script>");
+	                            //    out.println("<script type='text/javascript'>window.close();opener.location.reload();</script>");    
+	                                    // request.getRequestDispatcher("registerSuccess.jsp").forward(request,response);
+	                                request.getRequestDispatcher("index.jsp").forward(request, response);
+	                            } else {
+	                              //  out.println("<script type='text/javascript'>alert('the user have existed,please input a new one')</script>");
+	                               // out.println("<script type='text/javascript'>history.go(-1)</script>");
+	                                information = "修改失败";
+	                                request.setAttribute("infomation", information);
+	                                request.getRequestDispatcher("alterUserInformation.jsp").forward(request, response);
+	                            }   
+	                        } else {
+	                            information = "验证码失效";
+	                            request.setAttribute("infomation", information);
+	                            request.getRequestDispatcher("alterUserInformation.jsp").forward(request, response);
+	                        }
+	                }else{
+	                    System.out.println("验证码错误");
+                        information="验证码错误";
+	                  
+                        request.setAttribute("infomation", information);
+                        request.getRequestDispatcher("alterUserInformation.jsp").forward(request, response);
+	                }
+	                }else{
+	                    System.out.println("邮箱有问题");
+	                    information = "邮箱有问题";
+	                    request.setAttribute("infomation", information);
+	                    request.getRequestDispatcher("alterUserInformation.jsp").forward(request, response);
+	                }
+	            }else{
+	              //userType=0
+	                User newUserInfo = new User(userId,userName, password, email,phone,userTypeId);
+	                System.out.println(userName);
+	                if (jdbc.alterUserInformation(newUserInfo)) {//修改用户信息
+	                    System.out.println("修改信息成功");
+	                    request.getSession().setAttribute("user",newUserInfo);//更新存在session中的信息
+	                    out.println("<script type='text/javascript'>alert('success')</script>");
+	                 //   out.println("<script type='text/javascript'>window.close();opener.location.reload();</script>");    
+	                        // request.getRequestDispatcher("registerSuccess.jsp").forward(request,response);
+	                    request.getRequestDispatcher("index.jsp").forward(request, response);
+	                } else {
+	                   // out.println("<script type='text/javascript'>alert('the user have existed,please input a new one')</script>");
+	                    information="已存在";
+                        request.setAttribute("infomation", information);
+	                    request.getRequestDispatcher("alterUserInformation.jsp").forward(request, response);
+	                }   
+	            }
 			}
 			
-			//userType=0
-			User newUserInfo = new User(userId,userName, password, email,phone,userTypeId);
-			System.out.println(userName);
-			if (jdbc.alterUserInformation(newUserInfo)) {//修改用户信息
-				System.out.println("修改信息成功");
-				request.getSession().setAttribute("user",newUserInfo);//更新存在session中的信息
-				out.println("<script type='text/javascript'>alert('success')</script>");
-				out.println("<script type='text/javascript'>window.close();opener.location.reload();</script>");	
-					// request.getRequestDispatcher("registerSuccess.jsp").forward(request,response);
-			} else {
-				out.println("<script type='text/javascript'>alert('the user have existed,please input a new one')</script>");
-				out.println("<script type='text/javascript'>history.go(-1)</script>");
-			}	
+			
 		}		
 	}
 	

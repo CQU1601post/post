@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import allClasses.Pic;
+import allClasses.User;
+
 import configurations.*;
 
 public class ConnectDB {
@@ -20,7 +23,8 @@ public class ConnectDB {
 //            Class.forName(dbDriver).newInstance();
 //            con = DriverManager.getConnection(url, userName, password);
 //            con.setAutoCommit(true);
-            con=ConnectionUtil.getCon();
+          //  con=ConnectionUtil.getCon(); //使用dbcp连接池
+            con=C3POConnectionUtil.getConnection();
           
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
@@ -43,6 +47,44 @@ public class ConnectDB {
             return false;
         }
     }
+    
+    // 执行更新语句，更新了返回true,未更新返回false
+    public boolean executeUpdate(String sql,int id) {
+        // System.out.println("执行src/jdbc/ConnectDB/executeUpdate()");
+        try {
+           
+            PreparedStatement statement=con.prepareStatement(sql);
+            statement.setInt(1, id);
+            statement.executeUpdate();
+          
+            return true;
+        } catch (SQLException e) {
+            System.out.println("false in :src/jdbc/ConnectDB/executeUpdate()");
+            System.out.println("   错误信息：" + e);
+            return false;
+        }
+    }
+    
+    // 执行更新语句，更新了返回true,未更新返回false
+    public boolean executeUpdate(String sql,User user) {
+        // System.out.println("执行src/jdbc/ConnectDB/executeUpdate()");
+        try {
+            PreparedStatement statement=con.prepareStatement(sql);
+            statement.setString(1,user.getUserName());
+            statement.setString(2, user.getPassword());
+            statement.setString(3, user.getEmail());
+            statement.setString(4, user.getPhone());
+            statement.setInt(5, user.getUserType());
+            statement.executeUpdate();
+            
+            return true;
+        } catch (SQLException e) {
+            System.out.println("false in :src/jdbc/ConnectDB/executeUpdate()");
+            System.out.println("   错误信息：" + e);
+            return false;
+        }
+    }
+
 
     // 执行查询语句，返回查询结果，如果没有查询到任何结果返回null
     public ResultSet executeQuery(String sql) {
@@ -62,6 +104,44 @@ public class ConnectDB {
         }
         return rs;
     }
+    
+    public ResultSet executeQuery(String sql,String name,String password) {
+        // System.out.println("执行src/jdbc/ConnectDB/executeQuery()");
+
+        ResultSet rs;
+        try {
+            PreparedStatement statement=con.prepareStatement(sql);
+            statement.setString(1, name);
+            statement.setString(2, password);
+             rs= statement.executeQuery();
+           
+        } catch (SQLException e) {
+            System.out.println("false in :src/jdbc/ConnectDB/executeQuery()");
+            System.out.println("   错误信息：" + e);
+            return null;
+        }
+        return rs;
+    }
+    
+    public ResultSet executeQuery(String sql,String name) {
+        // System.out.println("执行src/jdbc/ConnectDB/executeQuery()");
+
+        ResultSet rs;
+        try {
+            PreparedStatement statement=con.prepareStatement(sql);
+            statement.setString(1, name);
+          
+             rs= statement.executeQuery();
+           
+        } catch (SQLException e) {
+            System.out.println("false in :src/jdbc/ConnectDB/executeQuery()");
+            System.out.println("   错误信息：" + e);
+            return null;
+        }
+        return rs;
+    }
+    
+    
 
     // 执行查询语句，删除成功则返回true
     public boolean executeBatch(String sql, int[] param) {
@@ -149,6 +229,47 @@ public class ConnectDB {
             return null;
         }
         return resultSets;
+    }
+    
+    public List<Pic> executeQueryBatchPic(String sql, int[] param) {
+      
+        PreparedStatement statement = null;
+        List<Pic> pics=new ArrayList<Pic>();
+        ResultSet rs = null;
+        try {
+            con.setAutoCommit(false);
+            statement = con.prepareStatement(sql);
+            for (int i = 0; i < param.length; i++) {
+                statement.setInt(1, param[i]);
+                System.out.println(param[i]);
+                rs = statement.executeQuery();     
+                while(rs.next()){
+                    Pic p=new Pic();
+                    p.setAdId(rs.getInt("adId"));
+                    p.setPicAddr(rs.getString("picAddr"));
+                    p.setWidth(rs.getInt("width"));
+                    p.setHeight(rs.getInt("height"));
+                    p.setPicId(rs.getInt("picId"));
+                    p.setChecked(rs.getInt("checked"));
+                    pics.add(p);
+                }
+              
+            }
+            con.commit();
+            con.setAutoCommit(true);          
+          
+        } catch (SQLException e) {
+            System.out.println("false in :src/jdbc/ConnectDB/executeQuery()");
+            System.out.println("   错误信息：" + e);
+            try {
+                con.rollback();
+            } catch (SQLException e1) {
+
+                e1.printStackTrace();
+            }
+            return null;
+        }
+        return pics;
     }
 
     // 关闭连接
