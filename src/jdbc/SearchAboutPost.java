@@ -707,6 +707,8 @@ public class SearchAboutPost {
 	
 	// postId 代表post的id(上传的粘贴栏) ; num 表示要随机生成的图片数量；money 表示什么等级以上的图片随机滚动，现在一般取0
 	public List<Ad> getRandAd(int postId, int num, int money) {
+	    int rows=5;//一行图片数
+	    int rows2=10;
 		List<Ad> ads2 = new ArrayList<Ad>();
 		if (money < 0) {
 			System.out.println("等级小于0");
@@ -730,31 +732,31 @@ public class SearchAboutPost {
 	            ads.addAll(ads2);
 	            Collections.shuffle(ads);
 	            ads2.removeAll(ads2);
-	            if(ads.size()<10){
+	            if(ads.size()<rows){
 	                for (int i = 0; i < ads.size(); i++) {
 	                    ads2.add(ads.get(i));
 	                }
-	                for (int i = 0; i < 10-ads.size(); i++) {
+	                for (int i = 0; i < rows-ads.size(); i++) {
 	                    Collections.shuffle(ads);
                         ads2.add(ads.get(0));
                     }
-	            }else if(ads.size()<20){
+	            }else if(ads.size()<rows2){
 	                for (int i = 0; i < ads.size(); i++) {
                         ads2.add(ads.get(i));
                     }
-                    for (int i = 0; i < 20-ads.size(); i++) {
+                    for (int i = 0; i < rows2-ads.size(); i++) {
                         Collections.shuffle(ads);
                         ads2.add(ads.get(0));
                     }
-	            }else if(ads.size()>=20){
-	                for (int i = 0; i < 20; i++) {
+	            }else if(ads.size()>=rows2){
+	                for (int i = 0; i < rows2; i++) {
                         ads2.add(ads.get(i));
                     }
 	            }
 	            
 		    }
-		    System.out.println(ads2.size());
-				return ads2;
+		  
+			return ads2;
 			
 		}
 
