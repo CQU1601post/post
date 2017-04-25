@@ -658,7 +658,7 @@ public class SearchAboutPost {
 
 	public List<Ad> getAd(int postId, int money) {
 		ConnectDB connectDB = new ConnectDB();
-		String sql = "select * from ad where postId='" + postId
+		String sql = "select * from ad where checked=1 and exist=1 and postId='" + postId
 				+ "'and money>'" + money + "'";
 		ResultSet result = connectDB.executeQuery(sql);
 		List<Ad> ads = new ArrayList<Ad>();
@@ -712,29 +712,50 @@ public class SearchAboutPost {
 			System.out.println("等级小于0");
 			return null;
 		} else {
-		//	List<Ad> ads = getAd(postId, money);//查找满足要求的某一个粘贴栏的广告
-		    List<Ad> ads=getAdByMoney(money);//查找所有的粘贴栏满足要求的广告
-			if (ads.size() <= num) {
-				return ads;
-			} else {
-				for (Iterator iterator = ads.iterator(); iterator.hasNext();) {
-					Ad ad = (Ad) iterator.next();
-					if (ad.getMoney() == 2) {
-						ads2.add(ad);
-					}
-					if (ad.getMoney() == 3) {
-						ads2.add(ad);
-						ads2.add(ad);
-					}
-				}
-				ads.addAll(ads2);
-				Collections.shuffle(ads);
-				ads2.removeAll(ads2);
-				for (int i = 0; i < num; i++) {
-					ads2.add(ads.get(i));
-				}
+			List<Ad> ads = getAd(postId, money);//查找满足要求的某一个粘贴栏的广告
+	//	    List<Ad> ads=getAdByMoney(money);//查找所有的粘贴栏满足要求的广告
+		    if(ads.size()==0){
+		        return null;
+		    }else{
+		        for (Iterator iterator = ads.iterator(); iterator.hasNext();) {
+	                Ad ad = (Ad) iterator.next();
+	                if (ad.getMoney() == 2) {
+	                    ads2.add(ad);
+	                }
+	                if (ad.getMoney() == 3) {
+	                    ads2.add(ad);
+	                    ads2.add(ad);
+	                }
+	            }
+	            ads.addAll(ads2);
+	            Collections.shuffle(ads);
+	            ads2.removeAll(ads2);
+	            if(ads.size()<10){
+	                for (int i = 0; i < ads.size(); i++) {
+	                    ads2.add(ads.get(i));
+	                }
+	                for (int i = 0; i < 10-ads.size(); i++) {
+	                    Collections.shuffle(ads);
+                        ads2.add(ads.get(0));
+                    }
+	            }else if(ads.size()<20){
+	                for (int i = 0; i < ads.size(); i++) {
+                        ads2.add(ads.get(i));
+                    }
+                    for (int i = 0; i < 20-ads.size(); i++) {
+                        Collections.shuffle(ads);
+                        ads2.add(ads.get(0));
+                    }
+	            }else if(ads.size()>=20){
+	                for (int i = 0; i < 20; i++) {
+                        ads2.add(ads.get(i));
+                    }
+	            }
+	            
+		    }
+		    System.out.println(ads2.size());
 				return ads2;
-			}
+			
 		}
 
 	}

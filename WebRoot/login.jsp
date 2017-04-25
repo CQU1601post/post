@@ -49,9 +49,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                 </p>
                                 <p> 
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                    <label for="password" class="youpasswd" data-icon="p" style="right:169px;">密     码 </label>
+                                    <label for="password" class="youpasswd" data-icon="p" style="right:169px;">密     码 </label>  <a href="AdminManagerLogical?info=findPasswordSelectAccount" size="10" id="findPassword" >找回密码</a>
                                     <input id="password" name="password" required="required" type="password" placeholder="......" /> 
-                                    <a href="AdminManagerLogical?info=findPasswordSelectAccount" size="10" id="findPassword" >找回密码</a> 
+                                   
                                 </p>
                                 <br>
                                 <p class="login button"> 
