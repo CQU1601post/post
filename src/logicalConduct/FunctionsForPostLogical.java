@@ -1008,7 +1008,7 @@ public class FunctionsForPostLogical {
 			System.out.println("postID" + postId);
 			List<Ad> ads = searchFromDB.getRandAd(postId, num, 0);
 			List<String> fristPicList = new ArrayList<String>();
-			System.out.println(fristPicList);
+			
 			if(ads!=null){
 			    for (Iterator iterator = ads.iterator(); iterator.hasNext();) {
 	                Ad ad = (Ad) iterator.next();
@@ -1017,8 +1017,7 @@ public class FunctionsForPostLogical {
 	            }
 			}
 			
-			System.out.println(fristPicList);
-			System.out.println(fristPicList.size());
+			
 			JSONArray jsonArray = JSONArray.fromObject(fristPicList);
 			// response.getWriter().print(jsonArray);
 			// String picaddrs = " ";
