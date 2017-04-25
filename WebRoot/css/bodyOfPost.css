@@ -14,6 +14,10 @@
     margin: 5px;
     z-index: 1;
 }
+.ad_cell img{
+    width: 250px;
+    height: 250px;
+}
 .ad_cell .keyInfo{
     display:none;
 }
