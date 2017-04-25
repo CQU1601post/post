@@ -730,24 +730,24 @@ public class SearchAboutPost {
 	            ads.addAll(ads2);
 	            Collections.shuffle(ads);
 	            ads2.removeAll(ads2);
-	            if(ads.size()<10){
+	            if(ads.size()<5){
 	                for (int i = 0; i < ads.size(); i++) {
 	                    ads2.add(ads.get(i));
 	                }
-	                for (int i = 0; i < 10-ads.size(); i++) {
+	                for (int i = 0; i < 5-ads.size(); i++) {
 	                    Collections.shuffle(ads);
                         ads2.add(ads.get(0));
                     }
-	            }else if(ads.size()<20){
+	            }else if(ads.size()<10){
 	                for (int i = 0; i < ads.size(); i++) {
                         ads2.add(ads.get(i));
                     }
-                    for (int i = 0; i < 20-ads.size(); i++) {
+                    for (int i = 0; i < 10-ads.size(); i++) {
                         Collections.shuffle(ads);
                         ads2.add(ads.get(0));
                     }
-	            }else if(ads.size()>=20){
-	                for (int i = 0; i < 20; i++) {
+	            }else if(ads.size()>=10){
+	                for (int i = 0; i < 10; i++) {
                         ads2.add(ads.get(i));
                     }
 	            }
