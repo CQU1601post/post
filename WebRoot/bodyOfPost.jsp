@@ -9,6 +9,7 @@
 <jsp:directive.page import="configurations.*" />
 <%
     String path = request.getContextPath();
+
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
 <%
@@ -232,30 +233,25 @@ String unitTypeId=request.getParameter("unitTypeId");
         <div class="wrapper" id="col_3"></div> -->
     </div>
     <div id="ads" class="ads">
-    
-     
+      
         <c:if test="${fn:length(ads)>0}">
-        
-            
-                
+
             <c:forEach var="ad" items="${ads}" varStatus="status">
                  
-                 <div class="ad_cell">
-                  <a href="PostLogical?functionName=picsOfAd&adId=${ad['adId']}&postId=${post.postId}" target="_blank">
-                    <img  class="img" alt="点击查看" src="${ad['firstPicAddr']}"
-                    id="${ad['adId']}"/>
-                    <span class='keyInfo'>
-                        <c:if test="${empty ad['remark']}">
-                           无文字介绍
-                        </c:if>
-                        <c:if test="${!empty ad['remark']}">
-                            ${fn:substring(ad['remark'],0,8)}
-                        </c:if>
-                    </span>
+                <div class="ad_cell">
+                    <a href="PostLogical?functionName=picsOfAd&adId=${ad['adId']}&postId=${post.postId}" target="_blank">
+                        <img  class="img" alt="点击查看" src="${ad['firstPicAddr']}"
+                        id="${ad['adId']}"/>
+                        <span class='keyInfo'>
+                            <c:if test="${empty ad['remark']}">
+                               无文字介绍
+                            </c:if>
+                            <c:if test="${!empty ad['remark']}">
+                                ${fn:substring(ad['remark'],0,8)}
+                            </c:if>
+                        </span>
                     </a>                     
                 </div>
-                  
-                 
                
             </c:forEach>
             <div style="clear:both"></div>                       
@@ -266,7 +262,7 @@ String unitTypeId=request.getParameter("unitTypeId");
         </c:if>
 
     </div>
-    <div id="returnTop" class="returnTop" onclick="returnTop() ">返回顶部</div>
+    <div id="returnTop" class="returnTop" onclick="returnTop() ">返回顶部↑</div>
     <!-- 返回顶部的小链接 -->
    <!--  <div style="height:1000"></div> -->
     

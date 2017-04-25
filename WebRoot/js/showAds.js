@@ -2,6 +2,7 @@
 function showAds(returnedData){//根据返回的图片信息（json对象）在图片框显示
 	var count = 0;
 	$("#ads").append("<tr>");
+	var html_all = '';
 	for ( var i = 0; i < returnedData.length; i++) {
 		var ad = returnedData[i];
 		var adId = ad.adId;
@@ -9,16 +10,25 @@ function showAds(returnedData){//根据返回的图片信息（json对象）在�
 		// alert("adId:"+adId);
 		// alert("firstPicAddr:"+firstPicAddr);
 		var link = "PostLogical?functionName=picsOfAd&adId=" + adId;
-		var html = "<td><a href='" + link
-				+ "' target='_blank'><input type='image' alt='查看' src='"
-				+ firstPicAddr + "' id='" + adId + "' class='img' style='width:250;height:250'/></a></td>";
-		// alert(html);
-		$("#ads tr:last").append(html);
-		count++;
-		if (count % 5 == 0) {// 到了五个则换行
-			$("#ads").append("</tr><tr> ");
+		var html = "<div class='ad_cell'><a href='" + link
+				+ "' target='_blank'><img class='img' alt='点击查看' src='"
+				+ firstPicAddr + "' id='" + adId + "'/>";
+				console.log(ad.remark);
+		if(ad.remark == ""){
+			html += "<span class='keyInfo'>无文字介绍</span>"
+		}else{
+			html += "<span class='keyInfo'>"+ad.remark.substring(0,8)+"</span>";
 		}
-	} 
+		html += "</a></div>";
+		// alert(html);
+		/*count++;*/
+		/*if (count % 5 == 0) {// 到了五个则换行
+			$("#ads").append("</tr><tr> ");
+		}*/
+		html_all += html;
+	}
+	html_all += "<div style='clear:both'></div>  ";
+	$("#ads").append(html_all); 
 }
 
 function scroll(obj){
@@ -50,17 +60,18 @@ function getScrollAds(obj,ul_obj,flag){
 	var url = 'PostLogical?functionName=getScrollAds&postId='+postId+'&num='+num+'&money=0';
 	var ul_html = '';
 	$.get(url,function(data){
-		for(var i = 0;i<data.length;i++){  
-			var li_html = '<li><a href="#"><img src="'+data[i]+'"></a></li>';
-			ul_html += li_html;
-		}
-		console.log(data.length);
-		if(data.length<num){
-			var n = num-data.length;
-			for(var j=0;j<n;j++){
-				var li_html_ = '<li><a href="#"><img src="'+data[j]+'"></a></li>';
-				ul_html += li_html_;
+		if(data.length>=10){
+			for(var i = 0;i<10;i++){  
+				var li_html = '<li><a href="#"><img src="'+data[i]+'"></a></li>';
+				ul_html += li_html;
 			}
+		}else if(data.length>=5){
+			for(var i = 0;i<5;i++){  
+				var li_html = '<li><a href="#"><img src="'+data[i]+'"></a></li>';
+				ul_html += li_html;
+			}
+		}else{
+			return;
 		}
 		ul_obj.innerHTML = ul_html;
 		if(flag==true){
