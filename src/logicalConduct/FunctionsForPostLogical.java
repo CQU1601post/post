@@ -195,13 +195,15 @@ public class FunctionsForPostLogical {
 				List<Ad> ads = new ArrayList<Ad>();
 				if (adTypeId == 0) {// adTypeId==0则返回所有广告
 					// 根据粘贴栏id返回 广告信息,每次取Configuration中指定的picNumOfEveryLoading
-					ads = (List<Ad>) searchFromDB.adsOfPost(postId, 0,
-							Configuration.PICNumOFEVERYLOADING);
+//					ads = (List<Ad>) searchFromDB.adsOfPost(postId, 0,
+//							Configuration.PICNumOFEVERYLOADING);
+				    ads= (List<Ad>) searchFromDB.adsOfPost(postId);
 				} else {// 如果adTypeId不为0则返回对应类别的广告
-					ads = (List<Ad>) searchFromDB.adsOfPost(postId, adTypeId,
-							0, Configuration.PICNumOFEVERYLOADING);
+//					ads = (List<Ad>) searchFromDB.adsOfPost(postId, adTypeId,
+//							0, Configuration.PICNumOFEVERYLOADING);
+				    ads= (List<Ad>) searchFromDB.adsOfPost(postId,adTypeId);
 				}
-				// System.out.println("粘贴栏下广告个数："+ads.size());
+				System.out.println("粘贴栏下广告个数："+ads.size());
 				request.setAttribute("post", post);
 				request.setAttribute("unitName", unit.getUnitName());
 				request.setAttribute("adTypeId", adTypeId);
@@ -222,12 +224,14 @@ public class FunctionsForPostLogical {
 				List<PrivateAd> ads = new ArrayList<PrivateAd>();
 				if (adTypeId == 0) {// adTypeId==0则返回所有广告
 					// 根据粘贴栏id返回 广告信息,每次取Configuration中指定的picNumOfEveryLoading
-					ads = (List<PrivateAd>) searchFromDB.adsOfPrivatePost(
-							postId, 0, Configuration.PICNumOFEVERYLOADING);
+//					ads = (List<PrivateAd>) searchFromDB.adsOfPrivatePost(
+//							postId, 0, Configuration.PICNumOFEVERYLOADING);
+					ads=(List<PrivateAd>) searchFromDB.adsOfPrivatePost1(postId);
 				} else {// 如果adTypeId不为0则返回对应类别的广告
-					ads = (List<PrivateAd>) searchFromDB.adsOfPrivatePost(
-							postId, adTypeId, 0,
-							Configuration.PICNumOFEVERYLOADING);
+//					ads = (List<PrivateAd>) searchFromDB.adsOfPrivatePost(
+//							postId, adTypeId, 0,
+//							Configuration.PICNumOFEVERYLOADING);
+				       ads=(List<PrivateAd>) searchFromDB.adsOfPrivatePost(postId,adTypeId);
 				}
 
 				System.out.println("专栏adTypes.size()" + adTypes.size());

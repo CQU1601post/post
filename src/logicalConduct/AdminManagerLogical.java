@@ -79,9 +79,7 @@ public class AdminManagerLogical extends HttpServlet {
             this.updateAdminManager(request, response);// 修改管理员
         } else if (info.equals("adminloginout")) {
             this.adminLoginOut(request, response);// 管理员退出
-        } else if (info.equals("auditInfo")) {
-            this.aduitInfo(request, response);// 审核信息
-        } else if (info.equals("auditInfo1")) {
+        }  else if (info.equals("auditInfo1")) {
             this.aduitInfo1(request, response);// 审核信息
         } else if (info.equals("getAdTypeList")) {
             this.getAdTypeList(request, response);// 动态 获取adtype
@@ -455,135 +453,135 @@ public class AdminManagerLogical extends HttpServlet {
                 response);
     }
 
-    // 点击审核、未审核显示对应状态广告
-    public void aduitInfo(HttpServletRequest request,
-            HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        request.setCharacterEncoding("UTF-8");
-        String audit = request.getParameter("audit");
-        String adType = request.getParameter("adType");
-
-        String pasteName = request.getParameter("pasteType");
-        String adTime = request.getParameter("adTime");
-
-        pasteName = new String(pasteName.getBytes("iso-8859-1"), "UTF-8");
-        adTime = new String(adTime.getBytes("iso-8859-1"), "UTF-8");
-        // pasteName=URLDecoder.decode(pasteName, "utf-8");
-        // adTime=URLDecoder.decode(adTime, "utf-8");
-        System.out.println("pasteName----->" + pasteName);
-        System.out.println("adTime----->" + adTime);
-        data = new AdminLogic();
-        List<Pic> noauditlist = new ArrayList(), auditlist = new ArrayList();
-        List<Pic> noauditlistOriginal = null;
-        List<Pic> auditlistOriginal = null;
-        int state = 0;
-        System.out.println("000000----->");
-        if (audit != null)
-            audit = new String(audit.getBytes("iso-8859-1"), "UTF-8");
-        // audit=URLDecoder.decode(audit, "utf-8");
-        System.out.println("audit----->" + audit);
-        adType = new String(adType.getBytes("iso-8859-1"), "UTF-8");
-        // adType=URLDecoder.decode(adType, "utf-8");
-        System.out.println("adType----->" + adType);
-        System.out.println("执行aduitInfo，要显示的图片状态为：" + audit);
-        OperationData od = new OperationData();
-        if (audit.equals("未审核")) {
-
-            state = 0;
-            if (data.selectAuditOrNoAuditNum(state) < 20) {// 未审核的广告数小于20
-                noauditlistOriginal = data.getAuditInfo(state);
-                if (adType.equals("所有广告")) {
-                    List adtypesList = getAdtypeBySession(request, response);
-                    for (int i = 0; i < noauditlistOriginal.size(); i++)// 按类别展示
-                    {
-                        Pic p = (Pic) noauditlistOriginal.get(i);
-                        int picId = p.getPicId();
-                        String adTypeName = od.query_adTypeBypicId(picId);
-                        System.out.println("adTypeName=" + adTypeName);
-                        for (Iterator iterator = adtypesList.iterator(); iterator
-                                .hasNext();) {
-                            AdType adType2 = (AdType) iterator.next();
-                            if (adTypeName.equals(adType2.getAdTypeName())) {
-                                noauditlist.add(p);
-                            }
-                        }
-                    }
-
-                } else {
-                    for (int i = 0; i < noauditlistOriginal.size(); i++)// 按类别展示
-                    {
-                        Pic p = (Pic) noauditlistOriginal.get(i);
-                        int picId = p.getPicId();
-                        String adTypeName = od.query_adTypeBypicId(picId);
-                        System.out.println("adTypeName=" + adTypeName);
-                        if (adTypeName.equals(adType)) {
-                            System.out.println("----------------->");
-                            noauditlist.add(p);
-                        }
-                    }
-
-                }
-                if (!pasteName.equals("所有粘贴栏")) // 按粘贴栏展示
-                {
-                    for (int i = 0; i < noauditlist.size(); i++) {
-                        String pasteStr = od.query_adPostBypicId(noauditlist
-                                .get(i).getPicId());
-                        if (!pasteName.equals(pasteStr)) {
-                            System.out.println("删除一个数据----->");
-                            noauditlist.remove(i);
-                        }
-                    }
-                }
-                // 按时间展示
-                noauditlist = new judgeTime().adjustTime(adTime, noauditlist);
-                System.out.println("size : ----->" + noauditlist.size());
-            }
-
-        } else if (audit.equals("已审核")) {
-
-            System.out.println("----------------->111");
-            state = 1;
-            auditlistOriginal = data.getAuditInfo(state);
-            System.out.println("----------------->222");
-            if (adType.equals("所有广告")) {
-                auditlist = auditlistOriginal;
-                System.out.println("----------------->333");
-            } else {
-                for (int i = 0; i < auditlistOriginal.size(); i++) {
-                    Pic p = (Pic) auditlistOriginal.get(i);
-                    int picId = p.getPicId();
-                    String adTypeName = od.query_adTypeBypicId(picId);
-                    System.out.println("adTypeName--------------->"
-                            + adTypeName);
-                    if (adTypeName != null && adTypeName.equals(adType)) {
-                        auditlist.add(p);
-                    }
-
-                }
-            }
-
-            if (!pasteName.equals("所有粘贴栏")) // 按粘贴栏展示
-            {
-                for (int i = 0; i < auditlist.size(); i++) {
-                    String pasteStr = od.query_adPostBypicId(auditlist.get(i)
-                            .getPicId());
-                    if (!pasteName.equals(pasteStr)) {
-                        System.out.println("删除一个数据----->");
-                        auditlist.remove(i);
-                    }
-                }
-            }
-            // 按时间展示
-            auditlist = new judgeTime().adjustTime(adTime, auditlist);
-
-        }
-        request.setAttribute("audit", audit);
-        request.setAttribute("noauditlist", noauditlist);
-        request.setAttribute("auditlist", auditlist);
-        request.getRequestDispatcher("adminManager.jsp").forward(request,
-                response);
-
-    }
+//    // 点击审核、未审核显示对应状态广告
+//    public void aduitInfo(HttpServletRequest request,
+//            HttpServletResponse response) throws ServletException, IOException {
+//        response.setContentType("text/html;charset=UTF-8");
+//        request.setCharacterEncoding("UTF-8");
+//        String audit = request.getParameter("audit");
+//        String adType = request.getParameter("adType");
+//
+//        String pasteName = request.getParameter("pasteType");
+//        String adTime = request.getParameter("adTime");
+//
+//        pasteName = new String(pasteName.getBytes("iso-8859-1"), "UTF-8");
+//        adTime = new String(adTime.getBytes("iso-8859-1"), "UTF-8");
+//        // pasteName=URLDecoder.decode(pasteName, "utf-8");
+//        // adTime=URLDecoder.decode(adTime, "utf-8");
+//        System.out.println("pasteName----->" + pasteName);
+//        System.out.println("adTime----->" + adTime);
+//        data = new AdminLogic();
+//        List<Pic> noauditlist = new ArrayList(), auditlist = new ArrayList();
+//        List<Pic> noauditlistOriginal = null;
+//        List<Pic> auditlistOriginal = null;
+//        int state = 0;
+//        System.out.println("000000----->");
+//        if (audit != null)
+//            audit = new String(audit.getBytes("iso-8859-1"), "UTF-8");
+//        // audit=URLDecoder.decode(audit, "utf-8");
+//        System.out.println("audit----->" + audit);
+//        adType = new String(adType.getBytes("iso-8859-1"), "UTF-8");
+//        // adType=URLDecoder.decode(adType, "utf-8");
+//        System.out.println("adType----->" + adType);
+//        System.out.println("执行aduitInfo，要显示的图片状态为：" + audit);
+//        OperationData od = new OperationData();
+//        if (audit.equals("未审核")) {
+//
+//            state = 0;
+//            if (data.selectAuditOrNoAuditNum(state) < 20) {// 未审核的广告数小于20
+//                noauditlistOriginal = data.getAuditInfo(state);
+//                if (adType.equals("所有广告")) {
+//                    List adtypesList = getAdtypeBySession(request, response);
+//                    for (int i = 0; i < noauditlistOriginal.size(); i++)// 按类别展示
+//                    {
+//                        Pic p = (Pic) noauditlistOriginal.get(i);
+//                        int picId = p.getPicId();
+//                        String adTypeName = od.query_adTypeBypicId(picId);
+//                        System.out.println("adTypeName=" + adTypeName);
+//                        for (Iterator iterator = adtypesList.iterator(); iterator
+//                                .hasNext();) {
+//                            AdType adType2 = (AdType) iterator.next();
+//                            if (adTypeName.equals(adType2.getAdTypeName())) {
+//                                noauditlist.add(p);
+//                            }
+//                        }
+//                    }
+//
+//                } else {
+//                    for (int i = 0; i < noauditlistOriginal.size(); i++)// 按类别展示
+//                    {
+//                        Pic p = (Pic) noauditlistOriginal.get(i);
+//                        int picId = p.getPicId();
+//                        String adTypeName = od.query_adTypeBypicId(picId);
+//                        System.out.println("adTypeName=" + adTypeName);
+//                        if (adTypeName.equals(adType)) {
+//                            System.out.println("----------------->");
+//                            noauditlist.add(p);
+//                        }
+//                    }
+//
+//                }
+//                if (!pasteName.equals("所有粘贴栏")) // 按粘贴栏展示
+//                {
+//                    for (int i = 0; i < noauditlist.size(); i++) {
+//                        String pasteStr = od.query_adPostBypicId(noauditlist
+//                                .get(i).getPicId());
+//                        if (!pasteName.equals(pasteStr)) {
+//                            System.out.println("删除一个数据----->");
+//                            noauditlist.remove(i);
+//                        }
+//                    }
+//                }
+//                // 按时间展示
+//                noauditlist = new judgeTime().adjustTime(adTime, noauditlist);
+//                System.out.println("size : ----->" + noauditlist.size());
+//            }
+//
+//        } else if (audit.equals("已审核")) {
+//
+//            System.out.println("----------------->111");
+//            state = 1;
+//            auditlistOriginal = data.getAuditInfo(state);
+//            System.out.println("----------------->222");
+//            if (adType.equals("所有广告")) {
+//                auditlist = auditlistOriginal;
+//                System.out.println("----------------->333");
+//            } else {
+//                for (int i = 0; i < auditlistOriginal.size(); i++) {
+//                    Pic p = (Pic) auditlistOriginal.get(i);
+//                    int picId = p.getPicId();
+//                    String adTypeName = od.query_adTypeBypicId(picId);
+//                    System.out.println("adTypeName--------------->"
+//                            + adTypeName);
+//                    if (adTypeName != null && adTypeName.equals(adType)) {
+//                        auditlist.add(p);
+//                    }
+//
+//                }
+//            }
+//
+//            if (!pasteName.equals("所有粘贴栏")) // 按粘贴栏展示
+//            {
+//                for (int i = 0; i < auditlist.size(); i++) {
+//                    String pasteStr = od.query_adPostBypicId(auditlist.get(i)
+//                            .getPicId());
+//                    if (!pasteName.equals(pasteStr)) {
+//                        System.out.println("删除一个数据----->");
+//                        auditlist.remove(i);
+//                    }
+//                }
+//            }
+//            // 按时间展示
+//            auditlist = new judgeTime().adjustTime(adTime, auditlist);
+//
+//        }
+//        request.setAttribute("audit", audit);
+//        request.setAttribute("noauditlist", noauditlist);
+//        request.setAttribute("auditlist", auditlist);
+//        request.getRequestDispatcher("adminManager.jsp").forward(request,
+//                response);
+//
+//    }
 
     // 点击审核、未审核显示对应状态广告
     public void aduitInfo1(HttpServletRequest request,

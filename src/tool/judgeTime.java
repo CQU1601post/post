@@ -32,6 +32,7 @@ public class judgeTime {
 			//ad=(Ad) list.get(i);
 		//	alltime[i]=(String)ad.getUpLoadTime();
 			  p=(Pic) list.get(i);
+			  System.out.println("picId"+p.getPicId());
 			alltime[i]=od.getUpTimeByPicId(p.getPicId());
 			System.out.println("uploadTime="+alltime[i]);
 			 if(alltime[i]==null)

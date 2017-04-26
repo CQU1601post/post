@@ -233,6 +233,41 @@ public class SearchAboutPost {
 		return ads;
 	}
 
+	public List<Ad> adsOfPost(int postId) {
+        // System.out.println("执行src/jdbc/SearchFromDB/adsOfPost(),传入的postId为："+postId);
+        ConnectDB connect = new ConnectDB();
+        // 返回通过审核的广告并且按时间排序
+        String sql = "select * from ad where exist=1 and postId='" + postId
+                + "' and checked=1  " ;
+        ResultSet result = connect.executeQuery(sql);
+        List<Ad> ads = changeResultSetToArray.adsArray(result);
+        connect.close();
+        System.out.println(ads.size());
+        return ads;
+    }
+
+	// 查找指定非专栏粘贴栏指定类别下m~n条广告
+    public List<Ad> adsOfPost(int postId, int adTypeId) {
+        // System.out.println("执行src/jdbc/SearchFromDB/adsOfPost(),传入的postId为："+postId);
+        if (adTypeId > 0) {
+            ConnectDB connect = new ConnectDB();
+            // 返回通过审核的广告并且按时间排序
+            String sql = "select * from ad where exist=1 and postId='" + postId
+                    + "' and adTypeId='" + adTypeId
+                    + "'and checked=1 ";
+            ResultSet result = connect.executeQuery(sql);
+            System.out.println("result:" + result);
+            List<Ad> ads = changeResultSetToArray.adsArray(result);
+            connect.close();
+            System.out.println(ads.size());
+            return ads;
+        } else {
+            System.out.println("src/jdbc/SearchFromDB/adsOfPost(),传入的postId为："
+                    + postId);
+            return null;
+        }
+    }
+	
 	// 查找指定非专栏粘贴栏指定类别下m~n条广告
 	public List<Ad> adsOfPost(int postId, int adTypeId, int m, int n) {
 		// System.out.println("执行src/jdbc/SearchFromDB/adsOfPost(),传入的postId为："+postId);
@@ -296,6 +331,20 @@ public class SearchAboutPost {
 		System.out.println(ads.size());
 		return ads;
 	}
+	
+	   // 查找指定专栏下第m~n条广告
+    public List<PrivateAd> adsOfPrivatePost1(int postId) {
+        // System.out.println("执行src/jdbc/SearchFromDB/adsOfPost(),传入的postId为："+postId);
+        ConnectDB connect = new ConnectDB();
+        // 返回通过审核的广告并且按时间排序
+        String sql = "select * from privateAd where  exist=1 and postId='"
+                + postId + "'";
+        ResultSet result = connect.executeQuery(sql);
+        List<PrivateAd> ads = changeResultSetToArray.privateAdsArray(result);
+        connect.close();
+        System.out.println(ads.size());
+        return ads;
+    }
 
 	// 查找指定专栏粘贴栏指定类别下m~n条广告
 	public List<PrivateAd> adsOfPrivatePost(int postId, int adTypeId, int m,
@@ -321,6 +370,30 @@ public class SearchAboutPost {
 			return null;
 		}
 	}
+	
+	
+    public List<PrivateAd> adsOfPrivatePost(int postId, int adTypeId) {
+        // System.out.println("执行src/jdbc/SearchFromDB/adsOfPost(),传入的postId为："+postId);
+        if (adTypeId > 0) {
+            ConnectDB connect = new ConnectDB();
+            // 返回通过审核的广告并且按时间排序
+            String sql = "select * from privateAd where  exist=1 and postId='"
+                    + postId + "' and adTypeId='" + adTypeId
+                    + "'";
+            ResultSet result = connect.executeQuery(sql);
+            System.out.println("result:" + result);
+            List<PrivateAd> ads = changeResultSetToArray
+                    .privateAdsArray(result);
+            connect.close();
+            System.out.println(ads.size());
+            return ads;
+        } else {
+            System.out
+                    .println("src/jdbc/SearchFromDB/PrivateadsOfPost(),传入的postId为："
+                            + postId);
+            return null;
+        }
+    }
 
 	// 查找指定专栏广告下所有图片
 	public List<PrivatePic> picsOfPrivateAd(int adId) {

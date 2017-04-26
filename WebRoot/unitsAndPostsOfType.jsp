@@ -5,7 +5,7 @@
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/"; 
 String unitTypeName=request.getParameter("unitTypeName");
-unitTypeName=new String(unitTypeName.getBytes("iso-8859-1"),"utf-8");
+
 String unitTypeId=request.getParameter("unitTypeId");
 
 %>
