@@ -60,6 +60,12 @@ function getScrollAds(obj,ul_obj,flag){
 	var url = 'PostLogical?functionName=getScrollAds&postId='+postId+'&num='+num+'&money=0';
 	var ul_html = '';
 	$.get(url,function(data){
+	    for(var i = 0;i<data[0].row.length;i++){
+	           console.log(data[0].row[i].row);
+	       }
+	   for(var i = 0;i<data[0].img.length;i++){
+	       console.log(data[0].img[i].firstPicAddr+" "+data[0].img[i].money);
+	   }
 		if(data.length>=10){
 			for(var i = 0;i<10;i++){  
 				var li_html = '<li><a href="#"><img src="'+data[i]+'"></a></li>';

@@ -96,7 +96,16 @@
 		$(".logManager_table_radio_button").click(function() {
 
 			//alert("提交表单");
-			document.getElementById('logForm').submit();
+		  var selectedAdTypeValue = $('#adType  option:selected').val();
+		  
+          var selectedPasteTypeValue = $('#pasteType  option:selected').val();
+        
+			if(($("#datepicker2").val()==""&&$("#datepicker").val()=="")||selectedPasteTypeValue=="所有类别"){
+			    if (confirm("删除范围比较大，确定继续删除吗?")) {
+			        document.getElementById('logForm').submit();
+			    }
+			}
+		
 
 		});
 
@@ -148,31 +157,6 @@
 		});
 	}
 
-	function showPic(e, sUrl) {
-
-		var x, y;
-
-		x = e.clientX;
-
-		y = e.clientY;
-
-		document.getElementById("Layer1").style.left = x + 2 + 'px';
-
-		document.getElementById("Layer1").style.top = y + 2 + 'px';
-
-		document.getElementById("Layer1").innerHTML = "<img border='0' src=\"" + sUrl + "\">";
-
-		document.getElementById("Layer1").style.display = "";
-
-	}
-
-	function hiddenPic() {
-
-		document.getElementById("Layer1").innerHTML = "";
-
-		document.getElementById("Layer1").style.display = "none";
-
-	}
 </script>
 <style type="text/css">
 .modal.fade {
@@ -252,8 +236,8 @@
 				<label for="datepicker2">结束日期</label> <input type="text"
 					id="datepicker2" name="datepicker2">
 			</div>
-			<button type="submit"
-				class="btn btn-default logManager_table_radio_button">删除</button>
+			<input type="button" value="删除"
+				class="btn btn-default logManager_table_radio_button"/>
 
 		</form>
 	</div>

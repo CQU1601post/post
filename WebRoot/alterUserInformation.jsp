@@ -70,7 +70,7 @@ $( function(){
 						<td width="35%" align="right"><font_set>用户名</font_set> <star>*</star>
 						</td>
 						<td width="20%"><input type="text" name="userName"
-							id="userName" onBlur="check_user_name()" /></td>
+							id="userName" value="${sessionScope.user.userName}" onBlur="check_user_name()" /></td>
 						<td width="20%" align="left"><div id="info1"
 								style="color:#FF0000; display:inline;"></div>
 						</td>
@@ -114,9 +114,14 @@ $( function(){
                             <tr height="10"></tr>
                           <tr>
                         <td align="right"><font_set>电子邮件</font_set></td>
-                        <td><input type="text" name="email"
+                    <!--
+                    <td><input type="text" name="email"
                             id="email" onblur="check_mail()"  value="${sessionScope.user.email }"/>
                         </td>
+                      -->    
+                      <td>
+                      <div>${sessionScope.user.email }</div>
+                      </td>
                         <td><div id="info7" style="color:#FF0000; display:inline;"></div>
                         </td>
                     </tr>

@@ -43,18 +43,19 @@ body{
     <td><img src="images/logo02.png" style="width:120px; height:80px; align:bottom;  float:left ;max-width:none"/></td>
      <td width="50"  rowspan="2"></td>
      <td width="50"  rowspan="2"></td>
-     <td width="140"  rowspan="2"><div align="center"><a href="adminManager1.jsp" class="top-a">审核信息管理</a></div></td>   
-      <td width="150" rowspan="2"><div align="center"><a href="AdminManagerLogical?info=adminManager" class="top-a">审核账号管理</a></div></td> 
+     <td width="140"  rowspan="3"><div align="center"><a href="adminManager1.jsp" class="top-a">审核信息管理</a></div></td>   
+      <td width="150" rowspan="3"><div align="center"><a href="AdminManagerLogical?info=adminManager" class="top-a">审核账号管理</a></div></td> 
      <c:if test="${sessionScope.adminInfo.level==0 }"> 
-     <td  width="120"  rowspan="2"><div align="center"><a href="AdminManagerLogical?info=showUser" class="top-a">注册用户管理</a></div></td>
+     <td  width="150"  rowspan="3"><div align="center"><a href="AdminManagerLogical?info=showUser" class="top-a">注册用户管理</a></div></td>
      <td width="120" rowspan="2"><div align="center"><a href="AdminManagerLogical?info=pasteShow" class="top-a">粘贴栏管理</a></div></td>
      <td width="120" rowspan="2"><div align="center"><a href="AdminManagerLogical?info=unitShow" class="top-a">单位管理</a></div></td>       
      <td width="120"  rowspan="2"><div align="center"><a href="AdminManagerLogical?info=typeGroupShow" class="top-a">类别管理</a></div></td> 
-     <td width="200" rowspan="2"><div align="center"><a href="AdminManagerLogical?info=pasteTypeShow" class="top-a">单位所属类别管理</a></div></td>       
+     <td width="200" rowspan="3"><div align="center"><a href="AdminManagerLogical?info=pasteTypeShow" class="top-a">单位所属类别管理</a></div></td>       
     
-      <td width="150" rowspan="2"><div align="center"><a href="AdminManagerLogical?info=CostManager" class="top-a">支付管理</a></div></td> 
-      <td width="150" rowspan="2"><div align="center"><a href="AdminManagerLogical?info=logManagerShow" class="top-a">日志管理</a></div></td> 
-        <td width="150" rowspan="2"><div align="center"><a href="AdminManagerLogical?info=adManagerShow" class="top-a">广告管理</a></div></td> 
+      <td width="120" rowspan="2"><div align="center"><a href="AdminManagerLogical?info=CostManager" class="top-a">支付管理</a></div></td> 
+      <td width="120" rowspan="2"><div align="center"><a href="AdminManagerLogical?info=logManagerShow" class="top-a">日志管理</a></div></td> 
+        <td width="120" rowspan="2"><div align="center"><a href="AdminManagerLogical?info=adManagerShow" class="top-a">广告管理</a></div></td> 
+          <td width="120" rowspan="2"><div align="center"><a href="AdminManagerLogical?info=browersPicNum" class="top-a">图片数量管理</a></div></td> 
      </c:if>
      <c:if  test="${!empty sessionScope.adminInfo }">
      <td width="180" rowspan="2"></td>

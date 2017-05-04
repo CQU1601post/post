@@ -11,10 +11,12 @@ import java.util.List;
 import java.util.Set;
 
 import sun.print.resources.serviceui;
+import tool.ChangeResultSetToArray;
 
 import allClasses.Ad;
 import allClasses.AdType;
 import allClasses.Administrator;
+import allClasses.BrowserControl;
 import allClasses.Pic;
 import allClasses.Post;
 import allClasses.TypeGroup;
@@ -477,10 +479,35 @@ public class AdminLogic {
         return list;
     }
 
+    public Ad getAdByAdId(int adId) {
+        ConnectDB connectDB = new ConnectDB();
+        sql = "select * from ad where adId='" + adId + "'";
+        ResultSet result = connectDB.executeQuery(sql);
+
+        Ad ad = new Ad();
+        try {
+            while (result.next()) {
+                ad = new Ad(result.getInt(1), result.getInt(2),
+                        result.getString(3), result.getInt(4),
+                        result.getInt(5), result.getString(6),
+                        result.getInt(7), result.getLong(8), result.getInt(9),
+                        result.getString(10), result.getInt(11),
+                        result.getInt(12), result.getInt(13),
+                        result.getInt(14), result.getInt(15));// 通过审核的广告checked属性必为1
+                // System.out.println(ad.getAdId());
+
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        connectDB.close();
+        return ad;
+    }
+
     public List<Pic> getPicByAdId(int adId) {
-        connection = new ConnectDB();
+        ConnectDB connection1 = new ConnectDB();
         sql = "select * from pic where adId='" + adId + "'";
-        ResultSet rs = connection.executeQuery(sql);
+        ResultSet rs = connection1.executeQuery(sql);
         List<Pic> pics = new ArrayList<Pic>();
 
         try {
@@ -500,7 +527,7 @@ public class AdminLogic {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            connection.close();
+            connection1.close();
         }
         return pics;
     }
@@ -569,10 +596,25 @@ public class AdminLogic {
     }
 
     // 删除某个id广告下所有的图片
-    public boolean del_pic_ad(int adId) {
+    public boolean del_pic_ad(int adId, String path, String compressPath) {
         ConnectDB connection1 = new ConnectDB();
+        Ad ad = getAdByAdId(adId);
+        String filePath = (path + ad.getFirstPicAddr()).replace("/", "\\");
+        System.out.println(filePath);
+        deleteLogManager(ad.getAdId());
+        deleteFile(filePath);// 删除文件
+        List<Pic> pics = getPicByAdId(adId);
+        for (int i = 0; i < pics.size(); i++) {
+            String picFilePath = (compressPath + pics.get(i).getPicAddr())
+                    .replace("/", "\\");
+            File file = new File(picFilePath);
+            if (file.exists()) {
+                file.delete();
+            }
+        }
         sql = "delete from pic where adId='" + adId + "'";
         boolean flag = connection1.executeUpdate(sql);
+
         sql = "delete from ad where adId='" + adId + "'";
         flag = connection1.executeUpdate(sql);
         connection1.close();
@@ -587,8 +629,37 @@ public class AdminLogic {
         connection.close();
     }
 
+    public void delBatch_pic_ad(List<Integer> AdList, String path,
+            String compressPath) {
+
+        connection = new ConnectDB();
+        for (int i = 0; i < AdList.size(); i++) {
+            Ad ad = getAdByAdId(AdList.get(i));
+            String filePath = (path + ad.getFirstPicAddr()).replace("/", "\\");
+            System.out.println(filePath);
+            deleteLogManager(ad.getAdId());
+            deleteFile(filePath);// 删除文件
+            List<Pic> pics = getPicByAdId(AdList.get(i));
+            for (int j = 0; j < pics.size(); j++) {
+                String picFilePath = (compressPath + pics.get(j).getPicAddr())
+                        .replace("/", "\\");
+                File file = new File(picFilePath);
+                if (file.exists()) {
+                    file.delete();
+                }
+            }
+        }
+
+        sql = "delete from pic where adId=?";
+        boolean flag = connection.executeBatch(sql,
+                listTransformationInt(AdList));
+        sql = "delete from ad where adId=?";
+        flag = connection.executeBatch(sql, listTransformationInt(AdList));
+        connection.close();
+    }
+
     public void delBatch_pic_ad(List<Integer> AdList) {
-       
+
         connection = new ConnectDB();
         sql = "delete from pic where adId=?";
         boolean flag = connection.executeBatch(sql,
@@ -598,25 +669,28 @@ public class AdminLogic {
         connection.close();
     }
 
-    public void deletePicFile(List<Integer> AdList,String path){
-        ConnectDB connectDB=new ConnectDB();
-        sql="select * from pic where adId=?";
-        int[] ads=new int[AdList.size()];
-        List<Pic> pics=new ArrayList<Pic>();
-        for(int i=0;i<AdList.size();i++){
-            ads[i]=AdList.get(i);
+    public void deletePicFile(List<Integer> AdList, String path) {
+        ConnectDB connectDB = new ConnectDB();
+        sql = "select * from pic where adId=?";
+        int[] ads = new int[AdList.size()];
+        List<Pic> pics = new ArrayList<Pic>();
+        for (int i = 0; i < AdList.size(); i++) {
+            ads[i] = AdList.get(i);
         }
-      pics=connectDB.executeQueryBatchPic(sql,ads);
-        
-        for(int i=0;i<pics.size();i++){
-            String pathname=(path+"/"+pics.get(i).getPicAddr()).replace("/","\\");
-            File file=new File(pathname);
-            if(file.exists()){
+        pics = connectDB.executeQueryBatchPic(sql, ads);
+
+        for (int i = 0; i < pics.size(); i++) {
+            String pathname = (path + pics.get(i).getPicAddr()).replace("/",
+                    "\\");
+            System.out.println(pathname);
+            File file = new File(pathname);
+            if (file.exists()) {
                 file.delete();
             }
         }
-        
+
     }
+
     public void newDelBatch_pic_ad(List<Integer> AdList) {
         connection = new ConnectDB();
         sql = "update ad set exist=0 where adId=?";
@@ -691,10 +765,11 @@ public class AdminLogic {
     }
 
     // 更改用户等级
-    public boolean changeUser(int userId, int userType) {
+    public boolean changeUser(int userId, String password, String email,
+            String level) {
         connection = new ConnectDB();
-        sql = "update user set  userType='" + userType + "' where userId='"
-                + userId + "'";
+        sql = "update user set  userType='" + level + "',password='" + password
+                + "',email='" + email + "'  where userId='" + userId + "'";
         boolean flag = connection.executeUpdate(sql);
         connection.close();
         System.out.println("执行changeUser，flag=" + flag);
@@ -1060,7 +1135,7 @@ public class AdminLogic {
     }
 
     // 删除特定id粘贴栏信息
-    public boolean delPaste(int pasteId) {
+    public boolean delPaste(int pasteId, String path, String compressPath) {
         ConnectDB connection1 = new ConnectDB();
         boolean flag = false, adFlag = false;
         List<Integer> adIdList = new ArrayList<Integer>();
@@ -1077,7 +1152,7 @@ public class AdminLogic {
         }
         if (flag) {
             for (int i = 0; i < adIdList.size(); i++) {
-                adFlag = del_pic_ad(adIdList.get(i));
+                adFlag = del_pic_ad(adIdList.get(i), path, compressPath);
             }
 
         }
@@ -1180,7 +1255,7 @@ public class AdminLogic {
     }
 
     // 删除特定id单元信息
-    public boolean delUnit(int unitId) {
+    public boolean delUnit(int unitId, String path, String compressPath) {
         ConnectDB connection1 = new ConnectDB();
         List<Integer> postIdList = new ArrayList<Integer>();
         boolean flag = false, postFlag = false;
@@ -1197,7 +1272,7 @@ public class AdminLogic {
         }
         if (flag) {
             for (int i = 0; i < postIdList.size(); i++) {
-                postFlag = delPaste(postIdList.get(i));
+                postFlag = delPaste(postIdList.get(i), path, compressPath);
                 if (!postFlag) {
                     break;
                 }
@@ -1583,7 +1658,7 @@ public class AdminLogic {
         return max;
     }
 
-    public boolean delPasteType(int id) {
+    public boolean delPasteType(int id, String path, String compressPath) {
         ConnectDB connection1 = new ConnectDB();
         boolean flag = false, unitFlag = false;
         List<Integer> unitIdList = new ArrayList<Integer>();
@@ -1602,7 +1677,7 @@ public class AdminLogic {
         if (flag) {
             for (int i = 0; i < unitIdList.size(); i++) {
 
-                unitFlag = delUnit(unitIdList.get(i));
+                unitFlag = delUnit(unitIdList.get(i), path, compressPath);
                 if (!unitFlag) {
                     break;
                 }
@@ -1892,32 +1967,50 @@ public class AdminLogic {
         return flag;
     }
 
-    public void deleteAdManager(String sql,String path,String picPath) {
+    public boolean deleteLogManager(int id) {
+        ConnectDB connection = new ConnectDB();
+        sql = "delete from visitorlog where adID='" + id + "'";
+        boolean flag = connection.executeUpdate(sql);
+        connection.close();
+        return flag;
+    }
+
+    public void deleteAdManager(String sql, String path, String picPath) {
         ConnectDB connection = new ConnectDB();
         ResultSet resultSet = connection.executeQuery(sql);
         List<Integer> list = new ArrayList<Integer>();
         try {
             while (resultSet.next()) {
                 list.add(resultSet.getInt("adId"));
-               String filePath=(path+"/" + resultSet.getString("firstPicAddr")).replace("/", "\\");
-               deleteFile(filePath);
+                String filePath = (path + resultSet.getString("firstPicAddr"))
+                        .replace("/", "\\");
+                System.out.println(filePath);
+                deleteLogManager(resultSet.getInt("adId"));
+                deleteFile(filePath);// 删除文件
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         deletePicFile(list, picPath);
-        delBatch_pic_ad(list);
+        delBatch_pic(list);
         connection.close();
 
     }
 
-    public void deleteFile(String path){
-        File file=new File(path);
-        if(file.exists()){
+    public void delBatch_pic(List<Integer> list) {
+        ConnectDB connectDB = new ConnectDB();
+        sql = "delete from pic where adId=?";
+        boolean flag = connectDB.executeBatch(sql, listTransformationInt(list));
+        connectDB.close();
+    }
+
+    public void deleteFile(String path) {
+        File file = new File(path);
+        if (file.exists()) {
             file.delete();
         }
     }
-    
+
     // 根据sql语句查询结果判定是否有重复项
     public boolean checkRepeat(String sqlString) {
         connection = new ConnectDB();
@@ -1936,4 +2029,32 @@ public class AdminLogic {
         connection.close();
         return flag;
     }
+
+    public List<BrowserControl> selectBrowserControls() {
+        connection = new ConnectDB();
+        sql = "select * from browserControl";
+        ResultSet resultSet = connection.executeQuery(sql);
+        List<BrowserControl> browserControls = new ArrayList<BrowserControl>();
+        try {
+            while (resultSet.next()) {
+                BrowserControl browserControl = new BrowserControl();
+                browserControl.setId(resultSet.getInt("id"));
+                browserControl.setRow(resultSet.getInt("Row"));
+                browserControls.add(browserControl);
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return browserControls;
+    }
+
+    public boolean updateBrowserPicNum(int id, String row) {
+        connection = new ConnectDB();
+        sql = "update browserControl set Row='" + row + "'where id='" + id
+                + "'";
+        boolean flag = connection.executeUpdate(sql);
+        return flag;
+    }
+
 }

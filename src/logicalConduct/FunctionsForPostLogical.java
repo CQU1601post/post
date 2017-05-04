@@ -36,6 +36,7 @@ import tool.GetCurrentTime;
 import tool.GetSortValue;
 import allClasses.Ad;
 import allClasses.AdType;
+import allClasses.BrowserControl;
 import allClasses.Pic;
 import allClasses.Post;
 import allClasses.PrivateAd;
@@ -135,7 +136,10 @@ public class FunctionsForPostLogical {
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
 				"yyyy-MM-dd HH:mm:ss");
 		String currentTime = simpleDateFormat.format(date);
+		System.out.println(currentTime);
 		Timestamp timestamp = Timestamp.valueOf(currentTime);
+	
+		
 		return timestamp;
 	}
 
@@ -181,6 +185,8 @@ public class FunctionsForPostLogical {
 					+ vl.getVisitorip() + "'and postId='" + vl.getPostId()
 					+ "'";
 			if (od.selectVisitorLog(vl, sql)) {
+			   System.out.println(vl.getTime());
+		
 				System.out.println("addVisitorLog......");
 				od.addVisitorLog(vl);
 			}
@@ -342,9 +348,9 @@ public class FunctionsForPostLogical {
 			// 返回指定ID下所有图片
 			if (post.getUserId() > 0) {// 如果是专栏
 				pics = searchFromDB.picsOfPrivateAd(adId);
-				String sql = "update privatead set click=click+1 where adId="
-						+ adId;
-				searchFromDB.updateClick(sql);
+//				String sql = "update privatead set click=click+1 where adId="
+//						+ adId;
+//				searchFromDB.updateClick(sql);
 				privateColumn = "1";
 			}
 			// System.out.println("ad:"+adId);
@@ -353,8 +359,8 @@ public class FunctionsForPostLogical {
 				pics = searchFromDB.picsOfAd(adId);
 				ad = searchFromDB.adOfId(adId);
 
-				String sql = "update ad set click=click+1 where adId=" + adId;
-				searchFromDB.updateClick(sql);
+//				String sql = "update ad set click=click+1 where adId=" + adId;
+//				searchFromDB.updateClick(sql);
 				privateColumn = "0";
 			}
 			request.setAttribute("costMark", ad.getMoney());
@@ -529,7 +535,8 @@ public class FunctionsForPostLogical {
 		int hiddenId=Integer.parseInt(request.getParameter("hiddenId"));
 		//int adId = searchFromDB.maxAdId();
 		int money1 = Integer.parseInt(money);
-		boolean flag = searchFromDB.saveMoney(hiddenId, money1);
+		Timestamp timestamp=getTimestamp();
+		boolean flag = searchFromDB.saveMoney(hiddenId, money1,timestamp);
 		if (flag) {
 			response.getWriter().write("1");
 		} else {
@@ -1010,19 +1017,31 @@ public class FunctionsForPostLogical {
 			int num = Integer.parseInt(request.getParameter("num"));
 			int postId = Integer.parseInt(request.getParameter("postId"));
 			System.out.println("postID" + postId);
-			List<Ad> ads = searchFromDB.getRandAd(postId, num, 0);
-			List<String> fristPicList = new ArrayList<String>();
-			
+			List<Ad> ads = searchFromDB.getRandAd(postId, 0);
+		//	List<String> fristPicList = new ArrayList<String>();
+			List<Object> adList=new ArrayList<Object>();
+			Map<String, List<Object>> map=new HashMap<String, List<Object>>();
+		//	Map<String, List<Ad>> map2=new HashMap<String, List<Ad>>();
+		//	List<Object> browserControls=new ArrayList<Object>();
 			if(ads!=null){
+			    List<Object> browserControls=  searchFromDB.selectAllBrowerControl();
+			    map.put("row", browserControls);
 			    for (Iterator iterator = ads.iterator(); iterator.hasNext();) {
 	                Ad ad = (Ad) iterator.next();
-	                fristPicList.add(ad.getFirstPicAddr());
-	                System.out.println(ad.getFirstPicAddr());
+	                 adList.add(ad);
+	            //    fristPicList.add(ad.getFirstPicAddr());
+	            
 	            }
+			  map.put("img", adList);
 			}
 			
-			
-			JSONArray jsonArray = JSONArray.fromObject(fristPicList);
+	
+		
+		//	JSONArray jsonArray = JSONArray.fromObject(fristPicList);
+			JSONArray jsonArray2 = JSONArray.fromObject(map);
+		
+		//	System.out.println(jsonArray);
+			System.out.println(jsonArray2);
 			// response.getWriter().print(jsonArray);
 			// String picaddrs = " ";
 			// for(int j=0;j<firstPicAddrs.length-1;j++){
@@ -1030,7 +1049,7 @@ public class FunctionsForPostLogical {
 			// System.out.println("firstPic"+firstPicAddrs[j]);
 			// }
 			// System.out.println("firstPic"+picaddrs);
-			out.print(jsonArray);
+			out.print(jsonArray2);
 		}
 	}
 }

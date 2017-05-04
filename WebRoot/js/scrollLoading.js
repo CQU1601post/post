@@ -1,4 +1,4 @@
-//根据滚动条所滚动的高度来决定每次加载图片的个数 
+/*//根据滚动条所滚动的高度来决定每次加载图片的个数 
  window.onscroll = function(){	 
     //document.body是DOM中Document对象里的body节点,document.documentElement是文档对象根节点(html)的引用,有些标准中不支持document.body.scrollTop 
     var currentScrollTop = document.documentElement.scrollTop || document.body.scrollTop;
@@ -61,4 +61,4 @@
 		}		
 	}   
 	 
-};
+};*/

@@ -46,6 +46,7 @@ import jdbc.UserOperation;
 import allClasses.Ad;
 import allClasses.AdType;
 import allClasses.Administrator;
+import allClasses.BrowserControl;
 import allClasses.Cost;
 import allClasses.Pic;
 import allClasses.Post;
@@ -181,6 +182,10 @@ public class AdminManagerLogical extends HttpServlet {
             this.adManagerDelete(request, response);
         }else if (info.equals("adManagerShow")) {
             this.adManagerShow(request, response);
+        }else if (info.equals("browersPicNum")) {
+            this.browersPicNum(request, response);
+        }else if (info.equals("updateBrowserManager")) {
+            this.updateBrowserManager(request, response);
         }
 
     }
@@ -894,10 +899,10 @@ public class AdminManagerLogical extends HttpServlet {
 
         List<String> scopeList = new ArrayList<String>();
         List<Post> postList = new ArrayList<Post>();
-        if (selectedValue != null) {
-            selectedValue = new String(selectedValue.getBytes("iso-8859-1"),
-                    "UTF-8");
-        }
+//        if (selectedValue != null) {
+//            selectedValue = new String(selectedValue.getBytes("iso-8859-1"),
+//                    "UTF-8");
+//        }
 
         if (selectedValue.equals("所有类别")) {
             try {
@@ -943,10 +948,10 @@ public class AdminManagerLogical extends HttpServlet {
                 .getParameter("selectedAdTypeValue");
 
         List<Ad> adList = new ArrayList<Ad>();
-        selectedPasteTypeValue = new String(
-                selectedPasteTypeValue.getBytes("iso-8859-1"), "UTF-8");
-        selectedAdTypeValue = new String(
-                selectedAdTypeValue.getBytes("iso-8859-1"), "UTF-8");
+//        selectedPasteTypeValue = new String(
+//                selectedPasteTypeValue.getBytes("iso-8859-1"), "UTF-8");
+//        selectedAdTypeValue = new String(
+//                selectedAdTypeValue.getBytes("iso-8859-1"), "UTF-8");
         if (!selectedAdTypeValue.equals("所有粘贴栏")) {
             try {
                 adList = new OperationData().getAds(selectedAdTypeValue);
@@ -1082,7 +1087,11 @@ public class AdminManagerLogical extends HttpServlet {
         int adId = Integer.parseInt(request.getParameter("adId"));
         data = new AdminLogic();
         System.out.println("adId=" + adId);
-        boolean flag = data.del_pic_ad(adId);
+        String compressPath = request.getSession().getServletContext()
+                .getRealPath("/");// 首图压缩后存放路径
+        String path = request.getSession().getServletContext()
+                .getRealPath("/");// 图片存储路径
+        boolean flag = data.del_pic_ad(adId,path,compressPath);
         int state = 0;
         List noauditlist = data.getAuditInfo(state);
         request.setAttribute("noauditlist", noauditlist);
@@ -1122,7 +1131,12 @@ public class AdminManagerLogical extends HttpServlet {
             AdList.add(i, Integer.parseInt((String) jsonArray.get(i)));
             System.out.println(" 广告ID" + (String) jsonArray.get(i));
         }
-        data.delBatch_pic_ad(AdList);
+        String compressPath = request.getSession().getServletContext()
+                .getRealPath("/");// 首图压缩后存放路径
+        String path = request.getSession().getServletContext()
+                .getRealPath("/");// 图片存储路径
+      
+        data.delBatch_pic_ad(AdList,path,compressPath);
         int state = 1;
 
         List auditlist = data.getAuditInfo(state);
@@ -1143,7 +1157,13 @@ public class AdminManagerLogical extends HttpServlet {
             AdList.add(i, Integer.parseInt((String) jsonArray.get(i)));
             // System.out.println(" 广告ID" + (String) jsonArray.get(i));
         }
-        data.newDelBatch_pic_ad(AdList);
+        String compressPath = request.getSession().getServletContext()
+                .getRealPath("/");// 首图压缩后存放路径
+        String path = request.getSession().getServletContext()
+                .getRealPath("/");// 图片存储路径
+      
+        data.delBatch_pic_ad(AdList,path,compressPath);
+      //  data.newDelBatch_pic_ad(AdList);
         int state = 1;
 
         List auditlist = data.getAuditInfo(state);
@@ -1296,15 +1316,18 @@ public class AdminManagerLogical extends HttpServlet {
     public void changeUser(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
         data = new AdminLogic();
-        response.setContentType("text/html;charset=UTF-8");
-        request.setCharacterEncoding("UTF-8");
-
+       
         String user = request.getParameter("userId");
         int userId = Integer.parseInt(user);
-        String type = request.getParameter("userType");
-        int userType = Integer.parseInt(type);
-        data.changeUser(userId, userType);
-        showUser(request, response);
+        String password = request.getParameter("password");
+        String email=request.getParameter("email");
+        String level=request.getParameter("level");
+       boolean flag=  data.changeUser(userId, password,email,level);
+       if(flag){
+           response.getWriter().print("成功");
+       }else{
+           response.getWriter().print("失败");
+       }
     }
 
     // 修改用户信息
@@ -1506,7 +1529,11 @@ public class AdminManagerLogical extends HttpServlet {
         String pasteId = request.getParameter("pasteId");
         System.out.println("pasteId=" + pasteId);
         int id = Integer.parseInt(pasteId);
-        boolean f = data.delPaste(id);
+        String compressPath = request.getSession().getServletContext()
+                .getRealPath("/");// 首图压缩后存放路径
+        String path = request.getSession().getServletContext()
+                .getRealPath("/");// 图片存储路径
+        boolean f = data.delPaste(id,path,compressPath);
         pasteShow(request, response);
 
     }
@@ -1605,7 +1632,11 @@ public class AdminManagerLogical extends HttpServlet {
         String unitId = request.getParameter("unitId");
         System.out.println("unitId=" + unitId);
         int id = Integer.parseInt(unitId);
-        data.delUnit(id);
+        String compressPath = request.getSession().getServletContext()
+                .getRealPath("/");// 首图压缩后存放路径
+        String path = request.getSession().getServletContext()
+                .getRealPath("/");// 图片存储路径
+        data.delUnit(id,path,compressPath);
         unitShow(request, response);
 
     }
@@ -1853,7 +1884,11 @@ public class AdminManagerLogical extends HttpServlet {
         String typeId = request.getParameter("typeId");
         System.out.println("typeId=" + typeId);
         int id = Integer.parseInt(typeId);
-        data.delPasteType(id);
+        String compressPath = request.getSession().getServletContext()
+                .getRealPath("/");// 首图压缩后存放路径
+        String path = request.getSession().getServletContext()
+                .getRealPath("/");// 图片存储路径
+        data.delPasteType(id,path,compressPath);
 
         List lists = data.get_pasteType();// 处理删除后超级管理员的范围
         if (lists.size() >= 0) {
@@ -2125,8 +2160,7 @@ public class AdminManagerLogical extends HttpServlet {
                 .getRealPath("/");// 首图压缩后存放路径
         String path = request.getSession().getServletContext()
                 .getRealPath("/");// 图片存储路径
-        
-     
+      
 //        if (unitId != null) {
 //            unitId = new String(unitId.getBytes("iso-8859-1"), "UTF-8");
 //        }
@@ -2151,16 +2185,16 @@ public class AdminManagerLogical extends HttpServlet {
             if (advertisement.equals("所有广告")) {
                 if (unitId.equals("所有类别") && adType.equals("所有粘贴栏")) {
                     if (datepicker2 == "" && datepicker != "") {
-                        sql = "select * from ad where str_to_date(upLoadTime, '%Y%m%d%H%i')>=str_to_date('"+datepicker+"', '%Y-%m-%d %H:%i')";
+                        sql = "select * from ad where money=0 and str_to_date(upLoadTime, '%Y%m%d%H%i')>=str_to_date('"+datepicker+"', '%Y-%m-%d %H:%i')";
                     }
                     if (datepicker2 != "" && datepicker == "") {
-                        sql = "select *  from ad where str_to_date(upLoadTime, '%Y%m%d%H%i')<=str_to_date('"+datepicker2+"', '%Y-%m-%d %H:%i')";
+                        sql = "select *  from ad where  money=0 and str_to_date(upLoadTime, '%Y%m%d%H%i')<=str_to_date('"+datepicker2+"', '%Y-%m-%d %H:%i')";
                     }
                     if (datepicker2 == "" && datepicker == "") {
-                        sql = "select *  from ad ";
+                        sql = "select *  from ad where money=0";
                     }
                     if (datepicker2 != "" && datepicker != "") {
-                        sql ="select * from ad where str_to_date(upLoadTime, '%Y%m%d%H%i')<='"+datepicker2+"'and str_to_date(upLoadTime, '%Y%m%d%H%i')>'"+datepicker+"'";
+                        sql ="select * from ad where money=0 and str_to_date(upLoadTime, '%Y%m%d%H%i')<='"+datepicker2+"'and str_to_date(upLoadTime, '%Y%m%d%H%i')>'"+datepicker+"'";
                     }
                     System.out.println(sql);
                    data.deleteAdManager(sql,path,compressPath);
@@ -2175,21 +2209,21 @@ public class AdminManagerLogical extends HttpServlet {
                             Post post = (Post) iterator.next();
 
                             if (datepicker2 == "" && datepicker != "") {
-                                sql = "select * from ad WHERE postId='"
+                                sql = "select * from ad WHERE money=0 and postId='"
                                         + post.getPostId() + "'and   str_to_date(upLoadTime, '%Y%m%d%H%i')>='"
                                         + datepicker + "'";
                             }
                             if (datepicker2 != "" && datepicker == "") {
-                                sql = "select * from ad WHERE  postId='"
+                                sql = "select * from ad WHERE money=0 and  postId='"
                                         + post.getPostId() + "' and str_to_date(upLoadTime, '%Y%m%d%H%i')<='"
                                         + datepicker2 + "'";
                             }
                             if (datepicker2 == "" && datepicker == "") {
-                                sql = "select * from ad WHERE  postId='"
+                                sql = "select * from ad WHERE money=0 and postId='"
                                         + post.getPostId() + "'";
                             }
                             if (datepicker2 != "" && datepicker != "") {
-                                sql = "select * from ad WHERE  postId='"
+                                sql = "select * from ad WHERE money=0 and  postId='"
                                         + post.getPostId() + "'and str_to_date(upLoadTime, '%Y%m%d%H%i')>='"
                                         + datepicker + "'and str_to_date(upLoadTime, '%Y%m%d%H%i')<='"
                                         + datepicker2 + "'";
@@ -2199,21 +2233,21 @@ public class AdminManagerLogical extends HttpServlet {
                         }
                     } else {
                         if (datepicker2 == "" && datepicker != "") {
-                            sql = "select * from ad WHERE postId='"
+                            sql = "select * from ad WHERE money=0 and postId='"
                                     + adType + "' and str_to_date(upLoadTime, '%Y%m%d%H%i')>='" + datepicker
                                     + "'";
                         }
                         if (datepicker2 != "" && datepicker == "") {
-                            sql = "select * from ad WHERE postId='"
+                            sql = "select * from ad WHERE money=0 and postId='"
                                     + adType + "'and str_to_date(upLoadTime, '%Y%m%d%H%i')<='" + datepicker2
                                     + "'";
                         }
                         if (datepicker2 == "" && datepicker == "") {
-                            sql = "select * from ad where postId='"
+                            sql = "select * from ad where money=0 and postId='"
                                     + adType + "'";
                         }
                         if (datepicker2 != "" && datepicker != "") {
-                            sql = "select * from ad where postId='"
+                            sql = "select * from ad where money=0 and postId='"
                                     + adType + "'and str_to_date(upLoadTime, '%Y%m%d%H%i')>='" + datepicker
                                     + "'and str_to_date(upLoadTime, '%Y%m%d%H%i')<='" + datepicker2 + "'";
                         }
@@ -2223,20 +2257,20 @@ public class AdminManagerLogical extends HttpServlet {
                 }
             } else {
                 if (datepicker2 == "" && datepicker != "") {
-                    sql = "select * from ad WHERE adID='"
+                    sql = "select * from ad WHERE money=0 and adID='"
                             + advertisement + "' and str_to_date(upLoadTime, '%Y%m%d%H%i')>='" + datepicker + "'";
                 }
                 if (datepicker2 != "" && datepicker == "") {
-                    sql = "select *  from ad WHERE  adID='"
+                    sql = "select *  from ad WHERE money=0 and adID='"
                             + advertisement + "'and  str_to_date(upLoadTime, '%Y%m%d%H%i')<='" + datepicker2
                             + "'";
                 }
                 if (datepicker2 == "" && datepicker == "") {
-                    sql = "select * from ad where adID='"
+                    sql = "select * from ad where  money=0 and adID='"
                             + advertisement + "'";
                 }
                 if (datepicker2 != "" && datepicker != "") {
-                    sql = "select *  from ad where adID='"
+                    sql = "select *  from ad where money=0 and adID='"
                             + advertisement + "'and str_to_date(upLoadTime, '%Y%m%d%H%i')>='" + datepicker
                             + "'and str_to_date(upLoadTime, '%Y%m%d%H%i')<='" + datepicker2 + "'";
                 }
@@ -2438,8 +2472,29 @@ public class AdminManagerLogical extends HttpServlet {
                 url = "findPasswordSelectAccount.jsp";
             }
         }
-        
 
         request.getRequestDispatcher(url).forward(request, response);
     }
+    
+    public void browersPicNum(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException {
+        data=new AdminLogic();
+        List<BrowserControl> browserControls=data.selectBrowserControls();
+        request.setAttribute("browserControls", browserControls);
+        request.getRequestDispatcher("browserPicNumManager.jsp").forward(request, response);
+    }
+    public void updateBrowserManager(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException {
+        int id=Integer.parseInt(request.getParameter("id"));
+        String updatePicNum=request.getParameter("updatePicNum");
+        
+        data=new AdminLogic();
+        boolean flag=data.updateBrowserPicNum(id,updatePicNum);
+        if(flag){
+            response.getWriter().print("成功");
+        }else{
+            response.getWriter().print("失败");
+        }
+    }
+     
 }

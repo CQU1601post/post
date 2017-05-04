@@ -1,5 +1,7 @@
 package allClasses;
 
+import java.sql.Timestamp;
+
 public class Ad {
 	private int adId;
 	private int adTypeId;
@@ -8,6 +10,7 @@ public class Ad {
 	private int postId;
 	private String firstPicAddr;
 	private int money;
+	private Timestamp paymentTime;
 	private long sortValue;
 	private int checked;
 	private String remark;
@@ -37,6 +40,29 @@ public class Ad {
         this.click = click;
         this.exist = exist;
         this.auditMark=auditMark;
+    }
+	
+	public Ad(int adId, int adTypeId, String upLoadTime, int userId,
+            int postId, String firstPicAddr, int money,long sortValue,
+            int checked, String remark, int height, int width, int click,
+            int exist,int auditMark, Timestamp paymentTime) {
+        super();
+        this.adId = adId;
+        this.adTypeId = adTypeId;
+        this.upLoadTime = upLoadTime;
+        this.userId = userId;
+        this.postId = postId;
+        this.firstPicAddr = firstPicAddr;
+        this.money = money;
+        this.sortValue = sortValue;
+        this.checked = checked;
+        this.remark = remark;
+        this.height = height;
+        this.width = width;
+        this.click = click;
+        this.exist = exist;
+        this.auditMark=auditMark;
+        this.paymentTime=paymentTime;
     }
     public Ad() {
 		super();
@@ -138,6 +164,14 @@ public class Ad {
     }
     public void setAuditMark(int auditMark) {
         this.auditMark = auditMark;
+    }
+
+    public Timestamp getPaymentTime() {
+        return paymentTime;
+    }
+
+    public void setPaymentTime(Timestamp paymentTime) {
+        this.paymentTime = paymentTime;
     }
 	
 	
