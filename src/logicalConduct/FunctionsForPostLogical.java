@@ -467,7 +467,7 @@ public class FunctionsForPostLogical {
 		} else {
 			String searchText = request.getParameter("searchText");
 			// System.out.println("searchText :"+searchText );
-			searchText = new String(searchText.getBytes("iso-8859-1"), "utf-8");
+		//	searchText = new String(searchText.getBytes("iso-8859-1"), "utf-8");
 			// System.out.println(searchText);
 			List<Map<String, List<Post>>> unitsAndPosts = searchFromDB
 					.postsContaintText(searchText);// 所有包含searchText字段的单位跟粘贴栏
@@ -491,10 +491,10 @@ public class FunctionsForPostLogical {
 			response.sendRedirect("index.jsp");
 		} else {
 			String searchText = request.getParameter("searchText");
-			searchText = new String(searchText.getBytes("iso-8859-1"), "utf-8");
+		   searchText = new String(searchText.getBytes("iso-8859-1"), "utf-8");
 			// System.out.println(searchText);
 			List<Map<String, Map<Integer,List<Ad>>>> unitsAndPosts = searchFromDB
-					.adsContaintText1(searchText);// 所有包含searchText字段的单位跟粘贴栏
+					.adsContaintText2(searchText);// 所有包含searchText字段的单位跟粘贴栏
 			
 			request.setAttribute("unitsAndPosts", unitsAndPosts);
 			request.setAttribute("searchText", searchText);

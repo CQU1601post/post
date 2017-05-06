@@ -7,9 +7,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import tool.ChangeResultSetToArray;
 import allClasses.*;
@@ -698,6 +700,95 @@ public class SearchAboutPost {
         return posts;
     }
 
+    public List<Map<String, Map<Integer, List<Ad>>>> adsContaintText2(
+            String text) {
+        // System.out.println("执行src/jdbc/SearchFromDB/adsOfPost(),传入的postId为："+postId);
+        ConnectDB connect = new ConnectDB();
+        List<Map<String, Map<Integer, List<Ad>>>> posts = new ArrayList<Map<String, Map<Integer, List<Ad>>>>();
+        String sql = "select * from ad where checked=1 and exist=1 and remark like '%"
+                + text + "%'";// 查找所有的广告
+        System.out.println(sql);
+        ResultSet result = connect.executeQuery(sql);
+        List<Ad> ads = new ArrayList<Ad>();
+
+        System.out.println("text" + text);
+    
+        try {
+            while (result.next()) {
+                Ad ad = new Ad(result.getInt(1), result.getInt(2),
+                        result.getString(3), result.getInt(4),
+                        result.getInt(5), result.getString(6),
+                        result.getInt(7), result.getLong(8), result.getInt(9),
+                        result.getString(10), result.getInt(11),
+                        result.getInt(12), result.getInt(13),
+                        result.getInt(14), result.getInt(15));// 通过审核的广告checked属性必为1
+                ads.add(ad);
+            }
+        } catch (SQLException e) {
+            System.out
+                    .println("false in:src/jdbc/SearchFromDB/postsContaintText");
+            e.printStackTrace();
+        }
+        System.out.println("广告数"+ads.size());
+        for (int i = 0; i < ads.size(); i++) {
+            boolean flag=true;
+          
+            sql = "select * from post where postId='" + ads.get(i).getPostId()
+                    + "'";
+            Post post = postOfSql(sql);
+            sql = "select * from unit where unitId='" + post.getUnitId() + "'";
+            Unit unit = unitOfSql(sql);
+            String unitString = unit.getUnitId() + "_" + unit.getUnitName();
+            System.out.println(unitString);
+            for (int j = 0; j < posts.size(); j++) {
+                Map<Integer, List<Ad>> recordMapValueMap3 = new HashMap<Integer, List<Ad>>();
+                Map<String, Map<Integer, List<Ad>>> map = (Map<String, Map<Integer, List<Ad>>>) posts
+                        .get(j);
+                for (Map.Entry<String, Map<Integer, List<Ad>>> entry : map
+                        .entrySet()) {
+                    if (entry.getKey().equals(unitString)) {
+                        flag=false;
+                        if (entry.getValue().containsKey(post.getPostId())) {
+                            List<Ad> ads3 = new ArrayList<Ad>();
+                            ads3 = entry.getValue().get(
+                                    post.getPostId());
+                            ads3.add(ads.get(i));
+                            recordMapValueMap3 = entry
+                                   .getValue();
+                            recordMapValueMap3.put(post.getPostId(), ads3);
+                        } else {
+                            List<Ad> ads3 = new ArrayList<Ad>();
+                            ads3.add(ads.get(i));
+                             recordMapValueMap3 = entry
+                                    .getValue();
+                            recordMapValueMap3.put(post.getPostId(), ads3);
+                        }
+
+                    } 
+                }
+                if(!flag){
+                    posts.get(j).put(unitString, recordMapValueMap3);
+                }
+                
+            }
+            if(posts.size()==0||flag){
+                List<Ad> ads3 = new ArrayList<Ad>();
+                ads3.add(ads.get(i));
+                Map<Integer, List<Ad>> recordMapValueMap3 = new HashMap<Integer, List<Ad>>();
+                recordMapValueMap3.put(ads.get(i).getPostId(), ads3);
+                Map<String, Map<Integer, List<Ad>>> unitsAndPost = new HashMap<String, Map<Integer, List<Ad>>>();
+                unitsAndPost.put(unitString, recordMapValueMap3);// 将单位跟粘贴栏放在Map中
+                posts.add(unitsAndPost);// 将map添加到list
+            }
+
+           
+        }
+
+        connect.close();
+        System.out.println("posts.size()" + posts.size());
+        return posts;
+    }
+
     // 查找用户所拥有的的粘贴栏
     public List<Post> postsOfUser(int userId) {
         ConnectDB connect = new ConnectDB();
@@ -719,7 +810,7 @@ public class SearchAboutPost {
         if (posts.size() > 1) {// 如果根据postId查出的单位栏超过一个，则出现错误
             System.out
                     .println("false in:SearchAboutPost/postId,一个postId对应的粘贴栏不可能为多个");
-        } else {
+        } else if (posts.size() == 1) {
             post = posts.get(0);// 只有一个则获取第一个
 
         }
@@ -984,10 +1075,10 @@ public class SearchAboutPost {
     }
 
     // 存储广告的金额
-    public boolean saveMoney(int adId, int money,Timestamp timestamp) {
+    public boolean saveMoney(int adId, int money, Timestamp timestamp) {
         ConnectDB connectDB = new ConnectDB();
-        String sql = "update ad set paymentTime='"+timestamp+"',  money='" + money + "'where adId='" + adId
-                + "'";
+        String sql = "update ad set paymentTime='" + timestamp + "',  money='"
+                + money + "'where adId='" + adId + "'";
         System.out.println(sql);
         boolean flag = connectDB.executeUpdate(sql);
         connectDB.close();
@@ -1210,7 +1301,7 @@ public class SearchAboutPost {
             while (resultSet.next()) {
                 BrowserControl browserControl = new BrowserControl();
                 browserControl.setRow(resultSet.getInt("Row"));
-              
+
                 browserControls.add(browserControl);
             }
         } catch (SQLException e) {

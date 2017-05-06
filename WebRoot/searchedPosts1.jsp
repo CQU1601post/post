@@ -14,8 +14,9 @@
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 String searchText=request.getParameter("searchText");
-System.out.println("页面内searchText："+searchText);
+
 searchText=new String(searchText.getBytes("iso-8859-1"),"utf-8");
+System.out.println("页面内searchText："+searchText);
 List<Map<String, Map<Integer,List<Ad>>>> unitsAndPosts=(List<Map<String, Map<Integer,List<Ad>>>>)request.getAttribute("unitsAndPosts");
 OperationData operationData=new OperationData();
 SearchAboutPost searchAboutPost=new SearchAboutPost();
