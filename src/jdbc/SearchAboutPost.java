@@ -712,7 +712,7 @@ public class SearchAboutPost {
         List<Ad> ads = new ArrayList<Ad>();
 
         System.out.println("text" + text);
-    
+
         try {
             while (result.next()) {
                 Ad ad = new Ad(result.getInt(1), result.getInt(2),
@@ -729,10 +729,10 @@ public class SearchAboutPost {
                     .println("false in:src/jdbc/SearchFromDB/postsContaintText");
             e.printStackTrace();
         }
-        System.out.println("广告数"+ads.size());
+        System.out.println("广告数" + ads.size());
         for (int i = 0; i < ads.size(); i++) {
-            boolean flag=true;
-          
+            boolean flag = true;
+
             sql = "select * from post where postId='" + ads.get(i).getPostId()
                     + "'";
             Post post = postOfSql(sql);
@@ -747,31 +747,28 @@ public class SearchAboutPost {
                 for (Map.Entry<String, Map<Integer, List<Ad>>> entry : map
                         .entrySet()) {
                     if (entry.getKey().equals(unitString)) {
-                        flag=false;
+                        flag = false;
                         if (entry.getValue().containsKey(post.getPostId())) {
                             List<Ad> ads3 = new ArrayList<Ad>();
-                            ads3 = entry.getValue().get(
-                                    post.getPostId());
+                            ads3 = entry.getValue().get(post.getPostId());
                             ads3.add(ads.get(i));
-                            recordMapValueMap3 = entry
-                                   .getValue();
+                            recordMapValueMap3 = entry.getValue();
                             recordMapValueMap3.put(post.getPostId(), ads3);
                         } else {
                             List<Ad> ads3 = new ArrayList<Ad>();
                             ads3.add(ads.get(i));
-                             recordMapValueMap3 = entry
-                                    .getValue();
+                            recordMapValueMap3 = entry.getValue();
                             recordMapValueMap3.put(post.getPostId(), ads3);
                         }
 
-                    } 
+                    }
                 }
-                if(!flag){
+                if (!flag) {
                     posts.get(j).put(unitString, recordMapValueMap3);
                 }
-                
+
             }
-            if(posts.size()==0||flag){
+            if (posts.size() == 0 || flag) {
                 List<Ad> ads3 = new ArrayList<Ad>();
                 ads3.add(ads.get(i));
                 Map<Integer, List<Ad>> recordMapValueMap3 = new HashMap<Integer, List<Ad>>();
@@ -781,7 +778,6 @@ public class SearchAboutPost {
                 posts.add(unitsAndPost);// 将map添加到list
             }
 
-           
         }
 
         connect.close();
@@ -868,63 +864,61 @@ public class SearchAboutPost {
         return ads;
     }
 
-    // // postId 代表post的id(上传的粘贴栏) ; num 表示要随机生成的图片数量；money
+    // postId 代表post的id(上传的粘贴栏) ; num 表示要随机生成的图片数量；money
     // 表示什么等级以上的图片随机滚动，现在一般取0
-    // public List<Ad> getRandAd(int postId, int num, int money) {
-    // int rows=5;//一行图片数
-    // int rows2=10;
-    // List<Ad> ads2 = new ArrayList<Ad>();
-    // if (money < 0) {
-    // System.out.println("等级小于0");
-    // return null;
-    // } else {
-    // List<Ad> ads = getAd(postId, money);//查找满足要求的某一个粘贴栏的广告
-    // // List<Ad> ads=getAdByMoney(money);//查找所有的粘贴栏满足要求的广告
-    // if(ads.size()==0){
-    // return null;
-    // }else{
-    // for (Iterator iterator = ads.iterator(); iterator.hasNext();) {
-    // Ad ad = (Ad) iterator.next();
-    // if (ad.getMoney() == 2) {
-    // ads2.add(ad);
-    // }
-    // if (ad.getMoney() == 3) {
-    // ads2.add(ad);
-    // ads2.add(ad);
-    // }
-    // }
-    // ads.addAll(ads2);
-    // Collections.shuffle(ads);
-    // ads2.removeAll(ads2);
-    // if(ads.size()<rows){
-    // for (int i = 0; i < ads.size(); i++) {
-    // ads2.add(ads.get(i));
-    // }
-    // for (int i = 0; i < rows-ads.size(); i++) {
-    // Collections.shuffle(ads);
-    // ads2.add(ads.get(0));
-    // }
-    // }else if(ads.size()<rows2){
-    // for (int i = 0; i < ads.size(); i++) {
-    // ads2.add(ads.get(i));
-    // }
-    // for (int i = 0; i < rows2-ads.size(); i++) {
-    // Collections.shuffle(ads);
-    // ads2.add(ads.get(0));
-    // }
-    // }else if(ads.size()>=rows2){
-    // for (int i = 0; i < rows2; i++) {
-    // ads2.add(ads.get(i));
-    // }
-    // }
-    //
-    // }
-    //
-    // return ads2;
-    //
-    // }
-    //
-    // }
+    public List<Ad> getRandAd(int postId, int rows, int money) {
+
+        List<Ad> ads2 = new ArrayList<Ad>();
+        if (money < 0) {
+            System.out.println("等级小于0");
+            return null;
+        } else {
+            List<Ad> ads = getAd(postId, money);// 查找满足要求的某一个粘贴栏的广告
+            // List<Ad> ads=getAdByMoney(money);//查找所有的粘贴栏满足要求的广告
+            if (ads.size() == 0) {
+                return null;
+            } else {
+                for (Iterator iterator = ads.iterator(); iterator.hasNext();) {
+                    Ad ad = (Ad) iterator.next();
+                    if (ad.getMoney() == 2) {
+                        ads2.add(ad);
+                    }
+                    if (ad.getMoney() == 3) {
+                        ads2.add(ad);
+                        ads2.add(ad);
+                    }
+                }
+                ads.addAll(ads2);
+                Collections.shuffle(ads);
+                ads2.removeAll(ads2);
+                if (ads.size() < rows) {
+                    for (int i = 0; i < ads.size(); i++) {
+                        ads2.add(ads.get(i));
+                    }
+                    for (int i = 0; i < rows - ads.size(); i++) {
+                        Collections.shuffle(ads);
+                        ads2.add(ads.get(0));
+                    }
+                } else if (ads.size() < rows * 2) {
+                    for (int i = 0; i < ads.size(); i++) {
+                        ads2.add(ads.get(i));
+                    }
+                    for (int i = 0; i < rows * 2 - ads.size(); i++) {
+                        Collections.shuffle(ads);
+                        ads2.add(ads.get(0));
+                    }
+                } else if (ads.size() >= rows * 2) {
+                    for (int i = 0; i < rows * 2; i++) {
+                        ads2.add(ads.get(i));
+                    }
+                }
+
+            }
+
+            return ads2;
+        }
+
+    }
 
     // postId 代表post的id(上传的粘贴栏) ; num 表示要随机生成的图片数量；money 表示什么等级以上的图片随机滚动，现在一般取0
     public List<Ad> getRandAd(int postId, int money) {
@@ -1292,11 +1286,11 @@ public class SearchAboutPost {
     }
 
     // 查询一行中图片的数目
-    public List<Object> selectAllBrowerControl() {
+    public List<BrowserControl> selectAllBrowerControl() {
         ConnectDB connect = new ConnectDB();
         String sql = "select * from browserControl";
         ResultSet resultSet = connect.executeQuery(sql);
-        List<Object> browserControls = new ArrayList<Object>();
+        List<BrowserControl> browserControls = new ArrayList<BrowserControl>();
         try {
             while (resultSet.next()) {
                 BrowserControl browserControl = new BrowserControl();
